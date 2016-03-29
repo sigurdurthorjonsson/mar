@@ -1,5 +1,6 @@
 # mar
 
+## dplyr-erized connection to MRI oracle database
 
 
 ```r
@@ -10,15 +11,10 @@ library(mar)
 library(dplyr)
 library(dplyrOracle)
 mar <- src_oracle("mar")
-system.time(st <-
-              lesa_stodvar(mar) %>%
-              filter(ar %in% c(1985:2016),
-                     veidarf == 73))
-```
-
-```
-##    user  system elapsed 
-##   0.014   0.000   0.014
+st <-
+  lesa_stodvar(mar) %>%
+  filter(ar %in% c(1985:2016),
+         veidarf == 73)
 ```
 
 
@@ -150,26 +146,40 @@ cod %>%
 
 ![](README_files/figure-html/smb2-1.png)
 
-__Not working__:
+Doing summarization within Oracle:
 
 ```r
 cod <-
   lesa_stodvar(mar) %>%
   filter(ar %in% c(1985:2016),
          veidarf == 73) %>% 
+  select(synis.id, ar) %>% 
   left_join(lesa_lengdir(mar) %>%
                filter(tegund %in% 1),
             by = "synis.id") %>%
   left_join(lesa_numer(mar) %>%
-              filter(tegund %in% 1) %>% 
-              select(synis.id, fj.talid, fj.maelt),
+              filter(tegund %in% 1,
+                     fj.maelt > 0) %>% 
+              mutate(r = 1 + fj.talid/fj.maelt) %>% 
+              select(synis.id, r),
             by = "synis.id") %>%
-  mutate(r = (1 + fj.talid/fj.maelt),  #this seems to be the problem
-         fjoldi = r * fjoldi,
-         fjoldi = ifelse(is.na(fjoldi),0,fjoldi),
-         b = fjoldi * 0.01 * lengd^3) %>% 
+  mutate(lengd = ifelse(is.na(lengd), 0, lengd),
+         fjoldi = ifelse(is.na(fjoldi), 0, fjoldi),
+         r = ifelse(is.na(r), 0 , r),
+         abu = r * fjoldi,
+         bio = r * fjoldi * 0.01 * lengd^3) %>% 
   group_by(synis.id, ar) %>% 
-  summarise(n = sum(fjoldi),
-            b = sum(b)) %>% 
+  summarise(n = sum(abu),
+            b = sum(bio)) %>% 
   collect()
+glimpse(cod)
+```
+
+```
+## Observations: 18,891
+## Variables: 4
+## $ synis.id (int) 48053, 48051, 48467, 48452, 47905, 48443, 48440, 4788...
+## $ ar       (dbl) 1991, 1991, 1991, 1991, 1991, 1991, 1991, 1991, 1991,...
+## $ n        (dbl) 1, 9, 67, 1048, 17, 88, 107, 218, 9, 6, 46, 7, 20, 33...
+## $ b        (dbl) 3732.48, 35606.49, 13199.50, 1607012.48, 69644.65, 12...
 ```
