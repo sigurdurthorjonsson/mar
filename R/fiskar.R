@@ -12,63 +12,62 @@
 #' mar <- dplyrOracle::src_oracle("mar")
 #' dplyr::glimpse(lesa_stodvar(mar))
 lesa_stodvar <- function(mar) {
+  ## exclusion list (duplicate synis_id in database)
+  ## a bit of a hack until this is fixed in the DB
+  excl.list <-
+    c(133095,  57070, 133401,  37559, 112980,
+      112984, 112987, 112991, 112995, 112998,
+      112999, 128268, 129166, 129168, 140153,
+      140155, 129370, 129170, 128765, 129098,
+      119798, 128890, 129146, 128586, 128898,
+      128902, 123916, 128392, 116665, 115948,
+      115967)
+
+  st <-
+    dplyr::tbl(mar,dplyr::sql("fiskar.stodvar")) %>%
+    dplyr::select(-c(SNT:SBN))
+  tog <- dplyr::tbl(mar,dplyr::sql("fiskar.togstodvar"))%>%
+    dplyr::select(-c(SNT:SBN))
+  um <- dplyr::tbl(mar,dplyr::sql("fiskar.umhverfi"))%>%
+    dplyr::select(-c(SNT:SBN))
+
+  st.corr <-
+    dplyr::tbl(mar,dplyr::sql("fiskar.leidr_stodvar")) %>%
+    dplyr::select(-c(SNT:SBN)) %>%
+    dplyr::filter(!(SYNIS_ID %in% excl.list)) %>%
+    dplyr::rename(SKIP=SKIP_NR,
+                  KASTAD_N_BREIDD = KASTAD_BREIDD,
+                  KASTAD_V_LENGD =  KASTAD_LENGD,
+                  HIFT_N_BREIDD = HIFT_BREIDD,
+                  HIFT_V_LENGD = HIFT_LENGD,
+                  VEIDARFAERI = VEIDARF,
+                  LONDUNARHOFN = L_HOFN,
+                  FJARDARREITUR = FJ_REITUR,
+                  YFIRBORDSHITI = YFIRB_HITI) %>%
+    dplyr::mutate(TOG_LENGD =-1, DREGID_FRA = NA) %>%
+    dplyr::select(-ORREITUR) %>%
+    dplyr::filter(DAGS < to_date('1986','yyyy') & DAGS > to_date('1910','yyyy'))
+
   d <-
-    dplyr::tbl(mar,dplyr::sql("fiskar.v_stodvar")) %>%
-    dplyr::select(synis.id = SYNIS_ID,
-                  leidangur = LEIDANGUR,
-                  skip.nr = SKIP_NR,
-                  stod = STOD,
-                  dags = DAGS,
-                  reitur = REITUR,
-                  smareitur = SMAREITUR,
-                  hnattstada = HNATTSTADA,
-                  kastad.breidd = KASTAD_BREIDD,
-                  kastad.lengd = KASTAD_LENGD,
-                  hift.breidd = HIFT_BREIDD,
-                  hift.lengd = HIFT_LENGD,
-                  dypi.kastad = DYPI_KASTAD,
-                  dypi.hift = DYPI_HIFT,
-                  veidarf = VEIDARF,
-                  moskvastaerd = MOSKVASTAERD,
-                  grandaralengd = GRANDARALENGD,
-                  heildarafli = HEILDARAFLI,
-                  l.hofn = L_HOFN,
-                  landsyni = LANDSYNI,
-                  skiki = SKIKI,
-                  fj.reitur = FJ_REITUR,
-                  aths = ATHS,
-                  togbyrjun = TOGBYRJUN,
-                  togendir = TOGENDIR,
-                  toghradi = TOGHRADI,
-                  toglengd = TOGLENGD,
-                  vir.uti = VIR_UTI,
-                  lodrett.opnun = LODRETT_OPNUN,
-                  togtimi = TOGTIMI,
-                  togdypi.kastad = TOGDYPI_KASTAD,
-                  togdypi.hift = TOGDYPI_HIFT,
-                  togdypishiti = TOGDYPISHITI,
-                  eykt = EYKT,
-                  kl.byrjun = KL_BYRJUN,
-                  kl.endir = KL_ENDIR,
-                  vindhradi = VINDHRADI,
-                  vindatt = VINDATT,
-                  vedur = VEDUR,
-                  sky = SKY,
-                  sjor = SJOR,
-                  botnhiti = BOTNHITI,
-                  yfirb.hiti = YFIRB_HITI,
-                  lofthiti = LOFTHITI,
-                  loftvog = LOFTVOG,
-                  hafis = HAFIS,
-                  straumstefna = STRAUMSTEFNA,
-                  straumhradi = STRAUMHRADI,
-                  sjondypi = SJONDYPI) %>%
+    st %>%
+    dplyr::left_join(tog) %>%
+    dplyr::left_join(um) %>%
+    dplyr::filter(DAGS > to_date('1985','yyyy')) %>%
+    dplyr::union_all(.,select_(st.corr,.dots=colnames(.))) %>%
+    dplyr::select_(.,.dots=within(list(),
+                                  for(i in colnames(.)){
+                                    assign(tolower(i),i)
+                                    i <- NULL
+                                  })) %>%
     dplyr::mutate(ar =   to_number(to_char(dags, "YYYY")),
                   man =  to_number(to_char(dags, "MM")))
 
     return(d)
 
 }
+
+
+
 
 #' Lengdarmaelingar
 #'
@@ -84,14 +83,30 @@ lesa_stodvar <- function(mar) {
 #' mar <- dplyrOracle::src_oracle("mar")
 #' dplyr::glimpse(lesa_lengdir(mar))
 lesa_lengdir <- function(mar) {
+
+  excl.list <-
+    c(133095,  57070, 133401,  37559, 112980,
+      112984, 112987, 112991, 112995, 112998,
+      112999, 128268, 129166, 129168, 140153,
+      140155, 129370, 129170, 128765, 129098,
+      119798, 128890, 129146, 128586, 128898,
+      128902, 123916, 128392, 116665, 115948,
+      115967)
+
+  le.corr <-
+    dplyr::tbl(mar,dplyr::sql("fiskar.leidr_lengdir")) %>%
+    dplyr::select(-c(SBN:SNT)) %>%
+    dplyr::filter(!(SYNIS_ID %in% excl.list))
+
   d <-
     dplyr::tbl(mar,dplyr::sql("fiskar.lengdir")) %>%
-    dplyr::select(synis.id = SYNIS_ID,
-                  tegund = TEGUND,
-                  lengd = LENGD,
-                  fjoldi = FJOLDI,
-                  kyn = KYN,
-                  kynthroski = KYNTHROSKI)
+    dplyr::select(-c(SNN:SBT)) %>%
+    dplyr::union_all(le.corr) %>%
+    dplyr::select_(.,.dots=within(list(),
+                                  for(i in colnames(.)){
+                                    assign(tolower(i),i)
+                                    i <- NULL
+                                  }))
 
   return(d)
 
@@ -112,20 +127,34 @@ lesa_lengdir <- function(mar) {
 #' mar <- dplyrOracle::src_oracle("mar")
 #' dplyr::glimpse(lesa_numer(mar))
 lesa_numer <- function(mar) {
+
+  excl.list <-
+    c(133095,  57070, 133401,  37559, 112980,
+      112984, 112987, 112991, 112995, 112998,
+      112999, 128268, 129166, 129168, 140153,
+      140155, 129370, 129170, 128765, 129098,
+      119798, 128890, 129146, 128586, 128898,
+      128902, 123916, 128392, 116665, 115948,
+      115967)
+
+
+  num.corr <-
+    dplyr::tbl(mar,dplyr::sql("fiskar.numer")) %>%
+    select(-c(SBN:SNT)) %>%
+    dplyr::filter(!(SYNIS_ID %in% excl.list))
   d <-
     dplyr::tbl(mar,dplyr::sql("fiskar.numer")) %>%
-    dplyr::select(synis.id = SYNIS_ID,
-                  tegund = TEGUND,
-                  fj.maelt = FJ_MAELT,
-                  fj.kvarnad = FJ_KVARNAD,
-                  fj.talid = FJ_TALID,
-                  fj.kyngreint = FJ_KYNGREINT,
-                  fj.magasyna = FJ_MAGASYNA,
-                  fj.merkt = FJ_MERKT,
-                  fj.aldursgr = FJ_ALDURSGR) #%>%
+    select(-c(SBN:SNT)) %>%
+    dplyr::union_all(num.corr) %>%
+    dplyr::select_(.,.dots=within(list(),
+                                  for(i in colnames(.)){
+                                    assign(tolower(i),i)
+                                    i <- NULL
+                                  })) #%>%
   # below returns an error
     #dplyr::mutate(r = 1 + fj.talid/fj.maelt)
 
   return(d)
 
 }
+
