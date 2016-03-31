@@ -18,7 +18,7 @@ mar <- src_oracle("mar")
 st <-
   lesa_stodvar(mar) %>%
   filter(ar %in% c(1985:2016),
-         veidarf == 73)
+         veidarfaeri == 73)
 ```
 
 
@@ -30,10 +30,10 @@ glimpse(st)
 ```{r smb1, message = FALSE, warning = FALSE}
 st %>% 
   collect() %>% 
-  mutate(lon1 = -gisland::geo_convert(kastad.lengd),
-         lat1 =  gisland::geo_convert(kastad.breidd)) %>% 
+  mutate(lon1 = -gisland::geo_convert(kastad_v_lengd),
+         lat1 =  gisland::geo_convert(kastad_n_breidd)) %>% 
   ggplot() +
-  theme_bw() +
+  theme_minimal() +
   geom_point(aes(lon1,lat1),alpha=0.2, size=1, col="red") +
   geom_polygon(data=gisland::iceland,aes(long,lat,group=group),fill="grey90") +
   coord_map(ylim=c(62,67.8), xlim=c(-31,-9)) +
@@ -44,25 +44,30 @@ st %>%
 cod <-
   lesa_stodvar(mar) %>%
   filter(ar %in% c(1985:2016),
-         veidarf == 73) %>% 
-  select(synis.id, ar) %>% 
+         veidarfaeri == 73) %>% 
+  select(synis_id, ar) %>% 
   left_join(lesa_lengdir(mar) %>%
                filter(tegund %in% 1),
-            by = "synis.id") %>%
+            by = "synis_id") %>%
   left_join(lesa_numer(mar) %>%
               filter(tegund %in% 1) %>% 
-              select(synis.id, fj.talid, fj.maelt),
-            by = "synis.id") %>% 
-  collect(n = 1e7) # should be allowed to pass n = -1, but returns an error
+              select(synis_id, fj_talid, fj_maelt),
+            by = "synis_id") %>%
+  mutate(fjoldi2 = fjoldi,
+         fjoldi = ifelse(is.na(fjoldi),0,fjoldi), 
+         fj_talid = ifelse(is.na(fj_talid),0,fj_talid),
+         fj_maelt = ifelse(fj_maelt==0,1,fj_maelt),
+         lengd = ifelse(is.na(lengd),0,lengd)) %>% 
+  mutate(fjoldi = (1 + fj_talid/fj_maelt)*fjoldi, 
+         b = 0.01 * lengd^3) %>% 
+  distinct() %>% 
+  group_by(ar, synis_id) %>% 
+  summarise(n = sum(fjoldi),
+            b = sum(fjoldi*b))
+
 glimpse(cod)
 cod %>% 
-  mutate(r = (1 + fj.talid/fj.maelt),
-         fjoldi = r * fjoldi,
-         fjoldi = ifelse(is.na(fjoldi),0,fjoldi),
-         b = fjoldi * 0.01 * lengd^3) %>% 
-  group_by(ar, synis.id) %>% 
-  summarise(n = sum(fjoldi),
-            b = sum(b, na.rm = T)) %>% 
+  collect() %>% 
   ggplot(aes(ar, b)) +
   stat_summary(fun.data = "mean_cl_boot", colour = "red") +
   expand_limits(y = 0) +
@@ -75,23 +80,23 @@ Doing summarization within Oracle:
 cod <-
   lesa_stodvar(mar) %>%
   filter(ar %in% c(1985:2016),
-         veidarf == 73) %>% 
-  select(synis.id, ar) %>% 
+         veidarfaeri == 73) %>% 
+  select(synis_id, ar) %>% 
   left_join(lesa_lengdir(mar) %>%
                filter(tegund %in% 1),
-            by = "synis.id") %>%
+            by = "synis_id") %>%
   left_join(lesa_numer(mar) %>%
               filter(tegund %in% 1,
-                     fj.maelt > 0) %>% 
-              mutate(r = 1 + fj.talid/fj.maelt) %>% 
-              select(synis.id, r),
-            by = "synis.id") %>%
+                     fj_maelt > 0) %>% 
+              mutate(r = 1 + fj_talid/fj_maelt) %>% 
+              select(synis_id, r),
+            by = "synis_id") %>%
   mutate(lengd = ifelse(is.na(lengd), 0, lengd),
          fjoldi = ifelse(is.na(fjoldi), 0, fjoldi),
          r = ifelse(is.na(r), 0 , r),
          abu = r * fjoldi,
          bio = r * fjoldi * 0.01 * lengd^3) %>% 
-  group_by(synis.id, ar) %>% 
+  group_by(synis_id, ar) %>% 
   summarise(n = sum(abu),
             b = sum(bio)) %>% 
   collect()

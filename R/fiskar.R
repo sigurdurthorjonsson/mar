@@ -52,7 +52,7 @@ lesa_stodvar <- function(mar) {
     st %>%
     dplyr::left_join(tog) %>%
     dplyr::left_join(um) %>%
-    dplyr::filter(DAGS > to_date('1985','yyyy')) %>%
+    dplyr::filter(DAGS > to_date('1986','yyyy')) %>%
     dplyr::union_all(.,select_(st.corr,.dots=colnames(.))) %>%
     dplyr::select_(.,.dots=within(list(),
                                   for(i in colnames(.)){
@@ -60,7 +60,8 @@ lesa_stodvar <- function(mar) {
                                     i <- NULL
                                   })) %>%
     dplyr::mutate(ar =   to_number(to_char(dags, "YYYY")),
-                  man =  to_number(to_char(dags, "MM")))
+                  man =  to_number(to_char(dags, "MM"))) %>%
+    distinct()
 
     return(d)
 
@@ -93,20 +94,33 @@ lesa_lengdir <- function(mar) {
       128902, 123916, 128392, 116665, 115948,
       115967)
 
+  st.corr <-
+    dplyr::tbl(mar,dplyr::sql("fiskar.leidr_stodvar")) %>%
+    dplyr::filter(DAGS < to_date('1986','yyyy') & DAGS > to_date('1910','yyyy')) %>%
+    dplyr::select(SYNIS_ID)
+
+  st <-
+    dplyr::tbl(mar,dplyr::sql("fiskar.stodvar")) %>%
+    dplyr::filter(DAGS > to_date('1986','yyyy')) %>%
+    dplyr::select(SYNIS_ID)
+
   le.corr <-
     dplyr::tbl(mar,dplyr::sql("fiskar.leidr_lengdir")) %>%
     dplyr::select(-c(SBN:SNT)) %>%
+    dplyr::inner_join(st.corr) %>%
     dplyr::filter(!(SYNIS_ID %in% excl.list))
 
   d <-
     dplyr::tbl(mar,dplyr::sql("fiskar.lengdir")) %>%
+    dplyr::inner_join(st) %>%
     dplyr::select(-c(SNN:SBT)) %>%
     dplyr::union_all(le.corr) %>%
     dplyr::select_(.,.dots=within(list(),
                                   for(i in colnames(.)){
                                     assign(tolower(i),i)
                                     i <- NULL
-                                  }))
+                                  })) %>%
+    distinct()
 
   return(d)
 
@@ -137,21 +151,36 @@ lesa_numer <- function(mar) {
       128902, 123916, 128392, 116665, 115948,
       115967)
 
+  st.corr <-
+    dplyr::tbl(mar,dplyr::sql("fiskar.leidr_stodvar")) %>%
+    dplyr::filter(DAGS < to_date('1986','yyyy') & DAGS > to_date('1910','yyyy')) %>%
+    dplyr::select(SYNIS_ID)
+
+  st <-
+    dplyr::tbl(mar,dplyr::sql("fiskar.stodvar")) %>%
+    dplyr::filter(DAGS > to_date('1986','yyyy')) %>%
+    dplyr::select(SYNIS_ID)
+
 
   num.corr <-
     dplyr::tbl(mar,dplyr::sql("fiskar.leidr_numer")) %>%
     dplyr::select(-c(SBN:SNT)) %>%
+    dplyr::inner_join(st.corr) %>%
     dplyr::filter(!(SYNIS_ID %in% excl.list)) %>%
-    dplyr::rename(ATHUGA=ATHS)
+    dplyr::rename(ATHUGA=ATHS) %>%
+    dplyr::filter()
+
   d <-
     dplyr::tbl(mar,dplyr::sql("fiskar.numer")) %>%
+    dplyr::inner_join(st) %>%
     dplyr::select(-c(SBN:SNT,starts_with('INNSL'))) %>%
     dplyr::union_all(.,select_(num.corr,.dots=colnames(.))) %>%
     dplyr::select_(.,.dots=within(list(),
                                   for(i in colnames(.)){
                                     assign(tolower(i),i)
                                     i <- NULL
-                                  })) #%>%
+                                  })) %>%
+    distinct()
   # below returns an error
     #dplyr::mutate(r = 1 + fj.talid/fj.maelt)
 
@@ -185,12 +214,27 @@ lesa_kvarnir <- function(mar) {
       115967)
 
 
+
+  st.corr <-
+    dplyr::tbl(mar,dplyr::sql("fiskar.leidr_stodvar")) %>%
+    dplyr::filter(DAGS < to_date('1986','yyyy') & DAGS > to_date('1910','yyyy')) %>%
+    dplyr::select(SYNIS_ID)
+
+  st <-
+    dplyr::tbl(mar,dplyr::sql("fiskar.stodvar")) %>%
+    dplyr::filter(DAGS > to_date('1986','yyyy')) %>%
+    dplyr::select(SYNIS_ID)
+
+
   oto.corr <-
     dplyr::tbl(mar,dplyr::sql("fiskar.leidr_kvarnir")) %>%
+    inner_join(st.corr) %>%
     select(-c(SBN:SNT)) %>%
     dplyr::filter(!(SYNIS_ID %in% excl.list))
+
   d <-
     dplyr::tbl(mar,dplyr::sql("fiskar.kvarnir")) %>%
+    inner_join(st) %>%
     select(-c(SBN:SNT)) %>%
     dplyr::union_all(oto.corr) %>%
     dplyr::select_(.,.dots=within(list(),
