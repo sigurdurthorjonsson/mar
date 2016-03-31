@@ -139,13 +139,14 @@ lesa_numer <- function(mar) {
 
 
   num.corr <-
-    dplyr::tbl(mar,dplyr::sql("fiskar.numer")) %>%
-    select(-c(SBN:SNT)) %>%
-    dplyr::filter(!(SYNIS_ID %in% excl.list))
+    dplyr::tbl(mar,dplyr::sql("fiskar.leidr_numer")) %>%
+    dplyr::select(-c(SBN:SNT)) %>%
+    dplyr::filter(!(SYNIS_ID %in% excl.list)) %>%
+    dplyr::rename(ATHUGA=ATHS)
   d <-
     dplyr::tbl(mar,dplyr::sql("fiskar.numer")) %>%
-    select(-c(SBN:SNT)) %>%
-    dplyr::union_all(num.corr) %>%
+    dplyr::select(-c(SBN:SNT,starts_with('INNSL'))) %>%
+    dplyr::union_all(.,select_(num.corr,.dots=colnames(.))) %>%
     dplyr::select_(.,.dots=within(list(),
                                   for(i in colnames(.)){
                                     assign(tolower(i),i)
@@ -157,4 +158,55 @@ lesa_numer <- function(mar) {
   return(d)
 
 }
+
+
+#' Kvarnir
+#'
+#' @description Fallid myndar tengingu við toflu kvarnir
+#' í fiskar gagnagrunninum.
+#'
+#' @param mar src_oracle tenging við oracle
+#'
+#' @return dataframe
+#' @export
+#'
+#' @examples
+#' mar <- dplyrOracle::src_oracle("mar")
+#' dplyr::glimpse(lesa_numer(mar))
+lesa_kvarnir <- function(mar) {
+
+  excl.list <-
+    c(133095,  57070, 133401,  37559, 112980,
+      112984, 112987, 112991, 112995, 112998,
+      112999, 128268, 129166, 129168, 140153,
+      140155, 129370, 129170, 128765, 129098,
+      119798, 128890, 129146, 128586, 128898,
+      128902, 123916, 128392, 116665, 115948,
+      115967)
+
+
+  oto.corr <-
+    dplyr::tbl(mar,dplyr::sql("fiskar.leidr_kvarnir")) %>%
+    select(-c(SBN:SNT)) %>%
+    dplyr::filter(!(SYNIS_ID %in% excl.list))
+  d <-
+    dplyr::tbl(mar,dplyr::sql("fiskar.kvarnir")) %>%
+    select(-c(SBN:SNT)) %>%
+    dplyr::union_all(oto.corr) %>%
+    dplyr::select_(.,.dots=within(list(),
+                                  for(i in colnames(.)){
+                                    assign(tolower(i),i)
+                                    i <- NULL
+                                  })) #%>%
+  # below returns an error
+  #dplyr::mutate(r = 1 + fj.talid/fj.maelt)
+
+  return(d)
+
+}
+
+
+
+
+
 
