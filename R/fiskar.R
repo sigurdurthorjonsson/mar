@@ -50,10 +50,10 @@ lesa_stodvar <- function(mar) {
 
   d <-
     st %>%
-    dplyr::left_join(tog) %>%
-    dplyr::left_join(um) %>%
+    dplyr::left_join(tog, by = "SYNIS_ID") %>%
+    dplyr::left_join(um, by = "SYNIS_ID") %>%
     dplyr::filter(DAGS > to_date('1986','yyyy')) %>%
-    dplyr::union_all(.,select_(st.corr,.dots=colnames(.))) %>%
+    dplyr::union_all(.,dplyr::select_(st.corr,.dots=colnames(.))) %>%
     dplyr::select_(.,.dots=within(list(),
                                   for(i in colnames(.)){
                                     assign(tolower(i),i)
@@ -173,8 +173,8 @@ lesa_numer <- function(mar) {
   d <-
     dplyr::tbl(mar,dplyr::sql("fiskar.numer")) %>%
     dplyr::inner_join(st) %>%
-    dplyr::select(-c(SBN:SNT,starts_with('INNSL'))) %>%
-    dplyr::union_all(.,select_(num.corr,.dots=colnames(.))) %>%
+    dplyr::select(-c(SBN:SNT,dplyr::starts_with('INNSL'))) %>%
+    dplyr::union_all(.,dplyr::select_(num.corr,.dots=colnames(.))) %>%
     dplyr::select_(.,.dots=within(list(),
                                   for(i in colnames(.)){
                                     assign(tolower(i),i)
@@ -228,14 +228,14 @@ lesa_kvarnir <- function(mar) {
 
   oto.corr <-
     dplyr::tbl(mar,dplyr::sql("fiskar.leidr_kvarnir")) %>%
-    inner_join(st.corr) %>%
-    select(-c(SBN:SNT)) %>%
+    dplyr::inner_join(st.corr) %>%
+    dplyr::select(-c(SBN:SNT)) %>%
     dplyr::filter(!(SYNIS_ID %in% excl.list))
 
   d <-
     dplyr::tbl(mar,dplyr::sql("fiskar.kvarnir")) %>%
-    inner_join(st) %>%
-    select(-c(SBN:SNT)) %>%
+    dplyr::inner_join(st) %>%
+    dplyr::select(-c(SBN:SNT)) %>%
     dplyr::union_all(oto.corr) %>%
     dplyr::select_(.,.dots=within(list(),
                                   for(i in colnames(.)){
