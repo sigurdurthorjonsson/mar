@@ -68,7 +68,7 @@ landadur_afli <- function(mar) {
 
   d <-
     lods_oslaegt(mar) %>%
-    dplyr::left_join(skipaskra %>%
+    dplyr::left_join(skipaskra(mar) %>%
                        dplyr::select(skip_nr, flokkur),
                      by = "skip_nr")
 
