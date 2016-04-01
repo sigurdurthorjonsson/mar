@@ -50,8 +50,8 @@ lesa_stodvar <- function(mar) {
 
   d <-
     st %>%
-    dplyr::left_join(tog) %>%
-    dplyr::left_join(um) %>%
+    dplyr::left_join(tog, by = "SYNIS_ID") %>%
+    dplyr::left_join(um, by = "SYNIS_ID") %>%
     dplyr::filter(DAGS > to_date('1985','yyyy')) %>%
     dplyr::union_all(.,dplyr::select_(st.corr,.dots=colnames(.))) %>%
     dplyr::select_(.,.dots=within(list(),

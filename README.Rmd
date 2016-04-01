@@ -9,7 +9,7 @@ output:
 
 ```{r, message = FALSE}
 # devtools::install_github("bernardocaldas/dplyrOracle")
-# devtools::install_github("einarhjorleifsson/mar")
+# devtools::install_github("fishvice/mar")
 library(ggplot2)
 library(mar)
 library(dplyr)
@@ -18,7 +18,9 @@ mar <- src_oracle("mar")
 st <-
   lesa_stodvar(mar) %>%
   filter(ar %in% c(1985:2016),
-         veidarf == 73)
+         veidarfaeri == 73,
+         synaflokkur == 30,
+         tognumer < 40)
 ```
 
 
@@ -30,8 +32,8 @@ glimpse(st)
 ```{r smb1, message = FALSE, warning = FALSE}
 st %>% 
   collect() %>% 
-  mutate(lon1 = -gisland::geo_convert(kastad.lengd),
-         lat1 =  gisland::geo_convert(kastad.breidd)) %>% 
+  mutate(lon1 = -gisland::geo_convert(kastad_v_lengd),
+         lat1 =  gisland::geo_convert(kastad_n_breidd)) %>% 
   ggplot() +
   theme_bw() +
   geom_point(aes(lon1,lat1),alpha=0.2, size=1, col="red") +
@@ -44,23 +46,25 @@ st %>%
 cod <-
   lesa_stodvar(mar) %>%
   filter(ar %in% c(1985:2016),
-         veidarf == 73) %>% 
-  select(synis.id, ar) %>% 
+         veidarfaeri == 73,
+         synaflokkur == 30,
+         tognumer < 40) %>% 
+  select(synis_id, ar) %>% 
   left_join(lesa_lengdir(mar) %>%
                filter(tegund %in% 1),
-            by = "synis.id") %>%
+            by = "synis_id") %>%
   left_join(lesa_numer(mar) %>%
               filter(tegund %in% 1) %>% 
-              select(synis.id, fj.talid, fj.maelt),
-            by = "synis.id") %>% 
+              select(synis_id, fj_talid, fj_maelt),
+            by = "synis_id") %>% 
   collect(n = 1e7) # should be allowed to pass n = -1, but returns an error
 glimpse(cod)
 cod %>% 
-  mutate(r = (1 + fj.talid/fj.maelt),
+  mutate(r = (1 + fj_talid/fj_maelt),
          fjoldi = r * fjoldi,
          fjoldi = ifelse(is.na(fjoldi),0,fjoldi),
          b = fjoldi * 0.01 * lengd^3) %>% 
-  group_by(ar, synis.id) %>% 
+  group_by(ar, synis_id) %>% 
   summarise(n = sum(fjoldi),
             b = sum(b, na.rm = T)) %>% 
   ggplot(aes(ar, b)) +
@@ -71,29 +75,41 @@ cod %>%
 ```
 
 Doing summarization within Oracle:
-```{r}
+```{r smb3}
 cod <-
   lesa_stodvar(mar) %>%
   filter(ar %in% c(1985:2016),
-         veidarf == 73) %>% 
-  select(synis.id, ar) %>% 
+         veidarfaeri == 73,
+         synaflokkur == 30,
+         tognumer < 40) %>% 
+  select(synis_id, ar) %>% 
   left_join(lesa_lengdir(mar) %>%
                filter(tegund %in% 1),
-            by = "synis.id") %>%
+            by = "synis_id") %>%
   left_join(lesa_numer(mar) %>%
               filter(tegund %in% 1,
-                     fj.maelt > 0) %>% 
-              mutate(r = 1 + fj.talid/fj.maelt) %>% 
-              select(synis.id, r),
-            by = "synis.id") %>%
+                     fj_maelt > 0) %>% 
+              mutate(r = 1 + fj_talid/fj_maelt) %>% 
+              select(synis_id, r),
+            by = "synis_id") %>%
   mutate(lengd = ifelse(is.na(lengd), 0, lengd),
          fjoldi = ifelse(is.na(fjoldi), 0, fjoldi),
          r = ifelse(is.na(r), 0 , r),
          abu = r * fjoldi,
          bio = r * fjoldi * 0.01 * lengd^3) %>% 
-  group_by(synis.id, ar) %>% 
+  group_by(synis_id, ar) %>% 
   summarise(n = sum(abu),
             b = sum(bio)) %>% 
   collect()
 glimpse(cod)
+cod %>% 
+  ggplot(aes(ar, b)) +
+  stat_summary(fun.data = "mean_cl_boot", colour = "red") +
+  expand_limits(y = 0) +
+  labs(x = NULL, y = NULL, title = "Cod: Bootstrap mean biomass and confidence interval") +
+  scale_x_continuous(breaks = seq(1985,2015,5))
+```
+
+```{r}
+devtools::session_info()
 ```
