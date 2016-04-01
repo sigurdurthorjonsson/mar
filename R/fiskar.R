@@ -61,7 +61,7 @@ lesa_stodvar <- function(mar) {
                                   })) %>%
     dplyr::mutate(ar =   to_number(to_char(dags, "YYYY")),
                   man =  to_number(to_char(dags, "MM"))) %>%
-    distinct()
+    dplyr::distinct()
 
     return(d)
 
@@ -120,7 +120,7 @@ lesa_lengdir <- function(mar) {
                                     assign(tolower(i),i)
                                     i <- NULL
                                   })) %>%
-    distinct()
+    dplyr::distinct()
 
   return(d)
 
@@ -180,7 +180,7 @@ lesa_numer <- function(mar) {
                                     assign(tolower(i),i)
                                     i <- NULL
                                   })) %>%
-    distinct()
+    dplyr::distinct()
   # below returns an error
     #dplyr::mutate(r = 1 + fj.talid/fj.maelt)
 
