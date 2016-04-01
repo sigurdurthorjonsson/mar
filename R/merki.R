@@ -60,7 +60,7 @@ endurheimtur <- function(mar) {
 #'
 #' @param mar src_oracle tenging við oracle
 rafaudkenni <- function(mar) {
-  d <- tbl(mar,dplyr::sql("fiskmerki.rafaudkenni")) %>%
+  d <- dplyr::tbl(mar,dplyr::sql("fiskmerki.rafaudkenni")) %>%
     dplyr::rename_(.dots=setNames(colnames(.),tolower(colnames(.)))) %>%
     dplyr::rename(tid = merki_id,
                   dst_id = taudkenni)
