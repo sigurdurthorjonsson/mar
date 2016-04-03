@@ -1,26 +1,41 @@
+#' lesa veiðarfæri
+#'
+#' @param mar
+#'
+#' @return
+#' @export
+#'
+#' @examples
 lesa_veidarfaeri <- function(mar){
   dplyr::tbl(mar,dplyr::sql("orri.veidarfaeri")) %>%
-    dplyr::select(veidarf = VEIDARFAERI,
-                  fi.veidarf = FI_VEIDARFAERI,
-                  lysing = LYSING,
-                  lysing.enska = LYSING_ENSKA,
-                  lods.veidarf = LODS_VEIDARFAERI)
+    select(-c(SNT:SBN)) %>%
+    dplyr::rename_(.dots=setNames(colnames(.),tolower(colnames(.))))
 }
 
+#' lesa tegundir
+#'
+#' @param mar
+#'
+#' @return
+#' @export
+#'
+#' @examples
 lesa_tegundir <- function(mar){
   dplyr::tbl(mar,dplyr::sql("orri.fisktegundir")) %>%
-    dplyr::select(tegund = TEGUND,
-                  heiti = HEITI,
-                  enskt.heiti = ENSKT_HEITI,
-                  yfirflokkur = YFIR_FLOKKUR,
-                  visindaheiti = VISINDAHEITI)
+    select(-c(SNT:SBN)) %>%
+    dplyr::rename_(.dots=setNames(colnames(.),tolower(colnames(.))))
 }
 
+#' lesa synaflokka
+#'
+#' @param mar db connection
+#'
+#' @return db query object
+#' @export
+#'
+#' @examples
+#' lesa_synaflokka(mar)
 lesa_synaflokka <- function(mar){
-  dplyr::tbl(mar,dplyr::sql("orri.veidarfaeri")) %>%
-    dplyr::select(synaflokkur = VEIDARFAERI,
-                  fi.veidarf = FI_VEIDARFAERI,
-                  lysing = LYSING,
-                  lysing.enska = LYSING_ENSKA,
-                  lods.veidarf = LODS_VEIDARFAERI)
+  dplyr::tbl(mar,dplyr::sql("fiskar.synaflokkar")) %>%
+  dplyr::rename_(.dots=setNames(colnames(.),tolower(colnames(.))))
 }
