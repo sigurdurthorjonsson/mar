@@ -35,3 +35,22 @@ lesa_synaflokka <- function(mar){
   dplyr::tbl(mar,dplyr::sql("fiskar.synaflokkar")) %>%
   dplyr::rename_(.dots=setNames(colnames(.),tolower(colnames(.))))
 }
+
+
+#' londundarhofn
+#'
+#' @param mar db connection
+#'
+#' @return db query object
+#' @export
+#'
+kvoti_stadur <- function(mar) {
+
+  d <-
+    dplyr::tbl(mar,dplyr::sql("kvoti.stadur")) %>%
+    dplyr::rename_(.dots=setNames(colnames(.),tolower(colnames(.))))
+
+  return(d)
+
+}
+

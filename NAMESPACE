@@ -2,8 +2,10 @@
 
 export(afli_afli)
 export(afli_stofn)
+export(afli_tac)
 export(dst)
 export(endurheimtur)
+export(kvoti_stadur)
 export(landadur_afli)
 export(lesa_kvarnir)
 export(lesa_lengdir)

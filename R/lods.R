@@ -76,3 +76,23 @@ landadur_afli <- function(mar) {
 
 }
 
+
+#' @title Landaður afli (Lóðs)
+#'
+#' @description Landaður afli byggður á töflu sem Sigfús Jó stjórnar
+#'
+#' @export
+#'
+#' @param mar src_oracle tenging við oracle
+afli_tac <- function(mar) {
+
+  d <- dplyr::tbl(mar, dplyr::sql("kvoti.afli_tac")) %>%
+    dplyr::rename_(.dots=setNames(colnames(.),tolower(colnames(.)))) %>%
+    dplyr::mutate(ar = to_number(ar),
+                  man = to_number(man)) %>%
+    rename(tegund = fteg,
+           veidarfaeri = veidarf)
+
+  return(d)
+
+}
