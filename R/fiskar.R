@@ -46,13 +46,13 @@ lesa_stodvar <- function(mar) {
                   YFIRBORDSHITI = YFIRB_HITI) %>%
     dplyr::mutate(TOG_LENGD =-1, DREGID_FRA = NA) %>%
     dplyr::select(-ORREITUR) %>%
-    dplyr::filter(DAGS < to_date('1986','yyyy') & DAGS > to_date('1910','yyyy'))
+    dplyr::filter(DAGS < to_date('01.01.1986','dd.mm.yyyy') & DAGS > to_date('1910','yyyy'))
 
   d <-
     st %>%
     dplyr::left_join(tog, by = "SYNIS_ID") %>%
     dplyr::left_join(um, by = "SYNIS_ID") %>%
-    dplyr::filter(DAGS > to_date('1986','yyyy')) %>%
+    dplyr::filter(DAGS > to_date('01.01.1986','dd.mm.yyyy')) %>%
     dplyr::union_all(.,dplyr::select_(st.corr,.dots=colnames(.))) %>%
     dplyr::select_(.,.dots=within(list(),
                                   for(i in colnames(.)){
@@ -96,12 +96,12 @@ lesa_lengdir <- function(mar) {
 
   st.corr <-
     dplyr::tbl(mar,dplyr::sql("fiskar.leidr_stodvar")) %>%
-    dplyr::filter(DAGS < to_date('1986','yyyy') & DAGS > to_date('1910','yyyy')) %>%
+    dplyr::filter(DAGS < to_date('01.01.1986','dd.mm.yyyy') & DAGS > to_date('1910','yyyy')) %>%
     dplyr::select(SYNIS_ID)
 
   st <-
     dplyr::tbl(mar,dplyr::sql("fiskar.stodvar")) %>%
-    dplyr::filter(DAGS > to_date('1986','yyyy')) %>%
+    dplyr::filter(DAGS > to_date('01.01.1986','dd.mm.yyyy')) %>%
     dplyr::select(SYNIS_ID)
 
   le.corr <-
@@ -153,12 +153,12 @@ lesa_numer <- function(mar) {
 
   st.corr <-
     dplyr::tbl(mar,dplyr::sql("fiskar.leidr_stodvar")) %>%
-    dplyr::filter(DAGS < to_date('1986','yyyy') & DAGS > to_date('1910','yyyy')) %>%
+    dplyr::filter(DAGS < to_date('01.01.1986','dd.mm.yyyy') & DAGS > to_date('1910','yyyy')) %>%
     dplyr::select(SYNIS_ID)
 
   st <-
     dplyr::tbl(mar,dplyr::sql("fiskar.stodvar")) %>%
-    dplyr::filter(DAGS > to_date('1986','yyyy')) %>%
+    dplyr::filter(DAGS > to_date('01.01.1986','dd.mm.yyyy')) %>%
     dplyr::select(SYNIS_ID)
 
 
@@ -217,12 +217,12 @@ lesa_kvarnir <- function(mar) {
 
   st.corr <-
     dplyr::tbl(mar,dplyr::sql("fiskar.leidr_stodvar")) %>%
-    dplyr::filter(DAGS < to_date('1986','yyyy') & DAGS > to_date('1910','yyyy')) %>%
+    dplyr::filter(DAGS < to_date('01.01.1986','dd.mm.yyyy') & DAGS > to_date('1910','yyyy')) %>%
     dplyr::select(SYNIS_ID)
 
   st <-
     dplyr::tbl(mar,dplyr::sql("fiskar.stodvar")) %>%
-    dplyr::filter(DAGS > to_date('1986','yyyy')) %>%
+    dplyr::filter(DAGS > to_date('01.01.1986','dd.mm.yyyy')) %>%
     dplyr::select(SYNIS_ID)
 
 
