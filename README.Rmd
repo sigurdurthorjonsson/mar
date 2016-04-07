@@ -11,14 +11,15 @@ output:
 # devtools::install_github("hadley/dplyr")
 # devtools::install_github("fishvice/dplyrOracle",  dependencies = FALSE)
 # devtools::install_github("fishvice/mar",  dependencies = FALSE)
-library(mar)
 library(dplyr)
 library(dplyrOracle)
-mar <- src_oracle("mar")
+library(mar)
+ls(2)
 mar <- src_oracle("mar")
 d <- lods_oslaegt(mar) %>%
+  left_join(skipaskra(mar) %>% select(skip_nr, flokkur), by = "skip_nr") %>% 
   filter(fteg == 1,
-         skip_nr != -4,
+         flokkur != -4,
          veidisvaedi == "I") %>%
   group_by(timabil, gerd) %>%
   summarise(afli = sum(magn_oslaegt)) %>%

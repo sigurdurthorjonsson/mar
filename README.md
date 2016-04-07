@@ -7,14 +7,28 @@
 # devtools::install_github("hadley/dplyr")
 # devtools::install_github("fishvice/dplyrOracle",  dependencies = FALSE)
 # devtools::install_github("fishvice/mar",  dependencies = FALSE)
-library(mar)
 library(dplyr)
 library(dplyrOracle)
-mar <- src_oracle("mar")
+library(mar)
+ls(2)
+```
+
+```
+##  [1] "afli_afli"        "afli_stofn"       "dst"             
+##  [4] "endurheimtur"     "landadur_afli"    "lesa_kvarnir"    
+##  [7] "lesa_lengdir"     "lesa_numer"       "lesa_stodvar"    
+## [10] "lesa_synaflokka"  "lesa_tegundir"    "lesa_veidarfaeri"
+## [13] "lods_oslaegt"     "lods_skipasaga"   "merki"           
+## [16] "mfiskar"          "rafaudkenni"      "skipaskra"       
+## [19] "taggart"
+```
+
+```r
 mar <- src_oracle("mar")
 d <- lods_oslaegt(mar) %>%
+  left_join(skipaskra(mar) %>% select(skip_nr, flokkur), by = "skip_nr") %>% 
   filter(fteg == 1,
-         skip_nr != -4,
+         flokkur != -4,
          veidisvaedi == "I") %>%
   group_by(timabil, gerd) %>%
   summarise(afli = sum(magn_oslaegt)) %>%
@@ -26,12 +40,20 @@ explain(d)
 ## <SQL> EXPLAIN PLAN FOR SELECT *
 ## FROM (SELECT "timabil", "gerd", SUM("magn_oslaegt") AS "afli"
 ## FROM (SELECT *
-## FROM (SELECT "skip_nr", "hofn", "komunr", "l_dags", "gerd", "fteg", "kfteg", "veidisvaedi", "stada", "veidarfaeri", TO_NUMBER(TO_CHAR("l_dags", 'YYYY')) AS "ar", TO_NUMBER(TO_CHAR("l_dags", 'MM')) AS "man", CASE WHEN (TO_NUMBER(TO_CHAR("l_dags", 'MM')) < 9.0) THEN (CONCAT(TO_NUMBER(TO_CHAR("l_dags", 'YYYY')) - 1.0, TO_NUMBER(TO_CHAR("l_dags", 'YYYY')))) ELSE (CONCAT(TO_NUMBER(TO_CHAR("l_dags", 'YYYY')), TO_NUMBER(TO_CHAR("l_dags", 'YYYY')) + 1.0)) END AS "timabil", CASE WHEN ("fteg" IN (30.0, 31.0) AND TO_NUMBER(TO_CHAR("l_dags", 'YYYY')) < 1993.0) THEN ("magn_oslaegt" / 1000.0) ELSE ("magn_oslaegt") END AS "magn_oslaegt"
+## FROM (SELECT * FROM (SELECT "skip_nr", "hofn", "komunr", "l_dags", "gerd", "fteg", "kfteg", "veidisvaedi", "stada", "veidarfaeri", TO_NUMBER(TO_CHAR("l_dags", 'YYYY')) AS "ar", TO_NUMBER(TO_CHAR("l_dags", 'MM')) AS "man", CASE WHEN (TO_NUMBER(TO_CHAR("l_dags", 'MM')) < 9.0) THEN (CONCAT(TO_NUMBER(TO_CHAR("l_dags", 'YYYY')) - 1.0, TO_NUMBER(TO_CHAR("l_dags", 'YYYY')))) ELSE (CONCAT(TO_NUMBER(TO_CHAR("l_dags", 'YYYY')), TO_NUMBER(TO_CHAR("l_dags", 'YYYY')) + 1.0)) END AS "timabil", CASE WHEN ("fteg" IN (30.0, 31.0) AND TO_NUMBER(TO_CHAR("l_dags", 'YYYY')) < 1993.0) THEN ("magn_oslaegt" / 1000.0) ELSE ("magn_oslaegt") END AS "magn_oslaegt"
 ## FROM (SELECT "skip_nr" AS "skip_nr", "hofn" AS "hofn", "komunr" AS "komunr", "l_dags" AS "l_dags", "gerd" AS "gerd", "fteg" AS "fteg", "kfteg" AS "kfteg", "magn_oslaegt" AS "magn_oslaegt", "veidisvaedi" AS "veidisvaedi", "stada" AS "stada", "veidarf" AS "veidarfaeri"
 ## FROM (SELECT "SKIP_NR" AS "skip_nr", "HOFN" AS "hofn", "KOMUNR" AS "komunr", "L_DAGS" AS "l_dags", "GERD" AS "gerd", "FTEG" AS "fteg", "KFTEG" AS "kfteg", "MAGN_OSLAEGT" AS "magn_oslaegt", "VEIDISVAEDI" AS "veidisvaedi", "STADA" AS "stada", "VEIDARF" AS "veidarf"
-## FROM (kvoti.lods_oslaegt) "mzykmkwsgc") "zsrwgfhllv") "bixlurbqqo") "devhfqtmmr"
-## WHERE (("fteg" = 1.0) AND ("skip_nr" != -4.0) AND ("veidisvaedi" = 'I'))) "nolprujeiz"
-## GROUP BY "timabil", "gerd") "mquwezcydz"
+## FROM (kvoti.lods_oslaegt) "pjoxffnqvb") "jzrvhnrdbf") "ofvygaipkj") "bfiubgtxyy"
+## 
+## LEFT JOIN
+## 
+## (SELECT "skip_nr" AS "skip_nr", "flokkur" AS "flokkur"
+## FROM (SELECT "SKIP_NR" AS "skip_nr", "EINKST" AS "einkst", "EINKNR" AS "einknr", "FLOKKUR" AS "flokkur", "HEIMAH" AS "heimah", "HEITI" AS "heiti", "BRL" AS "brl", "LENGD" AS "lengd", "SIMI" AS "simi", "EIGANDI" AS "eigandi", "REK_ADILI" AS "rek_adili"
+## FROM (orri.skipaskra) "fdlnbmntcr") "firocxobqn") "peeozdqweq"
+## 
+## USING ("skip_nr")) "iopiebqjjp"
+## WHERE (("fteg" = 1.0) AND ("flokkur" != -4.0) AND ("veidisvaedi" = 'I'))) "lnkwpblxnr"
+## GROUP BY "timabil", "gerd") "obogkewoxs"
 ## ORDER BY "timabil", "timabil", "gerd"
 ```
 
@@ -45,16 +67,16 @@ d %>% collect()
 ## 
 ##     timabil  gerd      afli
 ##       (chr) (chr)     (dbl)
-## 1  19921993     A  -1830418
-## 2  19921993     K 227159515
-## 3  19921993     L  13088533
-## 4  19921993     U   5465549
-## 5  19931994     A  -1172004
-## 6  19931994     K 194809140
-## 7  19931994     L  12097810
-## 8  19931994     U   3977377
-## 9  19941995     A   -605088
-## 10 19941995     K 156605681
+## 1  19921993     A  -1616591
+## 2  19921993     K 203536155
+## 3  19921993     L  11160471
+## 4  19921993     U   5042948
+## 5  19931994     A  -1022178
+## 6  19931994     K 168620634
+## 7  19931994     L  10463476
+## 8  19931994     U   3617187
+## 9  19941995     A   -591967
+## 10 19941995     K 143869620
 ## ..      ...   ...       ...
 ```
 
