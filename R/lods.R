@@ -11,16 +11,16 @@ lods_oslaegt <- function(mar) {
     dplyr::rename_(.dots=setNames(colnames(.),tolower(colnames(.)))) %>%
     dplyr::rename(veidarfaeri = veidarf) %>%
     dplyr::mutate(ar =   to_number(to_char(l_dags, "YYYY")),
-                  man =  to_number(to_char(l_dags, "MM")))
-    # This would be nice
-    #dplyr::mutate(magn = dplyr::ifelse(fteg %in% c(30, 31) & ar < 1993,
-    #                                    magn_oslaegt/1000,
-    #                                    magn_oslaegt))
-
-    # Also to create a category of foreign vessels (based on skip_nr)
-
+                  man =  to_number(to_char(l_dags, "MM")),
+                  timabil = if_else(to_number(to_char(l_dags, "MM")) < 9,
+                                    concat(to_number(to_char(l_dags, "YYYY")) -1, to_number(to_char(l_dags, "YYYY"))),
+                                    concat(to_number(to_char(l_dags, "YYYY")), to_number(to_char(l_dags, "YYYY")) + 1)),
+                  magn_oslaegt = if_else(fteg %in% c(30, 31) & to_number(to_char(l_dags, "YYYY")) < 1993,
+                                         magn_oslaegt/1000,
+                                         magn_oslaegt))
 
     return(d)
+
 }
 
 #' @title Skipasaga

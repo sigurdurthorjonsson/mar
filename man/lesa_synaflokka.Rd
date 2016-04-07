@@ -15,7 +15,4 @@ db query object
 \description{
 lesa synaflokka
 }
-\examples{
-lesa_synaflokka(mar)
-}
 

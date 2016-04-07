@@ -7,7 +7,10 @@
 lesa_tegundir(mar)
 }
 \arguments{
-\item{mar}{}
+\item{mar}{db connection}
+}
+\value{
+db query object
 }
 \description{
 lesa tegundir

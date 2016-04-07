@@ -1,11 +1,10 @@
 #' lesa veiðarfæri
 #'
-#' @param mar
+#' @param mar db connection
 #'
-#' @return
+#' @return db query object
 #' @export
 #'
-#' @examples
 lesa_veidarfaeri <- function(mar){
   dplyr::tbl(mar,dplyr::sql("orri.veidarfaeri")) %>%
     select(-c(SNT:SBN)) %>%
@@ -14,12 +13,11 @@ lesa_veidarfaeri <- function(mar){
 
 #' lesa tegundir
 #'
-#' @param mar
+#' @param mar db connection
 #'
-#' @return
+#' @return db query object
 #' @export
 #'
-#' @examples
 lesa_tegundir <- function(mar){
   dplyr::tbl(mar,dplyr::sql("orri.fisktegundir")) %>%
     select(-c(SNT:SBN)) %>%
@@ -33,8 +31,6 @@ lesa_tegundir <- function(mar){
 #' @return db query object
 #' @export
 #'
-#' @examples
-#' lesa_synaflokka(mar)
 lesa_synaflokka <- function(mar){
   dplyr::tbl(mar,dplyr::sql("fiskar.synaflokkar")) %>%
   dplyr::rename_(.dots=setNames(colnames(.),tolower(colnames(.))))
