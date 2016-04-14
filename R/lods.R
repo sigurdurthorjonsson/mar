@@ -99,6 +99,22 @@ afli_tac <- function(mar) {
 }
 
 
+#' @title kvoti studlar
+#'
+#' @description XXX
+#'
+#' @export
+#'
+#' @param mar src_oracle tenging við oracle
+kvoti_studlar <- function(mar) {
+
+  d <- dplyr::tbl(mar, dplyr::sql("kvoti.studlar")) %>%
+    dplyr::rename_(.dots=setNames(colnames(.),tolower(colnames(.))))
+
+  return(d)
+
+}
+
 #' @title Kvóti staða
 #'
 #' @description XXX
