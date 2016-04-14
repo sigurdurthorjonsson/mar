@@ -55,6 +55,7 @@ skipaskra <- function(mar) {
   return(d)
 
 }
+
 #' @title Landadur afli
 #'
 #' @description Landaður afli. Dálkurinn flokkur vísar til skipaflokks,
@@ -96,3 +97,57 @@ afli_tac <- function(mar) {
   return(d)
 
 }
+
+
+#' @title Kvóti staða
+#'
+#' @description XXX
+#'
+#' @export
+#'
+#' @param mar src_oracle tenging við oracle
+kvoti_stada <- function(mar) {
+
+  d <-
+    dplyr::tbl(mar, dplyr::sql("kvoti.kv_stada")) %>%
+    dplyr::rename_(.dots=setNames(colnames(.),tolower(colnames(.)))) %>%
+    dplyr::select(-c(sng:snt))
+
+  return(d)
+
+}
+
+
+#' @title Kvóti staða summary
+#'
+#' @description Á síðari árum er þetta nokk svona:
+#' kvoti = varanlegt + jofnsj + m_ara
+#' stada = kvoti - afli
+#' eftir = stada - tilf
+#' eftir + upptaka = n_ar + onotad
+#'
+#' @export
+#'
+#' @param mar src_oracle tenging við oracle
+kvoti_stada_summarised <- function(mar) {
+
+  d <-
+    kvoti_stada(mar) %>%
+    dplyr::group_by(fteg, timabil) %>%
+    dplyr::summarise(varanlegt = round(sum(varanlegt)/1000,0),
+              jofnsj = round(sum(jofnsj)/1000,0),
+              m_ara = round(sum(m_ara)/1000,0),
+              kvoti = round(sum(kvoti)/1000,0),
+              afli = round(sum(afli)/1000,0),
+              stada = round(sum(stada)/1000,0),
+              tilf = round(sum(tilf)/1000,0),
+              eftir = round(sum(eftir)/1000,0),
+              upptaka = round(sum(upptaka)/1000,0),
+              n_ar = round(sum(n_ar)/1000,0),
+              onotad = round(sum(onotad)/1000,0),
+              m_skipa = round(sum(m_skipa)/1000,0))
+
+  return(d)
+
+}
+
