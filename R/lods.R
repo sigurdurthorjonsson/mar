@@ -149,19 +149,22 @@ kvoti_stada_summarised <- function(mar) {
 
   d <-
     kvoti_stada(mar) %>%
+    left_join(kvoti_studlar(mar) %>%
+                select(fteg = ftegund, timabil, i_oslaegt),
+              by = c("fteg", "timabil")) %>%
     dplyr::group_by(fteg, timabil) %>%
-    dplyr::summarise(varanlegt = round(sum(varanlegt)/1000,0),
-              jofnsj = round(sum(jofnsj)/1000,0),
-              m_ara = round(sum(m_ara)/1000,0),
-              kvoti = round(sum(kvoti)/1000,0),
-              afli = round(sum(afli)/1000,0),
-              stada = round(sum(stada)/1000,0),
-              tilf = round(sum(tilf)/1000,0),
-              eftir = round(sum(eftir)/1000,0),
-              upptaka = round(sum(upptaka)/1000,0),
-              n_ar = round(sum(n_ar)/1000,0),
-              onotad = round(sum(onotad)/1000,0),
-              m_skipa = round(sum(m_skipa)/1000,0))
+    dplyr::summarise(varanlegt = round(sum(varanlegt * i_oslaegt)/1000,0),
+              jofnsj = round(sum(jofnsj * i_oslaegt)/1000,0),
+              m_ara = round(sum(m_ara * i_oslaegt)/1000,0),
+              kvoti = round(sum(kvoti * i_oslaegt)/1000,0),
+              afli = round(sum(afli * i_oslaegt)/1000,0),
+              stada = round(sum(stada * i_oslaegt)/1000,0),
+              tilf = round(sum(tilf * i_oslaegt)/1000,0),
+              eftir = round(sum(eftir * i_oslaegt)/1000,0),
+              upptaka = round(sum(upptaka * i_oslaegt)/1000,0),
+              n_ar = round(sum(n_ar * i_oslaegt)/1000,0),
+              onotad = round(sum(onotad * i_oslaegt)/1000,0),
+              m_skipa = round(sum(m_skipa * i_oslaegt)/1000,0))
 
   return(d)
 
