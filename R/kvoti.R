@@ -29,7 +29,7 @@ afla_heimild <- function(mar) {
            timabil = if_else(to_number(to_char(i_gildi, "MM")) < 9,
                              concat(to_number(to_char(i_gildi, "YY")) -1, to_number(to_char(i_gildi, "YY"))),
                              concat(to_number(to_char(i_gildi, "YY")), to_number(to_char(i_gildi, "YY")) + 1))) %>%
-    left_join(heimild, by = c("heimild" = "tegund")) %>%
+    left_join(heimild(mar), by = c("heimild" = "tegund")) %>%
     left_join(kvoti_studlar(mar) %>% select(ftegund, timabil, i_oslaegt), by = c("ftegund", "timabil")) %>%
     mutate(oslaegt = i_oslaegt * magn)
 
