@@ -6,8 +6,7 @@
 #'
 #' @param mar src_oracle tenging við oracle
 merki <- function(mar) {
-  d <- dplyr::tbl(mar,dplyr::sql("fiskmerki.merki")) %>%
-    dplyr::rename_(.dots=setNames(colnames(.),tolower(colnames(.)))) %>%
+  d <- tbl_mar(mar, "fiskmerki.merki") %>%
     dplyr::rename(tid = id)
   return(d)
 }
@@ -20,10 +19,11 @@ merki <- function(mar) {
 #'
 #' @param mar src_oracle tenging við oracle
 mfiskar <- function(mar) {
-  d <- dplyr::tbl(mar,dplyr::sql("fiskmerki.fiskar")) %>%
-    dplyr::rename_(.dots=setNames(colnames(.),tolower(colnames(.)))) %>%
+
+  d <- tbl_mar(mar, "fiskmerki.fiskar") %>%
     dplyr::rename(fiskur_id = id)
-  return(d)
+
+    return(d)
 }
 
 #' @title endurheimtur
@@ -34,8 +34,7 @@ mfiskar <- function(mar) {
 #'
 #' @param mar src_oracle tenging við oracle
 endurheimtur <- function(mar) {
-  d <- dplyr::tbl(mar,dplyr::sql("fiskmerki.endurheimtur")) %>%
-    dplyr::rename_(.dots=setNames(colnames(.),tolower(colnames(.)))) %>%
+  d <- tbl_mar(mar, "fiskmerki.endurheimtur") %>%
     dplyr::rename(rid = id,
                   tid = merki_id,
                   rtegund = tegund,
@@ -60,8 +59,8 @@ endurheimtur <- function(mar) {
 #'
 #' @param mar src_oracle tenging við oracle
 rafaudkenni <- function(mar) {
-  d <- dplyr::tbl(mar,dplyr::sql("fiskmerki.rafaudkenni")) %>%
-    dplyr::rename_(.dots=setNames(colnames(.),tolower(colnames(.)))) %>%
+
+  d <- tbl_mar(mar, "fiskmerki.rafaudkenni") %>%
     dplyr::rename(tid = merki_id,
                   dst_id = taudkenni)
   return(d)
@@ -75,10 +74,11 @@ rafaudkenni <- function(mar) {
 #'
 #' @param mar src_oracle tenging við oracle
 dst <- function(mar) {
-  d <- dplyr::tbl(mar,dplyr::sql("fiskmerki.rafgogn")) %>%
-    dplyr::rename_(.dots=setNames(colnames(.),tolower(colnames(.)))) %>%
+
+  d <- tbl_mar(mar, "fiskmerki.rafgogn") %>%
     dplyr::rename(dst_id = taudkenni)
-  return(d)
+
+    return(d)
 }
 
 

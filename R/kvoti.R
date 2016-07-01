@@ -6,8 +6,7 @@
 #' @export
 heimild <- function(mar) {
 
-  d <-   tbl(mar, sql("kvoti.heimild")) %>%
-    dplyr::rename_(.dots=setNames(colnames(.),tolower(colnames(.))))
+  d <-   tbl_mar(mar, "kvoti.heimild")
 
   return(d)
 
@@ -21,17 +20,16 @@ heimild <- function(mar) {
 afla_heimild <- function(mar) {
 
   d <-
-    tbl(mar, sql("kvoti.afla_heimild")) %>%
-    dplyr::rename_(.dots=setNames(colnames(.),tolower(colnames(.)))) %>%
-    select(-c(sng:sbt)) %>%
-    mutate(ar =   to_number(to_char(i_gildi, "YYYY")),
+    tbl_mar(mar, "kvoti.afla_heimild") %>%
+    dplyr::select(-c(sng:sbt)) %>%
+    dplyr::mutate(ar =   to_number(to_char(i_gildi, "YYYY")),
            man =  to_number(to_char(i_gildi, "MM")),
-           timabil = if_else(to_number(to_char(i_gildi, "MM")) < 9,
+           timabil = dplyr::if_else(to_number(to_char(i_gildi, "MM")) < 9,
                              concat(to_number(to_char(i_gildi, "YY")) -1, to_number(to_char(i_gildi, "YY"))),
                              concat(to_number(to_char(i_gildi, "YY")), to_number(to_char(i_gildi, "YY")) + 1))) %>%
-    left_join(heimild(mar), by = c("heimild" = "tegund")) %>%
-    left_join(kvoti_studlar(mar) %>% select(ftegund, timabil, i_oslaegt), by = c("ftegund", "timabil")) %>%
-    mutate(oslaegt = i_oslaegt * magn)
+    dplyr::left_join(heimild(mar), by = c("heimild" = "tegund")) %>%
+    dplyr::left_join(kvoti_studlar(mar) %>% dplyr::select(ftegund, timabil, i_oslaegt), by = c("ftegund", "timabil")) %>%
+    dplyr::mutate(oslaegt = i_oslaegt * magn)
 
   return(d)
 

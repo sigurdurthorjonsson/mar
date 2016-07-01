@@ -7,8 +7,7 @@
 #' @param mar src_oracle tenging við oracle
 lods_oslaegt <- function(mar) {
 
-  d <- dplyr::tbl(mar,dplyr::sql("kvoti.lods_oslaegt")) %>%
-    dplyr::rename_(.dots=setNames(colnames(.),tolower(colnames(.)))) %>%
+  d <- tbl_mar(mar, "kvoti.lods_oslaegt") %>%
     dplyr::rename(veidarfaeri = veidarf) %>%
     dplyr::mutate(ar =   to_number(to_char(l_dags, "YYYY")),
                   man =  to_number(to_char(l_dags, "MM")),
@@ -32,8 +31,7 @@ lods_oslaegt <- function(mar) {
 #' @param mar src_oracle tenging við oracle
 lods_skipasaga <- function(mar) {
 
-    d <- dplyr::tbl(mar,dplyr::sql("kvoti.skipasaga")) %>%
-      dplyr::rename_(.dots=setNames(colnames(.),tolower(colnames(.)))) %>%
+    d <- tbl_mar(mar, "kvoti.skipasaga") %>%
       dplyr::select(-(snt:sbn))
 
   return(d)
@@ -49,8 +47,7 @@ lods_skipasaga <- function(mar) {
 #' @param mar src_oracle tenging við oracle
 skipaskra <- function(mar) {
 
-  d <- dplyr::tbl(mar, dplyr::sql("orri.skipaskra")) %>%
-    dplyr::rename_(.dots=setNames(colnames(.),tolower(colnames(.))))
+  d <- tbl_mar(mar, "orri.skipaskra")
 
   return(d)
 
@@ -85,13 +82,13 @@ landadur_afli <- function(mar) {
 #' @export
 #'
 #' @param mar src_oracle tenging við oracle
+#'
 afli_tac <- function(mar) {
 
-  d <- dplyr::tbl(mar, dplyr::sql("kvoti.afli_tac")) %>%
-    dplyr::rename_(.dots=setNames(colnames(.),tolower(colnames(.)))) %>%
+  d <- tbl_mar(mar, "kvoti.afli_tac") %>%
     dplyr::mutate(ar = to_number(ar),
                   man = to_number(man)) %>%
-    rename(tegund = fteg,
+    dplyr::rename(tegund = fteg,
            veidarfaeri = veidarf)
 
   return(d)
@@ -108,8 +105,7 @@ afli_tac <- function(mar) {
 #' @param mar src_oracle tenging við oracle
 kvoti_studlar <- function(mar) {
 
-  d <- dplyr::tbl(mar, dplyr::sql("kvoti.studlar")) %>%
-    dplyr::rename_(.dots=setNames(colnames(.),tolower(colnames(.))))
+  d <- tbl_mar(mar, "kvoti.studlar")
 
   return(d)
 
@@ -125,8 +121,7 @@ kvoti_studlar <- function(mar) {
 kvoti_stada <- function(mar) {
 
   d <-
-    dplyr::tbl(mar, dplyr::sql("kvoti.kv_stada")) %>%
-    dplyr::rename_(.dots=setNames(colnames(.),tolower(colnames(.)))) %>%
+    tbl_mar(mar, "kvoti.kv_stada") %>%
     dplyr::select(-c(sng:snt))
 
   return(d)
@@ -149,9 +144,9 @@ kvoti_stada_summarised <- function(mar) {
 
   d <-
     kvoti_stada(mar) %>%
-    left_join(kvoti_studlar(mar) %>%
-                select(fteg = ftegund, timabil, i_oslaegt),
-              by = c("fteg", "timabil")) %>%
+    dplyr::left_join(kvoti_studlar(mar) %>%
+                       dplyr::select(fteg = ftegund, timabil, i_oslaegt),
+                     by = c("fteg", "timabil")) %>%
     dplyr::group_by(fteg, timabil) %>%
     dplyr::summarise(varanlegt = round(sum(varanlegt * i_oslaegt)/1000,0),
               jofnsj = round(sum(jofnsj * i_oslaegt)/1000,0),

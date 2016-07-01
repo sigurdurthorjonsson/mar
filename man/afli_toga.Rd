@@ -2,12 +2,12 @@
 % Please edit documentation in R/logbooks.R
 \name{afli_toga}
 \alias{afli_toga}
-\title{toga}
+\title{oracle afli_toga}
 \usage{
 afli_toga(mar)
 }
 \arguments{
-\item{mar}{src_oracle tenging við oracle}
+\item{mar}{tenging við oraclegrunn}
 }
 \description{
 XXX
