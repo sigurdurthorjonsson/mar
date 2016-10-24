@@ -19,6 +19,7 @@ LazyData: TRUE
 URL: http://github.com/einarhjorleifsson/mar
 BugReports: http://github.com/einarhjorleifsson/mar/issues
 Suggests:
-    knitr
+    knitr,
+    rmarkdown
 VignetteBuilder: knitr
 RoxygenNote: 5.0.1
