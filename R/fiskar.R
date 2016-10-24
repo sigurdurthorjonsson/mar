@@ -107,12 +107,12 @@ lesa_lengdir <- function(mar) {
   le.corr <-
     dplyr::tbl(mar,dplyr::sql("fiskar.leidr_lengdir")) %>%
     dplyr::select(-c(SBN:SNT)) %>%
-    dplyr::inner_join(st.corr) %>%
+    dplyr::inner_join(st.corr, by = "SYNIS_ID") %>%
     dplyr::filter(!(SYNIS_ID %in% excl.list))
 
   d <-
     dplyr::tbl(mar,dplyr::sql("fiskar.lengdir")) %>%
-    dplyr::inner_join(st) %>%
+    dplyr::inner_join(st, by = "SYNIS_ID") %>%
     dplyr::select(-c(SNN:SBT)) %>%
     dplyr::union_all(le.corr) %>%
     dplyr::select_(.,.dots=within(list(),
@@ -165,14 +165,14 @@ lesa_numer <- function(mar) {
   num.corr <-
     dplyr::tbl(mar,dplyr::sql("fiskar.leidr_numer")) %>%
     dplyr::select(-c(SBN:SNT)) %>%
-    dplyr::inner_join(st.corr) %>%
+    dplyr::inner_join(st.corr, by = "SYNIS_ID") %>%
     dplyr::filter(!(SYNIS_ID %in% excl.list)) %>%
     dplyr::rename(ATHUGA=ATHS) %>%
     dplyr::filter()
 
   d <-
     dplyr::tbl(mar,dplyr::sql("fiskar.numer")) %>%
-    dplyr::inner_join(st) %>%
+    dplyr::inner_join(st, by = "SYNIS_ID") %>%
     dplyr::select(-c(SBN:SNT,dplyr::starts_with('INNSL'))) %>%
     dplyr::union_all(.,dplyr::select_(num.corr,.dots=colnames(.))) %>%
     dplyr::select_(.,.dots=within(list(),
