@@ -2,7 +2,6 @@
 #'
 #' @description XXX
 #'
-#' @export
 #'
 #' @param mar src_oracle tenging við oracle
 merki <- function(mar) {
@@ -15,7 +14,6 @@ merki <- function(mar) {
 #'
 #' @description XXX
 #'
-#' @export
 #'
 #' @param mar src_oracle tenging við oracle
 mfiskar <- function(mar) {
@@ -30,7 +28,6 @@ mfiskar <- function(mar) {
 #'
 #' @description XXX
 #'
-#' @export
 #'
 #' @param mar src_oracle tenging við oracle
 endurheimtur <- function(mar) {
@@ -55,7 +52,6 @@ endurheimtur <- function(mar) {
 #'
 #' @description XXX
 #'
-#' @export
 #'
 #' @param mar src_oracle tenging við oracle
 rafaudkenni <- function(mar) {
@@ -70,7 +66,6 @@ rafaudkenni <- function(mar) {
 #'
 #' @description XXX
 #'
-#' @export
 #'
 #' @param mar src_oracle tenging við oracle
 dst <- function(mar) {
@@ -86,7 +81,6 @@ dst <- function(mar) {
 #'
 #' @description A flat dataframe of tags and recaptures
 #'
-#' @export
 #'
 #' @param mar src_oracle tenging við oracle
 taggart <- function(mar) {

@@ -33,7 +33,7 @@ lesa_tegundir <- function(mar){
 #' @export
 #'
 
-lesa_synaflokka <- function(mar){
+lesa_synaflokkar <- function(mar){
   tbl_mar(mar, "fiskar.synaflokkar")
 }
 
@@ -43,7 +43,6 @@ lesa_synaflokka <- function(mar){
 #' @param mar db connection
 #'
 #' @return db query object
-#' @export
 #'
 kvoti_stadur <- function(mar) {
 

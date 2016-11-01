@@ -1,11 +1,12 @@
-#' @title oracle afli_stofn
+#' @title oracle lesa_stofn
 #'
 #' @description XXX
 #'
 #' @export
 #'
 #' @param mar tenging við oraclegrunn
-afli_stofn <- function(mar) {
+
+lesa_stofn <- function(mar) {
 
   d <- tbl_mar(mar, "afli.stofn") %>%
     dplyr::rename(veidarfaeri = veidarf) %>%
@@ -23,7 +24,7 @@ afli_stofn <- function(mar) {
 #' @export
 #'
 #' @param mar tenging við oraclegrunn
-afli_afli <- function(mar) {
+lesa_afli <- function(mar) {
 
   d <- tbl_mar(mar,"afli.afli")
 
@@ -38,7 +39,7 @@ afli_afli <- function(mar) {
 #' @export
 #'
 #' @param mar tenging við oraclegrunn
-afli_siriti <- function(mar) {
+lesa_siriti <- function(mar) {
 
   d <- tbl_mar(mar, "afli.sjalfvirkir_maelar") %>%
     dplyr::mutate(ar =   to_number(to_char(timi, "YYYY")),
@@ -64,7 +65,7 @@ afli_siriti <- function(mar) {
 #' @export
 #'
 #' @param mar tenging við oraclegrunn
-afli_toga <- function(mar) {
+lesa_toga <- function(mar) {
 
   d <- tbl_mar(mar,"afli.toga")
 

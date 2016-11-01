@@ -3,7 +3,6 @@
 #'
 #' @param mar src_oracle tenging við oracle
 #'
-#' @export
 heimild <- function(mar) {
 
   d <-   tbl_mar(mar, "kvoti.heimild")
@@ -16,7 +15,6 @@ heimild <- function(mar) {
 #'
 #' @param mar src_oracle tenging við oracle
 #'
-#' @export
 afla_heimild <- function(mar) {
 
   d <-

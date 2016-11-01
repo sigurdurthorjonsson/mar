@@ -2,8 +2,6 @@
 #'
 #' @description XXX
 #'
-#' @export
-#'
 #' @param mar src_oracle tenging við oracle
 lods_oslaegt <- function(mar) {
 
@@ -26,7 +24,6 @@ lods_oslaegt <- function(mar) {
 #'
 #' @description XXX
 #'
-#' @export
 #'
 #' @param mar src_oracle tenging við oracle
 lods_skipasaga <- function(mar) {
@@ -45,7 +42,7 @@ lods_skipasaga <- function(mar) {
 #' @export
 #'
 #' @param mar src_oracle tenging við oracle
-skipaskra <- function(mar) {
+lesa_skipaskra <- function(mar) {
 
   d <- tbl_mar(mar, "orri.skipaskra")
 
@@ -59,14 +56,13 @@ skipaskra <- function(mar) {
 #' ef neikvæður þá er um erlent skip að ræða. Erlend skip eru
 #' einnig þegar þetta er skrifað (1. apríl 2016) með númer frá 3815:4999.
 #'
-#' @export
 #'
 #' @param mar src_oracle tenging við oracle
 landadur_afli <- function(mar) {
 
   d <-
     lods_oslaegt(mar) %>%
-    dplyr::left_join(skipaskra(mar) %>%
+    dplyr::left_join(lesa_skipaskra(mar) %>%
                        dplyr::select(skip_nr, flokkur),
                      by = "skip_nr")
 
@@ -79,7 +75,6 @@ landadur_afli <- function(mar) {
 #'
 #' @description Landaður afli byggður á töflu sem Sigfús Jó stjórnar
 #'
-#' @export
 #'
 #' @param mar src_oracle tenging við oracle
 #'
@@ -100,7 +95,6 @@ afli_tac <- function(mar) {
 #'
 #' @description XXX
 #'
-#' @export
 #'
 #' @param mar src_oracle tenging við oracle
 kvoti_studlar <- function(mar) {
@@ -115,7 +109,6 @@ kvoti_studlar <- function(mar) {
 #'
 #' @description XXX
 #'
-#' @export
 #'
 #' @param mar src_oracle tenging við oracle
 kvoti_stada <- function(mar) {
@@ -137,7 +130,6 @@ kvoti_stada <- function(mar) {
 #' eftir = stada - tilf
 #' eftir + upptaka = n_ar + onotad
 #'
-#' @export
 #'
 #' @param mar src_oracle tenging við oracle
 kvoti_stada_summarised <- function(mar) {
