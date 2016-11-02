@@ -2,13 +2,13 @@
 % Please edit documentation in R/magi.R
 \name{faeda}
 \alias{faeda}
-\alias{faeda_hopar}
 \alias{faeda_lengdir}
 \alias{faeda_ranfiskar}
+\alias{faeda_tegundir}
 \alias{faeda_thyngdir}
 \title{Magasyni Hafrannsóknarstofnunar}
 \usage{
-faeda_hopar(mar)
+faeda_tegundir(mar)
 
 faeda_ranfiskar(mar)
 
