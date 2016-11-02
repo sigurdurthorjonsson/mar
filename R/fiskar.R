@@ -48,13 +48,15 @@ lesa_stodvar <- function(mar) {
                   yfirbordshiti = yfirb_hiti) %>%
     dplyr::mutate(tog_lengd =-1, dregid_fra = NA) %>%
     dplyr::select(-orreitur) %>%
-    dplyr::filter(dags < to_date('01.01.1986','dd.mm.yyyy') & dags > to_date('1910','yyyy'))
+    dplyr::filter(dags < to_date('01.01.1986','dd.mm.yyyy') & dags > to_date('1910','yyyy')) %>%
+    dplyr::mutate(uppruni_stodvar = 'leidr_stodvar')
 
   d <-
     st %>%
     dplyr::left_join(tog, by = "synis_id") %>%
     dplyr::left_join(um, by = "synis_id") %>%
     dplyr::filter(dags > to_date('01.01.1986','dd.mm.yyyy')) %>%
+    dplyr::mutate(uppruni_stodvar = 'stodvar')%>%
     dplyr::union_all(.,dplyr::select_(st.corr,.dots=colnames(.))) %>%
     dplyr::mutate(ar =   to_number(to_char(dags, "YYYY")),
                   man =  to_number(to_char(dags, "MM"))) %>%
@@ -106,12 +108,14 @@ lesa_lengdir <- function(mar) {
     tbl_mar(mar,"fiskar.leidr_lengdir") %>%
     dplyr::select(-c(sbn:snt)) %>%
     dplyr::inner_join(st.corr, by = "synis_id") %>%
-    dplyr::filter(!(synis_id %in% excl.list))
+    dplyr::filter(!(synis_id %in% excl.list))%>%
+    dplyr::mutate(uppruni_lengdir = 'leidr_lengdir')
 
   d <-
     tbl_mar(mar,"fiskar.lengdir") %>%
     dplyr::inner_join(st, by = "synis_id") %>%
     dplyr::select(-c(snn:sbt)) %>%
+    dplyr::mutate(uppruni_lengdir = 'lengdir') %>%
     dplyr::union_all(le.corr) %>%
     dplyr::distinct()
 
@@ -161,13 +165,15 @@ lesa_numer <- function(mar) {
     dplyr::inner_join(st.corr, by = "synis_id") %>%
     dplyr::filter(!(synis_id %in% excl.list)) %>%
     dplyr::rename(aths_numer=aths) %>%
-    dplyr::filter()
+    dplyr::filter() %>%
+    dplyr::mutate(uppruni_numer = 'leidr_numer')
 
   d <-
     tbl_mar(mar,"fiskar.numer") %>%
     dplyr::inner_join(st, by = "synis_id") %>%
-    dplyr::rename(aths_numer = athuga)
+    dplyr::rename(aths_numer = athuga) %>%
     dplyr::select(-c(sbn:snt,dplyr::starts_with('innsl'))) %>%
+    dplyr::mutate(uppruni_numer = 'numer')
     dplyr::union_all(.,dplyr::select_(num.corr,.dots=colnames(.))) %>%
     dplyr::distinct()
   # below returns an error
@@ -219,12 +225,14 @@ lesa_kvarnir <- function(mar) {
     tbl_mar(mar,"fiskar.leidr_kvarnir") %>%
     dplyr::inner_join(st.corr, by = "synis_id") %>%
     dplyr::select(-c(sbn:snt)) %>%
-    dplyr::filter(!(synis_id %in% excl.list))
+    dplyr::filter(!(synis_id %in% excl.list)) %>%
+    dplyr::mutate(uppruni_kvarnir = 'leidr_kvarnir')
 
   d <-
     tbl_mar(mar,"fiskar.kvarnir") %>%
     dplyr::inner_join(st, by = "synis_id") %>%
     dplyr::select(-c(sbn:snt)) %>%
+    dplyr::mutate(uppruni_kvarnir = 'kvarnir') %>%
     dplyr::union_all(oto.corr)  %>%
     dplyr::rename(aths_kvarnir = aths)#%>%
   # below returns an error
