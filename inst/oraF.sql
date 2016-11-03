@@ -76,7 +76,7 @@ FUNCTION d2sr(lat1 number, lon1 number) RETURN INTEGER IS
 /
 
 CREATE OR REPLACE
-FUNCTION arcdist(lat number, lon number,lat1 number, lon1 number,nmi number) RETURN number IS
+FUNCTION arcdist(lat number, lon number,lat1 number, lon1 number,scale varchar2 default 'nmi') RETURN number IS
   mult1 number;
   mult2 number;
   rad number;
@@ -84,7 +84,7 @@ FUNCTION arcdist(lat number, lon number,lat1 number, lon1 number,nmi number) RET
   dist number
 
   BEGIN
-    if (nmi == 1) then
+    if (scale == 'nmi') then
       miles := 1.852;
     else
       miles := 1;
