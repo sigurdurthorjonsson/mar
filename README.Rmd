@@ -1,21 +1,218 @@
 ---
 title: "mar"
+author: Bjarki Þór Elvarsson and Einar Hjörleifsson
 output: 
   html_document: 
     keep_md: yes
 ---
 
-## dplyr-erized connection to MRI oracle database
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,
+                      message = FALSE,
+                      warning = FALSE)
+```
+
+<div class="panel panel-warning">
+<div class="panel-heading">The small print</div>
+<div class="panel-body">
+
+This mar package is work in progress.
+
+</div>
+</div>
+
+## Tidyverse connection to MRI oracle database
+
+The [`dplyr`-package](https://cran.rstudio.com/web/packages/dplyr/vignettes/introduction.html) is designed so that, in addition to working with local R-data.frames, it works with remote on-disk data stored in databases. [Inbuilt functions within dplyr](https://cran.rstudio.com/web/packages/dplyr/vignettes/databases.html) allow seamless connectivity with sqlite, mysql and postgresql.
+
+The `dplyrOracle`-package provides a generic connection to Oracle databases. Due to some idiosyncrasies associated with schema as well as issues related to case-sensitivity make "default" communication with Oracle not straight forward. These as well as other convenience wrappers are taken care of in the `mar`-packages.
+
+### Installation
+
+You have to do this once, or when you want to update the packages already installed on your computer:
+
+```{r, eval = FALSE}
+install.packages("dplyr")
+install.packages("devtools")
+devtools::install_github("fishvice/dplyrOracle",  dependencies = FALSE)
+devtools::install_github("fishvice/mar",  dependencies = FALSE)
+```
+
+### Establish conection
 
 ```{r, message = FALSE}
-# devtools::install_github("hadley/dplyr")
-# devtools::install_github("fishvice/dplyrOracle",  dependencies = FALSE)
-# devtools::install_github("fishvice/mar",  dependencies = FALSE)
 library(dplyr)
 library(dplyrOracle)
 library(mar)
-ls(2)
+```
+
+Connection to MRI Oracle database:
+```{r}
 mar <- src_oracle("mar")
+```
+
+### Some (hopefully) gentle introduction
+___
+
+The core function in the `mar`-package is the `tbl-mar`-function. It takes two arguments, the "connection" and the name of the oracle table. E.g. to establish a connection to the table "lengdir" in the schema "fiskar" one can do:
+```{r}
+lengdir <- tbl_mar(mar, "fiskar.lengdir")
+```
+What class is lengdir?:
+```{r}
+class(lengdir)
+```
+The class here is somewhat obtuse. Lets not worry about that to much. What has happened behind the scene one can realize by:
+```{r}
+explain(lengdir)
+```
+Ergo we generated an object, which one part is an SQL-query. The `explain` informs us how the database plans to execute the query.
+
+The operation has not yet touched the database. It’s not until you ask for the data (e.g. by printing lengdir) that dplyr generates the SQL and requests the results from the database. Even then it only pulls down 10 rows.
+```{r}
+lengdir
+```
+Now, there are columns returned that we have little interest in (sbt:snn). Using the `dplyr`-verbs (functions) one can easily build upon the base query, e.g.:
+```{r}
+lengdir %>% 
+  select(synis_id, tegund, lengd, fjoldi, kyn, kynthroski) %>% 
+  glimpse()
+```
+
+Now if one were only interested in one species and one station we may extend the above as:
+```{r}
+lengdir <- 
+  tbl_mar(mar, "fiskar.lengdir") %>% 
+  select(synis_id, tegund, lengd, fjoldi, kyn, kynthroski) %>% 
+  filter(synis_id == 48489,
+         tegund == 1)
+explain(lengdir)
+```
+
+To pull down all the results into R one uses collect(), which returns a tidyverse data.frame (tbl_df):
+```{r}
+d <- 
+  lengdir %>% 
+  collect()
+class(d)
+dim(d)
+```
+
+A quick visualization of the data can be obtained via:
+```{r}
+library(ggplot2)
+d %>% 
+  ggplot() +
+  geom_bar(aes(lengd, fjoldi), stat = "identity")
+```
+
+So we have the length distribution of measured cod from one sample (station). We do not however know what this sample is, because the column **synis_id** is just some gibberish automatically generated within Oracle. Before we deal with that, lets introduce `lesa_lengdir`-function that resides in the `mar`-package:
+
+```{r}
+lesa_lengdir(mar) %>% glimpse()
+```
+
+Here we have same columns as above with one additional column, **uppruni_lengdir**. This is because the function reads from two different tables, **fiskar.lengdir** and **fiskar.leidr_lengdir** and combines them into one. Hopefully this is only an interim measure - there are plans to merge these two data tables into one (lets keep our fingers crossed). 
+
+Lets used `lesa_lengdir` as our starting point, this time lets ask the question how many fish by species were length measured from this yet unknown station:
+```{r}
+d <-
+  lesa_lengdir(mar) %>% 
+  filter(synis_id == 48489) %>% 
+  group_by(tegund) %>% 
+  summarise(fjoldi = sum(fjoldi)) %>% 
+  arrange(fjoldi)
+explain(d)
+```
+
+The SQL query has now become a bunch of gibberish for some of us. But this demonstrates that in addition to **select** and **filter** the `dplyr`-verbs **group_by**, **summarise** and **arrange** are "translated" into SQL :-) To see the outcome we do:
+```{r}
+d %>% collect()
+```
+
+Those familiar with the fiskar database know that these information are also available in the table **numer**. Here we can use the ``mar::lesa_numer` function:
+```{r, eval = FALSE}
+# BUG, not run
+lesa_numer(mar) %>% 
+  filter(synis_id == 48489)
+```
+
+```{r}
+tbl_mar(mar, "fiskar.numer") %>% 
+  filter(synis_id == 48489) %>% 
+  select(tegund, fj_maelt, fj_talid) %>% 
+  arrange(fj_maelt) %>% 
+  collect()
+```
+
+So we get a dataframe that has more species than those obtained from `lesa_lengdir`. This is because the sample (station) also contained some species that were not measured, only counted.
+
+Information about the station that corresponds to synis_id = 48489 reside in the station table:
+```{r}
+lesa_stodvar(mar) %>% 
+  filter(synis_id == 48489) %>% 
+  glimpse()
+```
+
+For those familiar with what is stored in **fiskar.stodvar** recognize that the station is most likely part of the 1991 spring survey (veidarfaeri = 73 and synaflokkur = 30 provides the best hint). What if we were to start from this end and get all the stations from the 1991 survey and also limit the number of columns returned:
+```{r}
+smb1991 <-
+  lesa_stodvar(mar) %>% 
+  filter(ar == 1991,
+         veidarfaeri == 73,
+         synaflokkur == 30) %>% 
+  select(synis_id,
+         lon = kastad_v_lengd,
+         lat = kastad_n_breidd)
+```
+
+To get a quick plot of the station location we could do:
+```{r}
+smb1991 %>% 
+  collect() %>% 
+  # convert ddmmxx to decimal degrees
+  mutate(lon = -gisland::geo_convert(lon),
+         lat =  gisland::geo_convert(lat)) %>% 
+  ggplot(aes(lon, lat)) +
+  geom_polygon(data = gisland::iceland, aes(long, lat, group = group)) +
+  geom_point(col = "red") +
+  coord_quickmap()
+```
+
+Looks about right. But what if we were interested in getting the total number of fish recorded at each station? Here we need to obtain the information from **fiskar.numer** for the station (synis_id) in question. This we do by using `left_join`:
+```{r}
+nu <- 
+  tbl_mar(mar, "fiskar.numer") %>% 
+  group_by(synis_id) %>% 
+  summarise(n = sum(fj_maelt + fj_talid))
+smb1991_n <-
+  smb1991 %>% 
+  left_join(nu)
+```
+
+Again we have not done much more than generate an SQL-query and not touched the database. For those interested seeing the SQL-code do:
+```{r, eval = FALSE}
+explain(smb1991_n)
+```
+
+To turn this into action, lets execute the query, get the dataframe into R and plot the data:
+```{r}
+smb1991_n %>% 
+  collect() %>% 
+  mutate(lon = -gisland::geo_convert(lon),
+         lat =  gisland::geo_convert(lat)) %>% 
+  ggplot() +
+  theme_bw() +
+  geom_polygon(data = gisland::iceland, aes(long, lat, group = group), fill = "grey") +
+  geom_point(aes(lon, lat, size = n), col = "red", alpha = 0.25) +
+  scale_size_area(max_size = 15) +
+  scale_x_continuous(NULL, NULL) +
+  scale_y_continuous(NULL, NULL) +
+  coord_quickmap()
+```
+
+
+```{r, eval = FALSE, echo = FALSE}
 d <- lods_oslaegt(mar) %>%
   left_join(skipaskra(mar) %>% select(skip_nr, flokkur), by = "skip_nr") %>% 
   filter(fteg == 1,
@@ -27,6 +224,16 @@ d <- lods_oslaegt(mar) %>%
 explain(d)
 d %>% collect()
 ```
+
+### Something else (more advanced)
+____
+
+... pending
+
+### Working with stomach data
+____
+
+... pending
 
 ```{r}
 devtools::session_info()
