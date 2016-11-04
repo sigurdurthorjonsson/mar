@@ -173,7 +173,7 @@ lesa_numer <- function(mar) {
     dplyr::inner_join(st, by = "synis_id") %>%
     dplyr::rename(aths_numer = athuga) %>%
     dplyr::select(-c(sbn:snt,dplyr::starts_with('innsl'))) %>%
-    dplyr::mutate(uppruni_numer = 'numer')
+    dplyr::mutate(uppruni_numer = 'numer') %>%
     dplyr::union_all(.,dplyr::select_(num.corr,.dots=colnames(.))) %>%
     dplyr::distinct()
   # below returns an error
