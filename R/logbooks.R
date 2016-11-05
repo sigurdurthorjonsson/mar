@@ -1,12 +1,14 @@
-#' @title oracle lesa_stofn
+#' afli.stofn
 #'
-#' @description XXX
+#' @description Fallid myndar tengingu við toflu stofn í
+#' afli gagnagrunninum.
 #'
+#' @param mar src_oracle tenging við oracle
+#'
+#' @return dataframe
 #' @export
-#'
-#' @param mar tenging við oraclegrunn
 
-lesa_stofn <- function(mar) {
+afli_stofn <- function(mar) {
 
   d <- tbl_mar(mar, "afli.stofn") %>%
     dplyr::rename(veidarfaeri = veidarf) %>%
@@ -17,14 +19,17 @@ lesa_stofn <- function(mar) {
 
 }
 
-#' @title oracle afli_afli
+#' afli.afli
 #'
-#' @description XXX
+#' @description Fallid myndar tengingu við toflu afli í
+#' afli gagnagrunninum.
 #'
+#' @param mar src_oracle tenging við oracle
+#'
+#' @return dataframe
 #' @export
 #'
-#' @param mar tenging við oraclegrunn
-lesa_afli <- function(mar) {
+afli_afli <- function(mar) {
 
   d <- tbl_mar(mar,"afli.afli")
 
@@ -32,14 +37,16 @@ lesa_afli <- function(mar) {
 
 }
 
-#' @title oracle afli_siriti
+#' afli.sjálfvirkir_maelar
 #'
-#' @description XXX
+#' @description Fallid myndar tengingu við toflu sjálfvirkir_maelar í
+#' afli gagnagrunninum.
 #'
+#' @param mar src_oracle tenging við oracle
+#'
+#' @return dataframe
 #' @export
-#'
-#' @param mar tenging við oraclegrunn
-lesa_siriti <- function(mar) {
+afli_sjalfvirkir_maelar <- function(mar) {
 
   d <- tbl_mar(mar, "afli.sjalfvirkir_maelar") %>%
     dplyr::mutate(ar =   to_number(to_char(timi, "YYYY")),
@@ -58,14 +65,17 @@ lesa_siriti <- function(mar) {
 
 }
 
-#' @title oracle afli_toga
+#' afli.toga
 #'
-#' @description XXX
+#' @description Fallid myndar tengingu við toflu toga í
+#' afli gagnagrunninum.
 #'
+#' @param mar src_oracle tenging við oracle
+#'
+#' @return dataframe
 #' @export
 #'
-#' @param mar tenging við oraclegrunn
-lesa_toga <- function(mar) {
+afli_toga <- function(mar) {
 
   d <- tbl_mar(mar,"afli.toga")
 
@@ -73,3 +83,20 @@ lesa_toga <- function(mar) {
 
 }
 
+#' afli.lineha
+#'
+#' @description Fallid myndar tengingu við toflu linea í
+#' afli gagnagrunninum.
+#'
+#' @param mar src_oracle tenging við oracle
+#'
+#' @return dataframe
+#' @export
+#'
+afli_lineha <- function(mar) {
+
+  d <- tbl_mar(mar,"afli.toga")
+
+  return(d)
+
+}
