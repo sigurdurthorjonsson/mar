@@ -12,6 +12,7 @@ Depends:
 Imports:
     dplyr,
     dplyrOracle,
+    geo,
     magrittr,
     stats
 License: GPL (>= 2)

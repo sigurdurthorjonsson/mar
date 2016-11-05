@@ -42,14 +42,14 @@ lods_skipasaga <- function(mar) {
 #' @export
 #'
 #' @param mar src_oracle tenging við oracle
-#' @example
-#' mar <- dplyrOracle::src_oracle("mar")
-#' lods_skipasaga(mar) %>%
-#'  filter(heiti == 'Ljósafell') %>%
-#'  rename(skip=skip_nr) %>%
-#'  left_join(lesa_stodvar(mar)) %>%
-#'  filter(dags > i_gildi,dags<ur_gildi) %>%
-#'  select(i_gildi,ur_gildi,dags)
+# #' @example
+# #' mar <- dplyrOracle::src_oracle("mar")
+# #' mar:::lods_skipasaga(mar) %>%
+# #'  filter(heiti == 'Ljósafell') %>%
+# #'  rename(skip=skip_nr) %>%
+# #'  left_join(lesa_stodvar(mar)) %>%
+# #'  filter(dags > i_gildi,dags<ur_gildi) %>%
+# #'  select(i_gildi,ur_gildi,dags)
 lesa_skipaskra <- function(mar) {
 
   d <- tbl_mar(mar, "orri.skipaskra")
