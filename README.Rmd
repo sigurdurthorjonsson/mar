@@ -99,7 +99,7 @@ dim(d)
 ```
 
 A quick visualization of the data can be obtained via:
-```{r}
+```{r ldist}
 library(ggplot2)
 d %>% 
   ggplot() +
@@ -167,7 +167,7 @@ smb1991 <-
 ```
 
 To get a quick plot of the station location we could do:
-```{r}
+```{r smb1991_stodvar}
 smb1991 %>% 
   collect() %>% 
   # convert ddmmxx to decimal degrees
@@ -196,7 +196,7 @@ explain(smb1991_n)
 ```
 
 To turn this into action, lets execute the query, get the dataframe into R and plot the data:
-```{r}
+```{r smb1991_n}
 smb1991_n %>% 
   collect() %>% 
   mutate(lon = -gisland::geo_convert(lon),
