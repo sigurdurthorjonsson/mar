@@ -34,7 +34,7 @@ mar_fields <- function(mar, table) {
 
   fields <- build_sql("SELECT * FROM ", dplyr::sql(table), " WHERE 0=1",
                       con = mar$con)
-  qry <- DBI::dbSendQuery(con, fields)
+  qry <- DBI::dbSendQuery(mar$con, fields)
   on.exit(DBI::dbClearResult(qry))
   res <- DBI::dbGetInfo(qry)$fields
   res$name <- tolower(res$name)
