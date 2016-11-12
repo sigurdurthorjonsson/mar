@@ -3,14 +3,7 @@ Bjarki Þór Elvarsson and Einar Hjörleifsson
 
 
 
-<div class="panel panel-warning">
-<div class="panel-heading">The small print</div>
-<div class="panel-body">
-
-This mar package is work in progress.
-
-</div>
-</div>
+The small print: Package in the making
 
 ## Tidyverse connection to MRI oracle database
 
@@ -26,7 +19,7 @@ You have to do this once, or when you want to update the packages already instal
 ```r
 install.packages("dplyr")
 install.packages("devtools")
-devtools::install_github("fishvice/dplyrOracle",  dependencies = FALSE)
+devtools::install_github("fishvice/dplyrOracle", args = "--no-multiarch")
 devtools::install_github("fishvice/mar",  dependencies = FALSE)
 ```
 
@@ -70,7 +63,7 @@ explain(lengdir)
 
 ```
 ## <SQL> EXPLAIN PLAN FOR SELECT "SYNIS_ID" AS "synis_id", "TEGUND" AS "tegund", "LENGD" AS "lengd", "FJOLDI" AS "fjoldi", "KYN" AS "kyn", "KYNTHROSKI" AS "kynthroski", "SBT" AS "sbt", "SBN" AS "sbn", "SNT" AS "snt", "SNN" AS "snn"
-## FROM (fiskar.lengdir) "rnkkfresdn"
+## FROM (fiskar.lengdir) "rblnkymugu"
 ```
 Ergo we generated an object, which one part is an SQL-query. The `explain` informs us how the database plans to execute the query.
 
@@ -133,7 +126,7 @@ explain(lengdir)
 ## <SQL> EXPLAIN PLAN FOR SELECT *
 ## FROM (SELECT "synis_id" AS "synis_id", "tegund" AS "tegund", "lengd" AS "lengd", "fjoldi" AS "fjoldi", "kyn" AS "kyn", "kynthroski" AS "kynthroski"
 ## FROM (SELECT "SYNIS_ID" AS "synis_id", "TEGUND" AS "tegund", "LENGD" AS "lengd", "FJOLDI" AS "fjoldi", "KYN" AS "kyn", "KYNTHROSKI" AS "kynthroski", "SBT" AS "sbt", "SBN" AS "sbn", "SNT" AS "snt", "SNN" AS "snn"
-## FROM (fiskar.lengdir) "hwoxhdykog") "dyeauudyrc") "zpvrpexdmh"
+## FROM (fiskar.lengdir) "cxjhigvkiw") "nifzhlylxx") "brsbpayzpb"
 ## WHERE (("synis_id" = 48489.0) AND ("tegund" = 1.0))
 ```
 
@@ -210,36 +203,36 @@ explain(d)
 ## FROM (SELECT "synis_id", "tegund", "lengd", "fjoldi", "kyn", "kynthroski", 'lengdir' AS "uppruni_lengdir"
 ## FROM (SELECT "synis_id" AS "synis_id", "tegund" AS "tegund", "lengd" AS "lengd", "fjoldi" AS "fjoldi", "kyn" AS "kyn", "kynthroski" AS "kynthroski"
 ## FROM (SELECT * FROM (SELECT "SYNIS_ID" AS "synis_id", "TEGUND" AS "tegund", "LENGD" AS "lengd", "FJOLDI" AS "fjoldi", "KYN" AS "kyn", "KYNTHROSKI" AS "kynthroski", "SBT" AS "sbt", "SBN" AS "sbn", "SNT" AS "snt", "SNN" AS "snn"
-## FROM (fiskar.lengdir) "behpunedcf") "roinrsoudy"
+## FROM (fiskar.lengdir) "ktpkixrfxi") "gbfnltozqk"
 ## 
 ## INNER JOIN
 ## 
 ## (SELECT "synis_id" AS "synis_id"
 ## FROM (SELECT *
 ## FROM (SELECT "SYNIS_ID" AS "synis_id", "LEIDANGUR" AS "leidangur", "DAGS" AS "dags", "SKIP" AS "skip", "STOD" AS "stod", "REITUR" AS "reitur", "SMAREITUR" AS "smareitur", "KASTAD_N_BREIDD" AS "kastad_n_breidd", "KASTAD_V_LENGD" AS "kastad_v_lengd", "HIFT_N_BREIDD" AS "hift_n_breidd", "HIFT_V_LENGD" AS "hift_v_lengd", "DYPI_KASTAD" AS "dypi_kastad", "DYPI_HIFT" AS "dypi_hift", "VEIDARFAERI" AS "veidarfaeri", "MOSKVASTAERD" AS "moskvastaerd", "GRANDARALENGD" AS "grandaralengd", "HEILDARAFLI" AS "heildarafli", "LONDUNARHOFN" AS "londunarhofn", "SKIKI" AS "skiki", "FJARDARREITUR" AS "fjardarreitur", "SNT" AS "snt", "SNN" AS "snn", "SBT" AS "sbt", "SBN" AS "sbn", "HNATTSTADA" AS "hnattstada", "LANDSYNI" AS "landsyni", "ATHS" AS "aths", "STADA_STODVAR" AS "stada_stodvar", "NET_NR" AS "net_nr", "SYNAFLOKKUR" AS "synaflokkur", "VEIDISVAEDI" AS "veidisvaedi", "HITAMAELIR_ID" AS "hitamaelir_id", "MAELINGARMENN" AS "maelingarmenn", "VEIDARFAERI_ID" AS "veidarfaeri_id", "TOG_ATHS" AS "tog_aths", "MEDFERD_AFLA" AS "medferd_afla"
-## FROM (fiskar.stodvar) "nwlynxzzih") "ulwkiarttg"
-## WHERE ("dags" > TO_DATE('01.01.1986', 'dd.mm.yyyy'))) "ryqcbkzozx") "rgccnrxylv"
+## FROM (fiskar.stodvar) "xtnpalxues") "ckegtnjiwt"
+## WHERE ("dags" > TO_DATE('01.01.1986', 'dd.mm.yyyy'))) "isyujjhmyt") "vpihmdlshh"
 ## 
-## USING ("synis_id")) "tjmkdycukn") "dgrhvqtbgo"
+## USING ("synis_id")) "wzoepzxmtb") "sylsdqqhda"
 ## UNION ALL
 ## SELECT "synis_id", "tegund", "lengd", "fjoldi", "kyn", "kynthroski", 'leidr_lengdir' AS "uppruni_lengdir"
 ## FROM (SELECT *
 ## FROM (SELECT * FROM (SELECT "synis_id" AS "synis_id", "tegund" AS "tegund", "lengd" AS "lengd", "fjoldi" AS "fjoldi", "kyn" AS "kyn", "kynthroski" AS "kynthroski"
 ## FROM (SELECT "SNT" AS "snt", "SNN" AS "snn", "SBT" AS "sbt", "SBN" AS "sbn", "SYNIS_ID" AS "synis_id", "TEGUND" AS "tegund", "LENGD" AS "lengd", "FJOLDI" AS "fjoldi", "KYN" AS "kyn", "KYNTHROSKI" AS "kynthroski"
-## FROM (fiskar.leidr_lengdir) "xeojhniuhq") "skzoychwzz") "ucohvvhrgj"
+## FROM (fiskar.leidr_lengdir) "gccslsbmwl") "tyfogxjrlj") "alubdnymon"
 ## 
 ## INNER JOIN
 ## 
 ## (SELECT "synis_id" AS "synis_id"
 ## FROM (SELECT *
 ## FROM (SELECT "SNT" AS "snt", "SNN" AS "snn", "SBT" AS "sbt", "SBN" AS "sbn", "SYNIS_ID" AS "synis_id", "LEIDANGUR" AS "leidangur", "SYNAFLOKKUR" AS "synaflokkur", "DAGS" AS "dags", "SKIP_NR" AS "skip_nr", "STOD" AS "stod", "REITUR" AS "reitur", "SMAREITUR" AS "smareitur", "ORREITUR" AS "orreitur", "HNATTSTADA" AS "hnattstada", "KASTAD_BREIDD" AS "kastad_breidd", "KASTAD_LENGD" AS "kastad_lengd", "HIFT_BREIDD" AS "hift_breidd", "HIFT_LENGD" AS "hift_lengd", "DYPI_KASTAD" AS "dypi_kastad", "DYPI_HIFT" AS "dypi_hift", "VEIDARF" AS "veidarf", "MOSKVASTAERD" AS "moskvastaerd", "GRANDARALENGD" AS "grandaralengd", "HEILDARAFLI" AS "heildarafli", "L_HOFN" AS "l_hofn", "SKIKI" AS "skiki", "FJ_REITUR" AS "fj_reitur", "TOGBYRJUN" AS "togbyrjun", "TOGENDIR" AS "togendir", "TOGHRADI" AS "toghradi", "TOGLENGD" AS "toglengd", "VIR_UTI" AS "vir_uti", "LODRETT_OPNUN" AS "lodrett_opnun", "TOGNUMER" AS "tognumer", "TOGSTEFNA" AS "togstefna", "LARETT_OPNUN" AS "larett_opnun", "TOGTIMI" AS "togtimi", "EYKT" AS "eykt", "TOGDYPI_KASTAD" AS "togdypi_kastad", "TOGDYPI_HIFT" AS "togdypi_hift", "TOGDYPISHITI" AS "togdypishiti", "VINDHRADI" AS "vindhradi", "VINDATT" AS "vindatt", "VEDUR" AS "vedur", "SKY" AS "sky", "SJOR" AS "sjor", "BOTNHITI" AS "botnhiti", "YFIRB_HITI" AS "yfirb_hiti", "LOFTHITI" AS "lofthiti", "LOFTVOG" AS "loftvog", "HAFIS" AS "hafis", "STRAUMSTEFNA" AS "straumstefna", "STRAUMHRADI" AS "straumhradi", "SJONDYPI" AS "sjondypi", "ATHS" AS "aths", "LANDSYNI" AS "landsyni", "STADA_STODVAR" AS "stada_stodvar", "HITAMAELIR_ID" AS "hitamaelir_id", "MAELINGARMENN" AS "maelingarmenn", "MEDFERD_AFLA" AS "medferd_afla", "NET_NR" AS "net_nr", "TOG_ATHS" AS "tog_aths", "VEIDARFAERI_ID" AS "veidarfaeri_id", "VEIDISVAEDI" AS "veidisvaedi", "VINDHRADI_HNUTAR" AS "vindhradi_hnutar"
-## FROM (fiskar.leidr_stodvar) "bantpwqqxb") "mdqhtspqwa"
-## WHERE ("dags" < TO_DATE('01.01.1986', 'dd.mm.yyyy') AND "dags" > TO_DATE('1910', 'yyyy'))) "hjofjqqpzh") "oyagvzdpys"
+## FROM (fiskar.leidr_stodvar) "moncpipgne") "ybgpqkmjoh"
+## WHERE ("dags" < TO_DATE('01.01.1986', 'dd.mm.yyyy') AND "dags" > TO_DATE('1910', 'yyyy'))) "xbysoojuot") "uxzoaisbbz"
 ## 
-## USING ("synis_id")) "uhktkcbnuv"
-## WHERE (NOT(("synis_id" IN (133095.0, 57070.0, 133401.0, 37559.0, 112980.0, 112984.0, 112987.0, 112991.0, 112995.0, 112998.0, 112999.0, 128268.0, 129166.0, 129168.0, 140153.0, 140155.0, 129370.0, 129170.0, 128765.0, 129098.0, 119798.0, 128890.0, 129146.0, 128586.0, 128898.0, 128902.0, 123916.0, 128392.0, 116665.0, 115948.0, 115967.0))))) "doyrrimcaf") "aaiejraspg") "fbrbhmhhqr"
-## WHERE ("synis_id" = 48489.0)) "xsgoujfvsr"
-## GROUP BY "tegund") "bhqtywevtl"
+## USING ("synis_id")) "yxdfbffhdi"
+## WHERE (NOT(("synis_id" IN (133095.0, 57070.0, 133401.0, 37559.0, 112980.0, 112984.0, 112987.0, 112991.0, 112995.0, 112998.0, 112999.0, 128268.0, 129166.0, 129168.0, 140153.0, 140155.0, 129370.0, 129170.0, 128765.0, 129098.0, 119798.0, 128890.0, 129146.0, 128586.0, 128898.0, 128902.0, 123916.0, 128392.0, 116665.0, 115948.0, 115967.0))))) "jnsgnppyia") "ynzegpszca") "uvtzgenirg"
+## WHERE ("synis_id" = 48489.0)) "uznytcabeq"
+## GROUP BY "tegund") "usqmxssrcb"
 ## ORDER BY "fjoldi"
 ```
 
@@ -468,7 +461,7 @@ devtools::session_info()
 ##  language (EN)                        
 ##  collate  is_IS.UTF-8                 
 ##  tz       Atlantic/Reykjavik          
-##  date     2016-11-07                  
+##  date     2016-11-11                  
 ## 
 ##  package     * version    date      
 ##  assertthat    0.1        2013-12-06
@@ -479,13 +472,12 @@ devtools::session_info()
 ##  digest        0.6.10     2016-08-02
 ##  dplyr       * 0.5.0      2016-06-24
 ##  dplyrOracle * 0.0.1      2016-11-07
-##  evaluate      0.8        2015-09-18
-##  formatR       1.2.1      2015-09-18
+##  evaluate      0.10       2016-10-11
 ##  ggplot2     * 2.1.0      2016-03-01
 ##  gisland       0.0.05     2016-10-25
 ##  gtable        0.2.0      2016-02-26
 ##  htmltools     0.3.5      2016-03-21
-##  knitr         1.14       2016-08-13
+##  knitr         1.15       2016-11-09
 ##  labeling      0.3        2014-08-23
 ##  lattice       0.20-27    2014-02-27
 ##  lazyeval      0.2.0      2016-06-12
@@ -514,13 +506,12 @@ devtools::session_info()
 ##  cran (@0.6.10)                            
 ##  CRAN (R 3.3.1)                            
 ##  local                                     
-##  CRAN (R 3.2.3)                            
-##  CRAN (R 3.2.3)                            
+##  cran (@0.10)                              
 ##  CRAN (R 3.3.1)                            
 ##  Github (einarhjorleifsson/gisland@53f5a1f)
 ##  cran (@0.2.0)                             
 ##  CRAN (R 3.3.0)                            
-##  CRAN (R 3.3.1)                            
+##  cran (@1.15)                              
 ##  CRAN (R 3.2.0)                            
 ##  CRAN (R 3.0.2)                            
 ##  cran (@0.2.0)                             

@@ -19,7 +19,6 @@ mar_tables <- function(mar, schema) {
 
 }
 
-
 #' mar_fields
 #'
 #' @description Fallið ...
@@ -43,3 +42,4 @@ mar_fields <- function(mar, table) {
   return(res)
 
 }
+
