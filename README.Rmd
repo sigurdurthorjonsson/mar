@@ -12,14 +12,7 @@ knitr::opts_chunk$set(echo = TRUE,
                       warning = FALSE)
 ```
 
-<div class="panel panel-warning">
-<div class="panel-heading">The small print</div>
-<div class="panel-body">
-
-This mar package is work in progress.
-
-</div>
-</div>
+The small print: Package in the making
 
 ## Tidyverse connection to MRI oracle database
 
@@ -34,7 +27,7 @@ You have to do this once, or when you want to update the packages already instal
 ```{r, eval = FALSE}
 install.packages("dplyr")
 install.packages("devtools")
-devtools::install_github("fishvice/dplyrOracle",  dependencies = FALSE)
+devtools::install_github("fishvice/dplyrOracle", args = "--no-multiarch")
 devtools::install_github("fishvice/mar",  dependencies = FALSE)
 ```
 

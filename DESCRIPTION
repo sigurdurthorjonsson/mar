@@ -11,6 +11,7 @@ Description: Database utilities for MFRI db's
 Depends:
     R (>= 3.1.1)
 Imports:
+    DBI,
     dplyr,
     dplyrOracle,
     geo,
