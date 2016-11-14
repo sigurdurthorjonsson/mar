@@ -243,6 +243,27 @@ lesa_kvarnir <- function(mar) {
 }
 
 
+#' Skala með töldum
+#'
+#' Þetta fall skala lengdardreifingar með töldum fiskum úr ralli
+#'
+#' @param lengdir fyrirspurn á fiskar.lengdir
+#'
+#' @return fyrirspurn með sköluðum fjölda í lengdarbili
+#' @export
+#'
+#' @examples
+skala_med_toldum <- function(lengdir){
+  ratio <-
+    lesa_numer(lengdir$src) %>%
+    dplyr::mutate(r = ifelse(fj_talid==0,1,fj_talid/ifelse(fj_maelt==0,1,fj_maelt))) %>%
+    dplyr::select(synis_id,r)
+
+  lengdir %>%
+    dplyr::left_join(ratio) %>%
+    dplyr::mutate(fjoldi = fjoldi*r)
+}
+
 
 
 
