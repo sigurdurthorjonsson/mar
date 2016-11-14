@@ -64,9 +64,11 @@ faeda_thyngdir <- function(mar){
                                       111854,111860,111861,111862,111863,111864,111869,111870,111871,
                                       111938,111939,111940,111941,111942,111943,111944,111945,111946,
                                       111947,111953,111954,111955,111956,111957,111977,111978,111979))) %>%
+    dplyr::mutate(uppruni = 'f_hopar_tmp') %>%
     dplyr::anti_join(tbl_mar(mar,'faeda.f_hopar') %>%
                        dplyr::select(flokk_id)) %>%
-    dplyr::union_all(tbl_mar(mar,'faeda.f_hopar')) %>%
+    dplyr::union_all(tbl_mar(mar,'faeda.f_hopar') %>%
+                       dplyr::mutate(uppruni = 'f_hopar')) %>%
     dplyr::mutate(thyngd = ifelse(thyngd==-1,0.2,
                                   ifelse(thyngd<0,0,thyngd)),
                   faedutegund = faeduhopur,

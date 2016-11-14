@@ -30,11 +30,18 @@ devtools::install_github("fishvice/dplyrOracle",  dependencies = FALSE)
 devtools::install_github("fishvice/mar",  dependencies = FALSE)
 ```
 
+Windows users should note that the install of the dplyrOracle package may fail due failed dependency on 32 bit Oracle libraries. To fix this problem one can install the library with:
+
+
+```r
+devtools::install_github("fishvice/dplyrOracle",  dependencies = FALSE, args='--no-multiarch')
+```
+
 ### Establish conection
 
 
 ```r
-library(dplyr)
+library(tidyverse)
 library(dplyrOracle)
 library(mar)
 ```
@@ -70,7 +77,7 @@ explain(lengdir)
 
 ```
 ## <SQL> EXPLAIN PLAN FOR SELECT "SYNIS_ID" AS "synis_id", "TEGUND" AS "tegund", "LENGD" AS "lengd", "FJOLDI" AS "fjoldi", "KYN" AS "kyn", "KYNTHROSKI" AS "kynthroski", "SBT" AS "sbt", "SBN" AS "sbn", "SNT" AS "snt", "SNN" AS "snn"
-## FROM (fiskar.lengdir) "rnkkfresdn"
+## FROM (fiskar.lengdir) "ichhypujpv"
 ```
 Ergo we generated an object, which one part is an SQL-query. The `explain` informs us how the database plans to execute the query.
 
@@ -133,7 +140,7 @@ explain(lengdir)
 ## <SQL> EXPLAIN PLAN FOR SELECT *
 ## FROM (SELECT "synis_id" AS "synis_id", "tegund" AS "tegund", "lengd" AS "lengd", "fjoldi" AS "fjoldi", "kyn" AS "kyn", "kynthroski" AS "kynthroski"
 ## FROM (SELECT "SYNIS_ID" AS "synis_id", "TEGUND" AS "tegund", "LENGD" AS "lengd", "FJOLDI" AS "fjoldi", "KYN" AS "kyn", "KYNTHROSKI" AS "kynthroski", "SBT" AS "sbt", "SBN" AS "sbn", "SNT" AS "snt", "SNN" AS "snn"
-## FROM (fiskar.lengdir) "hwoxhdykog") "dyeauudyrc") "zpvrpexdmh"
+## FROM (fiskar.lengdir) "jaipjljauu") "cvyxskeygc") "ntuuzyyqqr"
 ## WHERE (("synis_id" = 48489.0) AND ("tegund" = 1.0))
 ```
 
@@ -210,36 +217,36 @@ explain(d)
 ## FROM (SELECT "synis_id", "tegund", "lengd", "fjoldi", "kyn", "kynthroski", 'lengdir' AS "uppruni_lengdir"
 ## FROM (SELECT "synis_id" AS "synis_id", "tegund" AS "tegund", "lengd" AS "lengd", "fjoldi" AS "fjoldi", "kyn" AS "kyn", "kynthroski" AS "kynthroski"
 ## FROM (SELECT * FROM (SELECT "SYNIS_ID" AS "synis_id", "TEGUND" AS "tegund", "LENGD" AS "lengd", "FJOLDI" AS "fjoldi", "KYN" AS "kyn", "KYNTHROSKI" AS "kynthroski", "SBT" AS "sbt", "SBN" AS "sbn", "SNT" AS "snt", "SNN" AS "snn"
-## FROM (fiskar.lengdir) "behpunedcf") "roinrsoudy"
+## FROM (fiskar.lengdir) "zmkmzhcyyk") "tqfcfwihgm"
 ## 
 ## INNER JOIN
 ## 
 ## (SELECT "synis_id" AS "synis_id"
 ## FROM (SELECT *
 ## FROM (SELECT "SYNIS_ID" AS "synis_id", "LEIDANGUR" AS "leidangur", "DAGS" AS "dags", "SKIP" AS "skip", "STOD" AS "stod", "REITUR" AS "reitur", "SMAREITUR" AS "smareitur", "KASTAD_N_BREIDD" AS "kastad_n_breidd", "KASTAD_V_LENGD" AS "kastad_v_lengd", "HIFT_N_BREIDD" AS "hift_n_breidd", "HIFT_V_LENGD" AS "hift_v_lengd", "DYPI_KASTAD" AS "dypi_kastad", "DYPI_HIFT" AS "dypi_hift", "VEIDARFAERI" AS "veidarfaeri", "MOSKVASTAERD" AS "moskvastaerd", "GRANDARALENGD" AS "grandaralengd", "HEILDARAFLI" AS "heildarafli", "LONDUNARHOFN" AS "londunarhofn", "SKIKI" AS "skiki", "FJARDARREITUR" AS "fjardarreitur", "SNT" AS "snt", "SNN" AS "snn", "SBT" AS "sbt", "SBN" AS "sbn", "HNATTSTADA" AS "hnattstada", "LANDSYNI" AS "landsyni", "ATHS" AS "aths", "STADA_STODVAR" AS "stada_stodvar", "NET_NR" AS "net_nr", "SYNAFLOKKUR" AS "synaflokkur", "VEIDISVAEDI" AS "veidisvaedi", "HITAMAELIR_ID" AS "hitamaelir_id", "MAELINGARMENN" AS "maelingarmenn", "VEIDARFAERI_ID" AS "veidarfaeri_id", "TOG_ATHS" AS "tog_aths", "MEDFERD_AFLA" AS "medferd_afla"
-## FROM (fiskar.stodvar) "nwlynxzzih") "ulwkiarttg"
-## WHERE ("dags" > TO_DATE('01.01.1986', 'dd.mm.yyyy'))) "ryqcbkzozx") "rgccnrxylv"
+## FROM (fiskar.stodvar) "outpbijjwq") "utbrzshunf"
+## WHERE ("dags" > TO_DATE('01.01.1986', 'dd.mm.yyyy'))) "lrtfukocnh") "xvpynwcnig"
 ## 
-## USING ("synis_id")) "tjmkdycukn") "dgrhvqtbgo"
+## USING ("synis_id")) "nhntndmoaa") "skqpmcgyez"
 ## UNION ALL
 ## SELECT "synis_id", "tegund", "lengd", "fjoldi", "kyn", "kynthroski", 'leidr_lengdir' AS "uppruni_lengdir"
 ## FROM (SELECT *
 ## FROM (SELECT * FROM (SELECT "synis_id" AS "synis_id", "tegund" AS "tegund", "lengd" AS "lengd", "fjoldi" AS "fjoldi", "kyn" AS "kyn", "kynthroski" AS "kynthroski"
 ## FROM (SELECT "SNT" AS "snt", "SNN" AS "snn", "SBT" AS "sbt", "SBN" AS "sbn", "SYNIS_ID" AS "synis_id", "TEGUND" AS "tegund", "LENGD" AS "lengd", "FJOLDI" AS "fjoldi", "KYN" AS "kyn", "KYNTHROSKI" AS "kynthroski"
-## FROM (fiskar.leidr_lengdir) "xeojhniuhq") "skzoychwzz") "ucohvvhrgj"
+## FROM (fiskar.leidr_lengdir) "vmkwngnppl") "zxhpxbnijp") "lkhuhotruf"
 ## 
 ## INNER JOIN
 ## 
 ## (SELECT "synis_id" AS "synis_id"
 ## FROM (SELECT *
 ## FROM (SELECT "SNT" AS "snt", "SNN" AS "snn", "SBT" AS "sbt", "SBN" AS "sbn", "SYNIS_ID" AS "synis_id", "LEIDANGUR" AS "leidangur", "SYNAFLOKKUR" AS "synaflokkur", "DAGS" AS "dags", "SKIP_NR" AS "skip_nr", "STOD" AS "stod", "REITUR" AS "reitur", "SMAREITUR" AS "smareitur", "ORREITUR" AS "orreitur", "HNATTSTADA" AS "hnattstada", "KASTAD_BREIDD" AS "kastad_breidd", "KASTAD_LENGD" AS "kastad_lengd", "HIFT_BREIDD" AS "hift_breidd", "HIFT_LENGD" AS "hift_lengd", "DYPI_KASTAD" AS "dypi_kastad", "DYPI_HIFT" AS "dypi_hift", "VEIDARF" AS "veidarf", "MOSKVASTAERD" AS "moskvastaerd", "GRANDARALENGD" AS "grandaralengd", "HEILDARAFLI" AS "heildarafli", "L_HOFN" AS "l_hofn", "SKIKI" AS "skiki", "FJ_REITUR" AS "fj_reitur", "TOGBYRJUN" AS "togbyrjun", "TOGENDIR" AS "togendir", "TOGHRADI" AS "toghradi", "TOGLENGD" AS "toglengd", "VIR_UTI" AS "vir_uti", "LODRETT_OPNUN" AS "lodrett_opnun", "TOGNUMER" AS "tognumer", "TOGSTEFNA" AS "togstefna", "LARETT_OPNUN" AS "larett_opnun", "TOGTIMI" AS "togtimi", "EYKT" AS "eykt", "TOGDYPI_KASTAD" AS "togdypi_kastad", "TOGDYPI_HIFT" AS "togdypi_hift", "TOGDYPISHITI" AS "togdypishiti", "VINDHRADI" AS "vindhradi", "VINDATT" AS "vindatt", "VEDUR" AS "vedur", "SKY" AS "sky", "SJOR" AS "sjor", "BOTNHITI" AS "botnhiti", "YFIRB_HITI" AS "yfirb_hiti", "LOFTHITI" AS "lofthiti", "LOFTVOG" AS "loftvog", "HAFIS" AS "hafis", "STRAUMSTEFNA" AS "straumstefna", "STRAUMHRADI" AS "straumhradi", "SJONDYPI" AS "sjondypi", "ATHS" AS "aths", "LANDSYNI" AS "landsyni", "STADA_STODVAR" AS "stada_stodvar", "HITAMAELIR_ID" AS "hitamaelir_id", "MAELINGARMENN" AS "maelingarmenn", "MEDFERD_AFLA" AS "medferd_afla", "NET_NR" AS "net_nr", "TOG_ATHS" AS "tog_aths", "VEIDARFAERI_ID" AS "veidarfaeri_id", "VEIDISVAEDI" AS "veidisvaedi", "VINDHRADI_HNUTAR" AS "vindhradi_hnutar"
-## FROM (fiskar.leidr_stodvar) "bantpwqqxb") "mdqhtspqwa"
-## WHERE ("dags" < TO_DATE('01.01.1986', 'dd.mm.yyyy') AND "dags" > TO_DATE('1910', 'yyyy'))) "hjofjqqpzh") "oyagvzdpys"
+## FROM (fiskar.leidr_stodvar) "bofegwsarz") "brohoepbkx"
+## WHERE ("dags" < TO_DATE('01.01.1986', 'dd.mm.yyyy') AND "dags" > TO_DATE('1910', 'yyyy'))) "msbvbqrihg") "kfkseovzaz"
 ## 
-## USING ("synis_id")) "uhktkcbnuv"
-## WHERE (NOT(("synis_id" IN (133095.0, 57070.0, 133401.0, 37559.0, 112980.0, 112984.0, 112987.0, 112991.0, 112995.0, 112998.0, 112999.0, 128268.0, 129166.0, 129168.0, 140153.0, 140155.0, 129370.0, 129170.0, 128765.0, 129098.0, 119798.0, 128890.0, 129146.0, 128586.0, 128898.0, 128902.0, 123916.0, 128392.0, 116665.0, 115948.0, 115967.0))))) "doyrrimcaf") "aaiejraspg") "fbrbhmhhqr"
-## WHERE ("synis_id" = 48489.0)) "xsgoujfvsr"
-## GROUP BY "tegund") "bhqtywevtl"
+## USING ("synis_id")) "obeksmnubh"
+## WHERE (NOT(("synis_id" IN (133095.0, 57070.0, 133401.0, 37559.0, 112980.0, 112984.0, 112987.0, 112991.0, 112995.0, 112998.0, 112999.0, 128268.0, 129166.0, 129168.0, 140153.0, 140155.0, 129370.0, 129170.0, 128765.0, 129098.0, 119798.0, 128890.0, 129146.0, 128586.0, 128898.0, 128902.0, 123916.0, 128392.0, 116665.0, 115948.0, 115967.0))))) "lbmoxtnpdv") "luxtxuwzuj") "hzsvzgwdfs"
+## WHERE ("synis_id" = 48489.0)) "ybopqhvipr"
+## GROUP BY "tegund") "dcpqsnxyep"
 ## ORDER BY "fjoldi"
 ```
 
@@ -453,7 +460,57 @@ ____
 ### Working with stomach data
 ____
 
-... pending
+Let's look at stomach samples. Restrict our analysis to fish from the spring survey after 1992.
+
+
+
+```r
+st <- 
+  lesa_stodvar(mar) %>% 
+  filter(synaflokkur == 30, ar > 1992) %>% 
+  select(synis_id,ar)
+```
+  
+and only look at stomachs from cods between 40 and 80 fish
+
+
+```r
+tmp <- 
+  faeda_ranfiskar(mar) %>% 
+  filter(lengd %in% 40:80,ranfiskur == 1) %>% 
+  mutate(weight = 0.01*lengd^3) %>% 
+  right_join(st) %>% 
+  left_join(faeda_thyngdir(mar)) %>% 
+  mutate(faeduhopur = if_else(is.na(faeduhopur),'Empty',faeduhopur),
+         thyngd = if_else(is.na(thyngd),0,thyngd))
+```
+
+Look at the average percentage of body weight capelin in the stomach is in the spring survey compared to other species
+
+```r
+tmp %>% 
+  left_join(tmp %>% 
+              group_by(flokk_id) %>% 
+              summarise(total = sum(thyngd))) %>% 
+  select(ar,flokk_id,faeduhopur,thyngd,total,weight) %>% 
+  group_by(ar,flokk_id,faeduhopur,weight) %>%  ## why do we have duplicate prey entries?
+  summarise(thyngd=sum(thyngd),total=sum(total)) %>% 
+  collect(n=Inf) %>% 
+  ungroup() %>% 
+  spread(faeduhopur,thyngd,fill=0) %>% ## this function should be availabe in the database
+  select(ar,flokk_id,weight,capelin=`mall vil`,total) %>% 
+  mutate(otherfood = (total - capelin)/weight,
+         capelin = capelin/weight) %>%  
+  select(ar,capelin,otherfood) %>% 
+  gather(Prey,prop,-ar) %>% 
+  group_by(ar,Prey) %>% 
+  summarise(prop=mean(prop,na.rm=TRUE)) %>% 
+  ggplot(aes(ar,prop,fill=Prey)) + geom_bar(stat = 'identity')
+```
+
+![](README_files/figure-html/unnamed-chunk-24-1.png)<!-- -->
+
+
 
 
 ```r
@@ -466,78 +523,84 @@ devtools::session_info()
 ##  system   x86_64, linux-gnu           
 ##  ui       X11                         
 ##  language (EN)                        
-##  collate  is_IS.UTF-8                 
+##  collate  en_US.UTF-8                 
 ##  tz       Atlantic/Reykjavik          
-##  date     2016-11-07                  
+##  date     2016-11-14                  
 ## 
 ##  package     * version    date      
 ##  assertthat    0.1        2013-12-06
-##  colorspace    1.2-6      2015-03-11
-##  data.table    1.9.7      2016-10-25
+##  colorspace    1.2-7      2016-10-11
 ##  DBI           0.5-1      2016-09-10
 ##  devtools      1.12.0     2016-06-24
 ##  digest        0.6.10     2016-08-02
 ##  dplyr       * 0.5.0      2016-06-24
-##  dplyrOracle * 0.0.1      2016-11-07
-##  evaluate      0.8        2015-09-18
-##  formatR       1.2.1      2015-09-18
+##  dplyrOracle * 0.0.1      2016-06-21
+##  evaluate      0.10       2016-10-11
+##  formatR       1.4        2016-05-09
 ##  ggplot2     * 2.1.0      2016-03-01
-##  gisland       0.0.05     2016-10-25
+##  gisland       0.0.03     2015-11-26
 ##  gtable        0.2.0      2016-02-26
 ##  htmltools     0.3.5      2016-03-21
 ##  knitr         1.14       2016-08-13
 ##  labeling      0.3        2014-08-23
-##  lattice       0.20-27    2014-02-27
+##  lattice       0.20-34    2016-09-06
 ##  lazyeval      0.2.0      2016-06-12
 ##  magrittr      1.5        2014-11-22
-##  mar         * 0.0.3.9000 2016-11-07
+##  mar         * 0.0.3.9000 2016-11-14
 ##  memoise       1.0.0      2016-01-29
 ##  munsell       0.4.3      2016-02-13
 ##  plyr          1.8.4      2016-06-08
+##  purrr       * 0.2.2      2016-06-18
 ##  R6            2.2.0      2016-10-05
 ##  Rcpp          0.12.7     2016-09-05
+##  readr       * 1.0.0      2016-08-03
 ##  rmarkdown     1.1        2016-10-16
 ##  ROracle       1.2-2      2016-02-17
 ##  scales        0.4.0      2016-02-26
 ##  sp          * 1.2-3      2016-04-14
-##  stringi       1.1.1      2016-05-27
+##  stringi       1.1.2      2016-10-01
 ##  stringr       1.1.0      2016-08-19
-##  tibble        1.2        2016-08-26
+##  tibble      * 1.2        2016-08-26
+##  tidyr       * 0.6.0      2016-08-12
+##  tidyverse   * 1.0.0      2016-09-09
 ##  withr         1.0.2      2016-06-20
 ##  yaml          2.1.13     2014-06-12
 ##  source                                    
-##  CRAN (R 3.0.2)                            
-##  CRAN (R 3.2.0)                            
-##  Github (Rdatatable/data.table@8c9cfc8)    
-##  cran (@0.5-1)                             
+##  CRAN (R 3.3.0)                            
 ##  CRAN (R 3.3.1)                            
-##  cran (@0.6.10)                            
 ##  CRAN (R 3.3.1)                            
+##  CRAN (R 3.3.0)                            
+##  CRAN (R 3.3.0)                            
+##  CRAN (R 3.3.0)                            
+##  Github (fishvice/dplyrOracle@3230705)     
+##  CRAN (R 3.3.1)                            
+##  CRAN (R 3.3.0)                            
+##  CRAN (R 3.3.0)                            
+##  Github (einarhjorleifsson/gisland@55bbcc8)
+##  CRAN (R 3.3.0)                            
+##  CRAN (R 3.3.0)                            
+##  CRAN (R 3.3.0)                            
+##  CRAN (R 3.3.0)                            
+##  CRAN (R 3.3.1)                            
+##  CRAN (R 3.3.0)                            
+##  CRAN (R 3.3.0)                            
 ##  local                                     
-##  CRAN (R 3.2.3)                            
-##  CRAN (R 3.2.3)                            
-##  CRAN (R 3.3.1)                            
-##  Github (einarhjorleifsson/gisland@53f5a1f)
-##  cran (@0.2.0)                             
+##  CRAN (R 3.3.0)                            
+##  CRAN (R 3.3.0)                            
+##  CRAN (R 3.3.0)                            
 ##  CRAN (R 3.3.0)                            
 ##  CRAN (R 3.3.1)                            
-##  CRAN (R 3.2.0)                            
-##  CRAN (R 3.0.2)                            
-##  cran (@0.2.0)                             
-##  CRAN (R 3.1.2)                            
-##  local                                     
-##  CRAN (R 3.3.0)                            
-##  cran (@0.4.3)                             
-##  cran (@1.8.4)                             
-##  cran (@2.2.0)                             
-##  cran (@0.12.7)                            
 ##  CRAN (R 3.3.1)                            
 ##  CRAN (R 3.3.0)                            
-##  cran (@0.4.0)                             
-##  cran (@1.2-3)                             
-##  cran (@1.1.1)                             
+##  CRAN (R 3.3.1)                            
 ##  CRAN (R 3.3.0)                            
-##  cran (@1.2)                               
 ##  CRAN (R 3.3.0)                            
-##  CRAN (R 3.2.1)
+##  CRAN (R 3.3.0)                            
+##  CRAN (R 3.3.1)                            
+##  cran (@1.1.0)                             
+##  CRAN (R 3.3.0)                            
+##  CRAN (R 3.3.0)                            
+##  CRAN (R 3.3.1)                            
+##  CRAN (R 3.3.0)                            
+##  CRAN (R 3.3.0)
 ```

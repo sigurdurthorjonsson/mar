@@ -38,10 +38,16 @@ devtools::install_github("fishvice/dplyrOracle",  dependencies = FALSE)
 devtools::install_github("fishvice/mar",  dependencies = FALSE)
 ```
 
+Windows users should note that the install of the dplyrOracle package may fail due failed dependency on 32 bit Oracle libraries. To fix this problem one can install the library with:
+
+```{r,eval=FALSE}
+devtools::install_github("fishvice/dplyrOracle",  dependencies = FALSE, args='--no-multiarch')
+```
+
 ### Establish conection
 
 ```{r, message = FALSE}
-library(dplyr)
+library(tidyverse)
 library(dplyrOracle)
 library(mar)
 ```
@@ -233,7 +239,55 @@ ____
 ### Working with stomach data
 ____
 
-... pending
+Let's look at stomach samples. Restrict our analysis to fish from the spring survey after 1992.
+
+
+```{r}
+st <- 
+  lesa_stodvar(mar) %>% 
+  filter(synaflokkur == 30, ar > 1992) %>% 
+  select(synis_id,ar)
+
+```
+  
+and only look at stomachs from cods between 40 and 80 fish
+
+```{r}
+tmp <- 
+  faeda_ranfiskar(mar) %>% 
+  filter(lengd %in% 40:80,ranfiskur == 1) %>% 
+  mutate(weight = 0.01*lengd^3) %>% 
+  right_join(st) %>% 
+  left_join(faeda_thyngdir(mar)) %>% 
+  mutate(faeduhopur = if_else(is.na(faeduhopur),'Empty',faeduhopur),
+         thyngd = if_else(is.na(thyngd),0,thyngd))
+```
+
+Look at the average percentage of body weight capelin in the stomach is in the spring survey compared to other species
+```{r}
+tmp %>% 
+  left_join(tmp %>% 
+              group_by(flokk_id) %>% 
+              summarise(total = sum(thyngd))) %>% 
+  select(ar,flokk_id,faeduhopur,thyngd,total,weight) %>% 
+  group_by(ar,flokk_id,faeduhopur,weight) %>%  ## why do we have duplicate prey entries?
+  summarise(thyngd=sum(thyngd),total=sum(total)) %>% 
+  collect(n=Inf) %>% 
+  ungroup() %>% 
+  spread(faeduhopur,thyngd,fill=0) %>% ## this function should be availabe in the database
+  select(ar,flokk_id,weight,capelin=`mall vil`,total) %>% 
+  mutate(otherfood = (total - capelin)/weight,
+         capelin = capelin/weight) %>%  
+  select(ar,capelin,otherfood) %>% 
+  gather(Prey,prop,-ar) %>% 
+  group_by(ar,Prey) %>% 
+  summarise(prop=mean(prop,na.rm=TRUE)) %>% 
+  ggplot(aes(ar,prop,fill=Prey)) + geom_bar(stat = 'identity')
+  
+            
+```
+
+
 
 ```{r}
 devtools::session_info()
