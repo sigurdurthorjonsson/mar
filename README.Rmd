@@ -37,7 +37,7 @@ Windows users should note that the install of the dplyrOracle package may fail d
 devtools::install_github("fishvice/dplyrOracle",  dependencies = FALSE, args='--no-multiarch')
 ```
 
-### Establish conection
+### Establish connection
 
 ```{r, message = FALSE}
 library(tidyverse)
