@@ -1,7 +1,7 @@
 #' afli.stofn
 #'
 #' @description Fallid myndar tengingu við toflu stofn í
-#' afli gagnagrunninum.
+#' afli gagnagrunninum. Grásleppan er alveg sér á parti ennþá
 #'
 #' @param mar src_oracle tenging við oracle
 #'
@@ -10,10 +10,69 @@
 
 afli_stofn <- function(mar) {
 
-  d <- tbl_mar(mar, "afli.stofn") %>%
-    dplyr::rename(veidarfaeri = veidarf) %>%
+  tmp_func <- function(data){
+    txt <- setdiff(colnames(stofn),colnames(data))
+    tmp <- rep('NA_real_',length(txt))
+    dplyr::mutate_(data,.dots = setNames(tmp,txt)) %>%
+      dplyr::select_(.dots = colnames(stofn))
+  }
+
+  stofn <-
+    tbl_mar(mar, "afli.stofn") %>%
+    dplyr::mutate(uppruni_stofn = 'afli.stofn')
+
+  smuga <-
+    tbl_mar(mar,'afli.smuga_stofn') %>%
+    dplyr::mutate(visir = visir+1e9,
+                  uppruni_stofn = 'afli.smuga_stofn',
+                  aths_texti = '') %>%
+    tmp_func()
+
+
+  inn <-
+    tbl_mar(mar,'afli.inn_stofn') %>%
+    dplyr::mutate(visir = visir+2e9,
+                  uppruni_stofn = 'afli.inn_stofn',
+                  aths_texti = '') %>%
+    tmp_func()
+
+
+  flem <-
+    tbl_mar(mar,'afli.flem_stofn') %>%
+    dplyr::mutate(visir = visir+3e9,
+                  uppruni_stofn = 'afli.flem_stofn',
+                  aths_texti = '') %>%
+    tmp_func()
+
+  plog <-
+    tbl_mar(mar,'afli.plog_stofn') %>%
+    dplyr::mutate(visir = visir+4e9,
+                  uppruni_stofn = 'afli.plog_stofn',
+                  aths_texti = '') %>%
+    tmp_func()
+
+
+  stofn %>%
+    union_all(smuga) %>%
+    union_all(inn) %>%
+    union_all(plog) %>%
+    union_all(inn) %>%
     dplyr::mutate(ar =   to_number(to_char(vedags, "YYYY")),
                   man =  to_number(to_char(vedags, "MM")))
+
+
+  # ## grásleppan er alveg sér
+  # grasl <-
+  #   tbl_mar(mar,'afli.grasl_stofn') %>%
+  #   dplyr::mutate(visir = visir+1e9,
+  #                 uppruni_stofn = 'afli.smuga_stofn')
+  # g <-
+  #   tbl_mar(mar,'afli.g_stofn') %>%
+  #   dplyr::mutate(visir = visir+1e9,
+  #                 uppruni_stofn = 'afli.smuga_stofn')
+  #
+  #
+  #
 
   return(d)
 
@@ -95,7 +154,7 @@ afli_toga <- function(mar) {
 #'
 afli_lineha <- function(mar) {
 
-  d <- tbl_mar(mar,"afli.toga")
+  d <- tbl_mar(mar,"afli.lineha")
 
   return(d)
 
