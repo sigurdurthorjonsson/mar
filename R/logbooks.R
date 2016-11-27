@@ -28,14 +28,12 @@ afli_stofn <- function(mar) {
                   aths_texti = '') %>%
     tmp_func()
 
-
   inn <-
     tbl_mar(mar,'afli.inn_stofn') %>%
     dplyr::mutate(visir = visir+2e9,
                   uppruni_stofn = 'afli.inn_stofn',
                   aths_texti = '') %>%
     tmp_func()
-
 
   flem <-
     tbl_mar(mar,'afli.flem_stofn') %>%
@@ -51,31 +49,28 @@ afli_stofn <- function(mar) {
                   aths_texti = '') %>%
     tmp_func()
 
-
   stofn %>%
-    union_all(smuga) %>%
-    union_all(inn) %>%
-    union_all(plog) %>%
-    union_all(inn) %>%
+    dplyr::union_all(smuga) %>%
+    dplyr::union_all(inn) %>%
+    dplyr::union_all(plog) %>%
+    dplyr::union_all(inn) %>%
     dplyr::mutate(ar =   to_number(to_char(vedags, "YYYY")),
-                  man =  to_number(to_char(vedags, "MM")))
+                  man =  to_number(to_char(vedags, "MM")),
+                  lengd = lengd*100,
+                  breidd = breidd*100,
+                  lengd_lok = lengd_lok*100,
+                  breidd_lok = breidd_lok*100) %>%
+    fix_pos(col.names=c('lengd','breidd'),lon='lengd',lat='breidd')
 
 
   # ## grásleppan er alveg sér
-  # grasl <-
-  #   tbl_mar(mar,'afli.grasl_stofn') %>%
-  #   dplyr::mutate(visir = visir+1e9,
-  #                 uppruni_stofn = 'afli.smuga_stofn')
-  # g <-
-  #   tbl_mar(mar,'afli.g_stofn') %>%
-  #   dplyr::mutate(visir = visir+1e9,
-  #                 uppruni_stofn = 'afli.smuga_stofn')
-  #
-  #
-  #
-
-  return(d)
-
+   # grasl <-
+   #   tbl_mar(mar,'afli.g_stofn') %>%
+   #   dplyr::mutate(vear = vear + 1900,
+   #                 stadur = NA,
+   #                 bokst_regl = NA,
+   #                 ahofn = NA) %>%
+   #   dplyr::union_all(tbl_mar(mar,'afli.grasl_stofn'))
 }
 
 #' afli.afli
@@ -89,11 +84,23 @@ afli_stofn <- function(mar) {
 #' @export
 #'
 afli_afli <- function(mar) {
-
-  d <- tbl_mar(mar,"afli.afli")
-
-  return(d)
-
+  tbl_mar(mar,"afli.plog_afli") %>%
+    dplyr::mutate(visir = 4e9+visir,
+                  uppruni_afli = 'plog_afli') %>%
+    dplyr::union_all(tbl_mar(mar,"afli.inn_afli",
+                             uppruni_afli = 'inn_afli') %>%
+                       dplyr::mutate(visir = visir + 2e9)) %>%
+    dplyr::union_all(tbl_mar(mar,"afli.smuga_afli",
+                             uppruni_afli = 'smuga_afli') %>%
+                       dplyr::mutate(visir = visir + 1e9)) %>%
+    dplyr::union_all(tbl_mar(mar,"afli.flem_afli",
+                             uppruni_afli = 'flem_afli') %>%
+                       dplyr::mutate(visir = visir + 3e9)) %>%
+    dplyr::mutate(medalthyngd_gr=NA,
+                  astand=NA,
+                  magn=NA) %>%
+    dplyr::union_all(tbl_mar(mar,"afli.afli") %>%
+                       dplyr::mutate(uppruni_afli = 'afli'))
 }
 
 #' afli.sjálfvirkir_maelar
@@ -136,10 +143,34 @@ afli_sjalfvirkir_maelar <- function(mar) {
 #'
 afli_toga <- function(mar) {
 
-  d <- tbl_mar(mar,"afli.toga")
+  tmp_func <- function(data){
+    txt <- setdiff(colnames(tog),colnames(data))
+    tmp <- rep('NA_real_',length(txt))
+    dplyr::mutate_(data,.dots = setNames(tmp,txt)) %>%
+      dplyr::select_(.dots = colnames(tog))
+  }
 
-  return(d)
+  tog <-
+    tbl_mar(mar,"afli.toga") %>%
+    dplyr::mutate(uppruni_toga = 'afli.toga')
 
+  tog %>%
+    dplyr::union_all(tbl_mar(mar,"afli.inn_toga") %>%
+                     dplyr::mutate(visir = visir + 2e9,
+                                   uppruni_toga = 'afli.inn_toga') %>%
+                       tmp_func()) %>%
+    dplyr::union_all(tbl_mar(mar,"afli.plog_toga") %>%
+                       dplyr::mutate(visir = 4e9+visir,
+                                     uppruni_toga = 'afli.plog_toga') %>%
+                       tmp_func()) %>%
+    dplyr::union_all(tbl_mar(mar,"afli.smuga_toga") %>%
+                       dplyr::mutate(visir = visir + 1e9,
+                                     uppruni_toga = 'afli.smuga_toga') %>%
+                       tmp_func()) %>%
+    dplyr::union_all(tbl_mar(mar,"afli.flem_toga") %>%
+                       dplyr::mutate(visir = 3e9+visir,
+                                     uppruni_toga = 'afli.flem_toga') %>%
+                       tmp_func())
 }
 
 #' afli.lineha
@@ -154,8 +185,20 @@ afli_toga <- function(mar) {
 #'
 afli_lineha <- function(mar) {
 
-  d <- tbl_mar(mar,"afli.lineha")
+  tmp_func <- function(data){
+    txt <- setdiff(colnames(tog),colnames(data))
+    tmp <- rep('NA_real_',length(txt))
+    dplyr::mutate_(data,.dots = setNames(tmp,txt)) %>%
+      dplyr::select_(.dots = colnames(tog))
+  }
 
-  return(d)
+  tog <-
+    tbl_mar(mar,"afli.lineha") %>%
+    dplyr::mutate(uppruni_lina = 'afli.lineha')
 
+  tog %>%
+    dplyr::union_all(tbl_mar(mar,"afli.smuga_lina") %>%
+                       dplyr::mutate(visir = visir + 1e9,
+                                     uppruni_toga = 'afli.smuga_toga') %>%
+                       tmp_func())
 }

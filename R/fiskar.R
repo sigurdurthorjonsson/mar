@@ -61,7 +61,9 @@ lesa_stodvar <- function(mar) {
     dplyr::mutate(ar =   to_number(to_char(dags, "YYYY")),
                   man =  to_number(to_char(dags, "MM"))) %>%
     dplyr::distinct() %>%
-    dplyr::rename(aths_stodvar = aths)
+    dplyr::rename(aths_stodvar = aths) %>%
+    fix_pos(col.names=c('kastad_n_breidd','kastad_v_lengd',
+                        'hift_n_breidd','hift_v_lengd'))
 
     return(d)
 

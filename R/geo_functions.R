@@ -4,10 +4,12 @@ geoconvert <- function(data, inverse = FALSE, col.names = c("lat", "lon")){
   }
   if(!inverse){
     tmp <- sprintf('geoconvert1(%s)',col.names)
-    dplyr::mutate_(data,.dots = setNames(tmp,col.names))
+    dplyr::mutate_(data,.dots = setNames(tmp,col.names)) %>%
+      select_(.dots=colnames(data))
   } else {
     tmp <- sprintf('geoconvert2(%s)',col.names)
-    dplyr::mutate_(data,.dots = setNames(tmp,col.names))
+    dplyr::mutate_(data,.dots = setNames(tmp,col.names)) %>%
+      select_(.dots=colnames(data))
   }
 }
 
@@ -27,6 +29,53 @@ r2d <- function(data,cell.col='r',col.names=c('lat','lon')){
     dplyr::select_(.dots = setNames(c('r','lat','lon'),c(cell.col,col.names)))
   data %>%
     dplyr::left_join(r)
+}
+
+sr2d <- function(data,cell.col='sr',col.names=c('lat','lon')){
+  if(!('tbl_oracle' %in% class(data))){
+    mod <- function(x,y) x%%y
+  }
+
+  l1.lat <- c(0, 0.125, 0.125, -0.125, -0.125)
+  l1.lon <- c(0, -0.25, 0.25, -0.25, 0.25)
+
+  sr <-
+    data %>%
+    dplyr::select_(.dots=setNames(cell.col,'sr')) %>%
+    dplyr::distinct() %>%
+    dplyr::mutate(r = floor(sr/10)) %>%
+    dplyr::mutate(s = sr - r*10,
+                  lat = floor(r/100)) %>%
+    dplyr::mutate(lon = mod(r - lat*100,50)) %>%
+    dplyr::mutate(halfb = (r-100*lat - lon)/100) %>%
+    dplyr::mutate(lon = -(lon-0.5),
+                  lat = lat + 60 + halfb + 0.25) %>%
+    dplyr::mutate(lon = lon + ifelse(s==0, 0,ifelse(s %in% 1:2, 0.125,-0.125)),
+                  lat = lat + ifelse(s==0, 0,ifelse(s %in% c(1,3), -0.25, 0.25))) %>%
+    dplyr::select_(.dots = setNames(c('sr','lat','lon'),c(cell.col,col.names)))
+  data %>%
+    dplyr::left_join(sr)
+}
+
+fix_pos <- function(data,
+                    lat='kastad_n_breidd',
+                    lon='kastad_v_lengd',...){
+  skika.fix <-
+    tbl_mar(mar,'fiskar.skikar') %>%
+    group_by(skiki,fj_reitur) %>%
+    summarise(sr.fix=max(reitur)*10+max(nvl(smareitur,0)))
+
+  tmp <-
+    c(sprintf('nvl(%s,lat)',lat),sprintf('nvl(%s,lon)',lon))
+
+  data %>%
+    dplyr::mutate(sr = reitur*10 + nvl(smareitur,0)) %>%
+    geoconvert(...) %>%
+    dplyr::left_join(skika.fix) %>%
+    dplyr::mutate(sr = nvl(sr,sr.fix)) %>%
+    sr2d() %>%
+    dplyr::mutate_(.dots=setNames(tmp,c(lat,lon))) %>%
+    select_(.dots = colnames(data))
 }
 
 
