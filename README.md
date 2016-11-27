@@ -70,7 +70,7 @@ explain(lengdir)
 
 ```
 ## <SQL> EXPLAIN PLAN FOR SELECT "SYNIS_ID" AS "synis_id", "TEGUND" AS "tegund", "LENGD" AS "lengd", "FJOLDI" AS "fjoldi", "KYN" AS "kyn", "KYNTHROSKI" AS "kynthroski", "SBT" AS "sbt", "SBN" AS "sbn", "SNT" AS "snt", "SNN" AS "snn"
-## FROM (fiskar.lengdir) "hkilyrvkld"
+## FROM (fiskar.lengdir) "ogvogjwigj"
 ```
 Ergo we generated an object, which one part is an SQL-query. The `explain` informs us how the database plans to execute the query.
 
@@ -133,7 +133,7 @@ explain(lengdir)
 ## <SQL> EXPLAIN PLAN FOR SELECT *
 ## FROM (SELECT "synis_id" AS "synis_id", "tegund" AS "tegund", "lengd" AS "lengd", "fjoldi" AS "fjoldi", "kyn" AS "kyn", "kynthroski" AS "kynthroski"
 ## FROM (SELECT "SYNIS_ID" AS "synis_id", "TEGUND" AS "tegund", "LENGD" AS "lengd", "FJOLDI" AS "fjoldi", "KYN" AS "kyn", "KYNTHROSKI" AS "kynthroski", "SBT" AS "sbt", "SBN" AS "sbn", "SNT" AS "snt", "SNN" AS "snn"
-## FROM (fiskar.lengdir) "hvqhbzyfbh") "scmwyksqez") "duafngrueq"
+## FROM (fiskar.lengdir) "pqowpfcaqz") "kjspekatwk") "kunaqysrtd"
 ## WHERE (("synis_id" = 48489.0) AND ("tegund" = 1.0))
 ```
 
@@ -210,36 +210,36 @@ explain(d)
 ## FROM (SELECT "synis_id", "tegund", "lengd", "fjoldi", "kyn", "kynthroski", 'lengdir' AS "uppruni_lengdir"
 ## FROM (SELECT "synis_id" AS "synis_id", "tegund" AS "tegund", "lengd" AS "lengd", "fjoldi" AS "fjoldi", "kyn" AS "kyn", "kynthroski" AS "kynthroski"
 ## FROM (SELECT * FROM (SELECT "SYNIS_ID" AS "synis_id", "TEGUND" AS "tegund", "LENGD" AS "lengd", "FJOLDI" AS "fjoldi", "KYN" AS "kyn", "KYNTHROSKI" AS "kynthroski", "SBT" AS "sbt", "SBN" AS "sbn", "SNT" AS "snt", "SNN" AS "snn"
-## FROM (fiskar.lengdir) "becrdlvnfw") "lnqicezgvi"
+## FROM (fiskar.lengdir) "axmmfesjfj") "tzdjzmygdz"
 ## 
 ## INNER JOIN
 ## 
 ## (SELECT "synis_id" AS "synis_id"
 ## FROM (SELECT *
 ## FROM (SELECT "SYNIS_ID" AS "synis_id", "LEIDANGUR" AS "leidangur", "DAGS" AS "dags", "SKIP" AS "skip", "STOD" AS "stod", "REITUR" AS "reitur", "SMAREITUR" AS "smareitur", "KASTAD_N_BREIDD" AS "kastad_n_breidd", "KASTAD_V_LENGD" AS "kastad_v_lengd", "HIFT_N_BREIDD" AS "hift_n_breidd", "HIFT_V_LENGD" AS "hift_v_lengd", "DYPI_KASTAD" AS "dypi_kastad", "DYPI_HIFT" AS "dypi_hift", "VEIDARFAERI" AS "veidarfaeri", "MOSKVASTAERD" AS "moskvastaerd", "GRANDARALENGD" AS "grandaralengd", "HEILDARAFLI" AS "heildarafli", "LONDUNARHOFN" AS "londunarhofn", "SKIKI" AS "skiki", "FJARDARREITUR" AS "fjardarreitur", "SNT" AS "snt", "SNN" AS "snn", "SBT" AS "sbt", "SBN" AS "sbn", "HNATTSTADA" AS "hnattstada", "LANDSYNI" AS "landsyni", "ATHS" AS "aths", "STADA_STODVAR" AS "stada_stodvar", "NET_NR" AS "net_nr", "SYNAFLOKKUR" AS "synaflokkur", "VEIDISVAEDI" AS "veidisvaedi", "HITAMAELIR_ID" AS "hitamaelir_id", "MAELINGARMENN" AS "maelingarmenn", "VEIDARFAERI_ID" AS "veidarfaeri_id", "TOG_ATHS" AS "tog_aths", "MEDFERD_AFLA" AS "medferd_afla"
-## FROM (fiskar.stodvar) "yjusjwkdrh") "soesafjklq"
-## WHERE ("dags" > TO_DATE('01.01.1986', 'dd.mm.yyyy'))) "vdsmzxeyvu") "cjbbabzqxp"
+## FROM (fiskar.stodvar) "hefvqecptr") "nwhcirokzr"
+## WHERE ("dags" > TO_DATE('01.01.1986', 'dd.mm.yyyy'))) "zzyovcibmi") "fidobvfwfh"
 ## 
-## USING ("synis_id")) "bsbeynzwqk") "yqatwlpjdp"
+## USING ("synis_id")) "ifprnsklcu") "ztgxeuenrr"
 ## UNION ALL
 ## SELECT "synis_id", "tegund", "lengd", "fjoldi", "kyn", "kynthroski", 'leidr_lengdir' AS "uppruni_lengdir"
 ## FROM (SELECT *
 ## FROM (SELECT * FROM (SELECT "synis_id" AS "synis_id", "tegund" AS "tegund", "lengd" AS "lengd", "fjoldi" AS "fjoldi", "kyn" AS "kyn", "kynthroski" AS "kynthroski"
 ## FROM (SELECT "SNT" AS "snt", "SNN" AS "snn", "SBT" AS "sbt", "SBN" AS "sbn", "SYNIS_ID" AS "synis_id", "TEGUND" AS "tegund", "LENGD" AS "lengd", "FJOLDI" AS "fjoldi", "KYN" AS "kyn", "KYNTHROSKI" AS "kynthroski"
-## FROM (fiskar.leidr_lengdir) "xublgigloc") "tacwjgvqyl") "lotebiwznf"
+## FROM (fiskar.leidr_lengdir) "eaficzgpse") "yuyiwqplnf") "ntbduxporp"
 ## 
 ## INNER JOIN
 ## 
 ## (SELECT "synis_id" AS "synis_id"
 ## FROM (SELECT *
 ## FROM (SELECT "SNT" AS "snt", "SNN" AS "snn", "SBT" AS "sbt", "SBN" AS "sbn", "SYNIS_ID" AS "synis_id", "LEIDANGUR" AS "leidangur", "SYNAFLOKKUR" AS "synaflokkur", "DAGS" AS "dags", "SKIP_NR" AS "skip_nr", "STOD" AS "stod", "REITUR" AS "reitur", "SMAREITUR" AS "smareitur", "ORREITUR" AS "orreitur", "HNATTSTADA" AS "hnattstada", "KASTAD_BREIDD" AS "kastad_breidd", "KASTAD_LENGD" AS "kastad_lengd", "HIFT_BREIDD" AS "hift_breidd", "HIFT_LENGD" AS "hift_lengd", "DYPI_KASTAD" AS "dypi_kastad", "DYPI_HIFT" AS "dypi_hift", "VEIDARF" AS "veidarf", "MOSKVASTAERD" AS "moskvastaerd", "GRANDARALENGD" AS "grandaralengd", "HEILDARAFLI" AS "heildarafli", "L_HOFN" AS "l_hofn", "SKIKI" AS "skiki", "FJ_REITUR" AS "fj_reitur", "TOGBYRJUN" AS "togbyrjun", "TOGENDIR" AS "togendir", "TOGHRADI" AS "toghradi", "TOGLENGD" AS "toglengd", "VIR_UTI" AS "vir_uti", "LODRETT_OPNUN" AS "lodrett_opnun", "TOGNUMER" AS "tognumer", "TOGSTEFNA" AS "togstefna", "LARETT_OPNUN" AS "larett_opnun", "TOGTIMI" AS "togtimi", "EYKT" AS "eykt", "TOGDYPI_KASTAD" AS "togdypi_kastad", "TOGDYPI_HIFT" AS "togdypi_hift", "TOGDYPISHITI" AS "togdypishiti", "VINDHRADI" AS "vindhradi", "VINDATT" AS "vindatt", "VEDUR" AS "vedur", "SKY" AS "sky", "SJOR" AS "sjor", "BOTNHITI" AS "botnhiti", "YFIRB_HITI" AS "yfirb_hiti", "LOFTHITI" AS "lofthiti", "LOFTVOG" AS "loftvog", "HAFIS" AS "hafis", "STRAUMSTEFNA" AS "straumstefna", "STRAUMHRADI" AS "straumhradi", "SJONDYPI" AS "sjondypi", "ATHS" AS "aths", "LANDSYNI" AS "landsyni", "STADA_STODVAR" AS "stada_stodvar", "HITAMAELIR_ID" AS "hitamaelir_id", "MAELINGARMENN" AS "maelingarmenn", "MEDFERD_AFLA" AS "medferd_afla", "NET_NR" AS "net_nr", "TOG_ATHS" AS "tog_aths", "VEIDARFAERI_ID" AS "veidarfaeri_id", "VEIDISVAEDI" AS "veidisvaedi", "VINDHRADI_HNUTAR" AS "vindhradi_hnutar"
-## FROM (fiskar.leidr_stodvar) "jrjpodpvyy") "iteijqcuyo"
-## WHERE ("dags" < TO_DATE('01.01.1986', 'dd.mm.yyyy') AND "dags" > TO_DATE('1910', 'yyyy'))) "fnmpchdnri") "fedvgwgrkp"
+## FROM (fiskar.leidr_stodvar) "hnmvuerngi") "tdbvndafhq"
+## WHERE ("dags" < TO_DATE('01.01.1986', 'dd.mm.yyyy') AND "dags" > TO_DATE('1910', 'yyyy'))) "vexsluqcnt") "xtmorsuvzs"
 ## 
-## USING ("synis_id")) "xuulmgeemk"
-## WHERE (NOT(("synis_id" IN (133095.0, 57070.0, 133401.0, 37559.0, 112980.0, 112984.0, 112987.0, 112991.0, 112995.0, 112998.0, 112999.0, 128268.0, 129166.0, 129168.0, 140153.0, 140155.0, 129370.0, 129170.0, 128765.0, 129098.0, 119798.0, 128890.0, 129146.0, 128586.0, 128898.0, 128902.0, 123916.0, 128392.0, 116665.0, 115948.0, 115967.0))))) "enzfghdety") "swvkycetfm") "khoudokflg"
-## WHERE ("synis_id" = 48489.0)) "xviuthyeze"
-## GROUP BY "tegund") "mgbqliywor"
+## USING ("synis_id")) "cyysyvfxmy"
+## WHERE (NOT(("synis_id" IN (133095.0, 57070.0, 133401.0, 37559.0, 112980.0, 112984.0, 112987.0, 112991.0, 112995.0, 112998.0, 112999.0, 128268.0, 129166.0, 129168.0, 140153.0, 140155.0, 129370.0, 129170.0, 128765.0, 129098.0, 119798.0, 128890.0, 129146.0, 128586.0, 128898.0, 128902.0, 123916.0, 128392.0, 116665.0, 115948.0, 115967.0))))) "ytmwgmphdr") "olkfydhtob") "vlcisdmscj"
+## WHERE ("synis_id" = 48489.0)) "orkwrmiztu"
+## GROUP BY "tegund") "smfoqlxvot"
 ## ORDER BY "fjoldi"
 ```
 
@@ -317,9 +317,9 @@ lesa_stodvar(mar) %>%
 ## $ reitur           <int> 669
 ## $ smareitur        <int> 4
 ## $ kastad_n_breidd  <dbl> 66.50917
-## $ kastad_v_lengd   <dbl> 19.39383
+## $ kastad_v_lengd   <dbl> -19.39383
 ## $ hift_n_breidd    <dbl> 66.5575
-## $ hift_v_lengd     <dbl> 19.37867
+## $ hift_v_lengd     <dbl> -19.37867
 ## $ dypi_kastad      <int> 311
 ## $ dypi_hift        <int> 311
 ## $ veidarfaeri      <int> 73

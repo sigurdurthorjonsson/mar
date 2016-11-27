@@ -59,7 +59,9 @@ lesa_stodvar <- function(mar) {
     dplyr::mutate(uppruni_stodvar = 'stodvar')%>%
     dplyr::union_all(.,dplyr::select_(st.corr,.dots=colnames(.))) %>%
     dplyr::mutate(ar =   to_number(to_char(dags, "YYYY")),
-                  man =  to_number(to_char(dags, "MM"))) %>%
+                  man =  to_number(to_char(dags, "MM")),
+                  kastad_v_lengd = -kastad_v_lengd,
+                  hift_v_lengd = -hift_v_lengd) %>%
     dplyr::distinct() %>%
     dplyr::rename(aths_stodvar = aths) %>%
     fix_pos(col.names=c('kastad_n_breidd','kastad_v_lengd',

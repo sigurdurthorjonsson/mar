@@ -56,9 +56,9 @@ afli_stofn <- function(mar) {
     dplyr::union_all(inn) %>%
     dplyr::mutate(ar =   to_number(to_char(vedags, "YYYY")),
                   man =  to_number(to_char(vedags, "MM")),
-                  lengd = lengd*100,
+                  lengd = -lengd*100,
                   breidd = breidd*100,
-                  lengd_lok = lengd_lok*100,
+                  lengd_lok = -lengd_lok*100,
                   breidd_lok = breidd_lok*100) %>%
     fix_pos(col.names=c('lengd','breidd'),lon='lengd',lat='breidd')
 
