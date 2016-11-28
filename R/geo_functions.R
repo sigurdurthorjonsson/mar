@@ -36,26 +36,24 @@ sr2d <- function(data,cell.col='sr',col.names=c('lat','lon')){
     mod <- function(x,y) x%%y
   }
 
-  l1.lat <- c(0, 0.125, 0.125, -0.125, -0.125)
-  l1.lon <- c(0, -0.25, 0.25, -0.25, 0.25)
-
   sr <-
     data %>%
     dplyr::select_(.dots=setNames(cell.col,'sr')) %>%
     dplyr::distinct() %>%
     dplyr::mutate(r = floor(sr/10)) %>%
-    dplyr::mutate(s = sr - r*10,
+    dplyr::mutate(s = round(sr - r*10,0) + 1,
                   lat = floor(r/100)) %>%
     dplyr::mutate(lon = mod(r - lat*100,50)) %>%
     dplyr::mutate(halfb = (r-100*lat - lon)/100) %>%
-    dplyr::mutate(lon = -(lon-0.5),
+    dplyr::mutate(lon = -(lon+0.5),
                   lat = lat + 60 + halfb + 0.25) %>%
-    dplyr::mutate(lon = lon + ifelse(s==0, 0,ifelse(s %in% 1:2, 0.125,-0.125)),
-                  lat = lat + ifelse(s==0, 0,ifelse(s %in% c(1,3), -0.25, 0.25))) %>%
+    dplyr::mutate(lat = lat + ifelse(s==1, 0,ifelse(s %in% 2:3, 0.125,-0.125)),
+                  lon = lon + ifelse(s==1, 0,ifelse(s %in% c(2,4), -0.25, 0.25))) %>%
     dplyr::select_(.dots = setNames(c('sr','lat','lon'),c(cell.col,col.names)))
   data %>%
     dplyr::left_join(sr,by='sr')
 }
+
 
 fix_pos <- function(data,
                     lat='kastad_n_breidd',

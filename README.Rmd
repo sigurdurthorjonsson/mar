@@ -84,7 +84,7 @@ lengdir <-
   tbl_mar(mar, "fiskar.lengdir") %>% 
   select(synis_id, tegund, lengd, fjoldi, kyn, kynthroski) %>% 
   filter(synis_id == 48489,
-         tegund == 1)
+         tegund == 1)/net/hafkaldi/export/u2/reikn/stasi/gis/sjomaelingar/README.html
 explain(lengdir)
 ```
 
