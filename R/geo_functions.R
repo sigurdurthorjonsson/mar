@@ -54,7 +54,7 @@ sr2d <- function(data,cell.col='sr',col.names=c('lat','lon')){
                   lat = lat + ifelse(s==0, 0,ifelse(s %in% c(1,3), -0.25, 0.25))) %>%
     dplyr::select_(.dots = setNames(c('sr','lat','lon'),c(cell.col,col.names)))
   data %>%
-    dplyr::left_join(sr)
+    dplyr::left_join(sr,by='sr')
 }
 
 fix_pos <- function(data,
@@ -66,16 +66,16 @@ fix_pos <- function(data,
     summarise(sr.fix=max(reitur)*10+max(nvl(smareitur,0)))
 
   tmp <-
-    c(sprintf('nvl(%s,lat)',lat),sprintf('nvl(%s,lon)',lon))
+    c(sprintf("nvl2(%s,'unchanged','fixed')",lat),sprintf('nvl(%s,lat)',lat),sprintf('nvl(%s,lon)',lon))
 
   data %>%
     dplyr::mutate(sr = reitur*10 + nvl(smareitur,0)) %>%
     geoconvert(...) %>%
-    dplyr::left_join(skika.fix) %>%
+    dplyr::left_join(skika.fix,by='skiki') %>%
     dplyr::mutate(sr = nvl(sr,sr.fix)) %>%
     sr2d() %>%
-    dplyr::mutate_(.dots=setNames(tmp,c(lat,lon))) %>%
-    select_(.dots = colnames(data))
+    dplyr::mutate_(.dots=setNames(tmp,c('pos_fix',lat,lon))) %>%
+    select_(.dots = c(colnames(data),'pos_fix'))
 }
 
 

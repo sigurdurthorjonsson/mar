@@ -202,3 +202,31 @@ afli_lineha <- function(mar) {
                                      uppruni_toga = 'afli.smuga_toga') %>%
                        tmp_func())
 }
+
+
+#' Grásleppunet
+#'
+#' @param mar
+#'
+#' @return
+#' @export
+#'
+#' @examples
+afli_grasl <- function(mar){
+  grasl <-
+    tbl_mar(mar,'afli.grasl_sokn') %>%
+    dplyr::mutate(sr = round(reitur/10,0),
+                  uppruni_grasl = 'grasl_sokn') %>%
+    dplyr::select(-vear)
+
+  g <-
+    tbl_mar(mar,'afli.g_sokn') %>%
+    dplyr::mutate(sr = reitur,
+           reitur = 10*reitur,
+           uppruni_grasl = 'g_sokn',
+           athugasemd = '') %>%
+    dplyr::select_(.dots = colnames(grasl))
+
+  dplyr::union_all(grasl,g) %>%
+    sr2d()
+  }
