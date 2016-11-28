@@ -77,3 +77,16 @@ fix_pos <- function(data,
 }
 
 
+encode_zchords <- function(data,col.names=c('lat','lon'),dx=1,dy=0.5,invalids=TRUE){
+
+  tmp <-
+    c(sprintf('floor(%s/dx)*dx',col.names[2]),sprintf('floor(%s/dy)*dy',col.names[1]),col.names)
+
+  data %>%
+    dplyr::mutate(dx = dx,
+                  dy = dy) %>%
+    dplyr::mutate_(.dots=setNames(tmp,c('x','y','lat','lon'))) %>%
+    dplyr::mutate(x = x+dx/2,
+                  y = y+dy/2) %>%
+    dplyr::mutate(sq = round(x,6)%||%':'%||%round(y,6))
+}
