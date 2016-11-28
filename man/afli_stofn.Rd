@@ -14,6 +14,6 @@ dataframe
 }
 \description{
 Fallid myndar tengingu við toflu stofn í
-afli gagnagrunninum.
+afli gagnagrunninum. Grásleppan er alveg sér á parti ennþá
 }
 

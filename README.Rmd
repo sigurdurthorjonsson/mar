@@ -84,7 +84,7 @@ lengdir <-
   tbl_mar(mar, "fiskar.lengdir") %>% 
   select(synis_id, tegund, lengd, fjoldi, kyn, kynthroski) %>% 
   filter(synis_id == 48489,
-         tegund == 1)
+         tegund == 1)/net/hafkaldi/export/u2/reikn/stasi/gis/sjomaelingar/README.html
 explain(lengdir)
 ```
 
@@ -169,9 +169,6 @@ To get a quick plot of the station location we could do:
 ```{r smb1991_stodvar}
 smb1991 %>% 
   collect() %>% 
-  # convert ddmmxx to decimal degrees
-  mutate(lon = -gisland::geo_convert(lon),
-         lat =  gisland::geo_convert(lat)) %>% 
   ggplot(aes(lon, lat)) +
   geom_polygon(data = gisland::iceland, aes(long, lat, group = group)) +
   geom_point(col = "red") +
@@ -198,8 +195,6 @@ To turn this into action, lets execute the query, get the dataframe into R and p
 ```{r smb1991_n}
 smb1991_n %>% 
   collect() %>% 
-  mutate(lon = -gisland::geo_convert(lon),
-         lat =  gisland::geo_convert(lat)) %>% 
   ggplot() +
   theme_bw() +
   geom_polygon(data = gisland::iceland, aes(long, lat, group = group), fill = "grey") +
