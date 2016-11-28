@@ -180,8 +180,12 @@ lesa_numer <- function(mar) {
     dplyr::mutate(uppruni_numer = 'numer') %>%
     dplyr::union_all(.,dplyr::select_(num.corr,.dots=colnames(.))) %>%
     dplyr::distinct()
-  # below returns an error
-    #dplyr::mutate(r = 1 + fj.talid/fj.maelt)
+
+  if(scale){
+    d <-
+      d %>%
+      skala_med_toldum()
+  }
 
   return(d)
 
