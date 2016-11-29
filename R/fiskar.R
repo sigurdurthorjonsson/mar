@@ -63,7 +63,7 @@ lesa_stodvar <- function(mar) {
                   kastad_v_lengd = -kastad_v_lengd,
                   hift_v_lengd = -hift_v_lengd) %>%
     dplyr::distinct() %>%
-    dplyr::rename(aths_stodvar = aths) %>%
+    dplyr::rename(aths_stodvar = aths,fj_reitur=fjardarreitur) %>%
     fix_pos(col.names=c('kastad_n_breidd','kastad_v_lengd',
                         'hift_n_breidd','hift_v_lengd'))
 
