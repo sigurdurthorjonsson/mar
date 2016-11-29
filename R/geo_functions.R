@@ -58,8 +58,9 @@ sr2d <- function(data,cell.col='sr',col.names=c('lat','lon')){
 fix_pos <- function(data,
                     lat='kastad_n_breidd',
                     lon='kastad_v_lengd',...){
+
   skika.fix <-
-    tbl_mar(mar,'fiskar.skikar') %>%
+    tbl_mar(data$src,'fiskar.skikar') %>%
     group_by(skiki,fj_reitur) %>%
     summarise(sr.fix=max(reitur)*10+max(nvl(smareitur,0)))
 

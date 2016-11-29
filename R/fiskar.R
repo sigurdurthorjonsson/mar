@@ -181,11 +181,6 @@ lesa_numer <- function(mar) {
     dplyr::union_all(.,dplyr::select_(num.corr,.dots=colnames(.))) %>%
     dplyr::distinct()
 
-  if(scale){
-    d <-
-      d %>%
-      skala_med_toldum()
-  }
 
   return(d)
 
