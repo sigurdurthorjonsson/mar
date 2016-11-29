@@ -69,7 +69,7 @@ fix_pos <- function(data,
   data %>%
     dplyr::mutate(sr = reitur*10 + nvl(smareitur,0)) %>%
     geoconvert(...) %>%
-    dplyr::left_join(skika.fix,by='skiki') %>%
+    dplyr::left_join(skika.fix,by=c('skiki','fj_reitur')) %>%
     dplyr::mutate(sr = nvl(sr,sr.fix)) %>%
     sr2d() %>%
     dplyr::mutate_(.dots=setNames(tmp,c('pos_fix',lat,lon))) %>%

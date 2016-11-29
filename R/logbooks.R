@@ -84,23 +84,27 @@ afli_stofn <- function(mar) {
 #' @export
 #'
 afli_afli <- function(mar) {
-  tbl_mar(mar,"afli.plog_afli") %>%
+  d <-
+    tbl_mar(mar,"afli.plog_afli") %>%
     dplyr::mutate(visir = 4e9+visir,
                   uppruni_afli = 'plog_afli') %>%
-    dplyr::union_all(tbl_mar(mar,"afli.inn_afli",
-                             uppruni_afli = 'inn_afli') %>%
-                       dplyr::mutate(visir = visir + 2e9)) %>%
-    dplyr::union_all(tbl_mar(mar,"afli.smuga_afli",
-                             uppruni_afli = 'smuga_afli') %>%
-                       dplyr::mutate(visir = visir + 1e9)) %>%
-    dplyr::union_all(tbl_mar(mar,"afli.flem_afli",
-                             uppruni_afli = 'flem_afli') %>%
-                       dplyr::mutate(visir = visir + 3e9)) %>%
+    dplyr::union_all(tbl_mar(mar,"afli.inn_afli") %>%
+                       dplyr::mutate(visir = visir + 2e9,
+                                     uppruni_afli = 'inn_afli')) %>%
+    dplyr::union_all(tbl_mar(mar,"afli.smuga_afli") %>%
+                       dplyr::mutate(visir = visir + 1e9,
+                                     uppruni_afli = 'smuga_afli')) %>%
+    dplyr::union_all(tbl_mar(mar,"afli.flem_afli") %>%
+                       dplyr::mutate(visir = visir + 3e9,
+                                     uppruni_afli = 'flem_afli')) %>%
     dplyr::mutate(medalthyngd_gr=NA,
                   astand=NA,
-                  magn=NA) %>%
-    dplyr::union_all(tbl_mar(mar,"afli.afli") %>%
-                       dplyr::mutate(uppruni_afli = 'afli'))
+                  magn=NA)
+
+  d2 <- tbl_mar(mar,"afli.afli") %>%
+    dplyr::mutate(uppruni_afli = 'afli')
+
+  dplyr::union_all(d2,d %>% select_(.dots=colnames(d2)))
 }
 
 #' afli.sjálfvirkir_maelar
