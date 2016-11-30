@@ -1,27 +1,27 @@
 #' @export
 uv_veidisvaedi <- function(db) {
-  dplyr::tbl_mar(db, "uv.veidisvaedi") %>%
+  tbl_mar(db, "uv.veidisvaedi") %>%
     # fs_skyring is not readable into R
     dplyr::select(-c(snt:sbg, fs_skyring)) %>%
     dplyr::mutate(ar = to_number(to_char(dags_fra, "YYYY")))
 }
 #' @export
 uv_hnit <- function(db) {
-  dplyr::tbl_mar(db, "uv.hnit") %>%
+  tbl_mar(db, "uv.hnit") %>%
     dplyr::rename(hnit_id = id,
                   id = veidisv)
 }
 #' @export
 uv_veidisv_fteg <- function(db) {
   d <-
-    dplyr::tbl_mar(db, "uv.veidisv_fteg") %>%
+    tbl_mar(db, "uv.veidisv_fteg") %>%
     dplyr::select(fteg_id = fteg,
                   id = veidisv_id)
   d2 <-
-    dplyr::tbl_mar(db, "uv.fteg") %>%
+    tbl_mar(db, "uv.fteg") %>%
     dplyr::select(fteg_id = id, tegund, fiskheiti = heiti)
   d %>%
-    dplyr::left_join(d2) %>%
+    dplyr::left_join(d2, by = "fteg_id") %>%
     dplyr::select(-fteg_id)
 }
 
@@ -29,31 +29,22 @@ uv_veidisv_fteg <- function(db) {
 #' @export
 uv_veidisv_veidarf <- function(db) {
   d <-
-    dplyr::tbl_mar(db, "uv.veidisv_veidarf") %>%
+    tbl_mar(db, "uv.veidisv_veidarf") %>%
     dplyr::select(id = veidisv_id,
                   veidarf_id = veidarf)
   d2 <-
-    dplyr::tbl_mar(db, "uv.veidarfa") %>%
+    tbl_mar(db, "uv.veidarfa") %>%
     dplyr::select(-c(snt:sbg)) %>%
     dplyr::select(veidarf_id = id, veidarfaeri = heiti)
   d %>%
-    dplyr::left_join(d2) %>%
+    dplyr::left_join(d2, by = "veidarf_id") %>%
     dplyr::select(-veidarf_id)
-}
-
-
-#' @export
-uv_veidarfa <- function(db) {
-  dplyr::tbl_mar(db, "uv.veidarfa") %>%
-    dplyr::select(-c(snt:sbg))
 }
 
 uv_flat_file <- function(db) {
   uv_veidisvaedi(db) %>%
-    #filter(teg_veidisvaeda == "Skyndilokun") %>%
-    dplyr::left_join(uv_veidisv_fteg(db)) %>%
-    dplyr::left_join(uv_veidisv_veidarf(db)) %>%
-    dplyr::collect(n = Inf)
+    dplyr::left_join(uv_veidisv_fteg(db), by = "id") %>%
+    dplyr::left_join(uv_veidisv_veidarf(db), by = "id")
 }
 
 get_skyndilokun <- function(db, year, nr) {
