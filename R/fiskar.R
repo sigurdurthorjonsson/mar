@@ -257,14 +257,15 @@ lesa_kvarnir <- function(mar) {
 #'
 #' @examples
 skala_med_toldum <- function(lengdir){
+
   ratio <-
     lesa_numer(lengdir$src) %>%
-    dplyr::mutate(r = ifelse(fj_talid==0,1,fj_talid/ifelse(fj_maelt==0,1,fj_maelt))) %>%
-    dplyr::select(synis_id,r)
+    dplyr::mutate(r = ifelse(fj_talid==0, 1, fj_talid / ifelse(fj_maelt == 0, 1, fj_maelt))) %>%
+    dplyr::select(synis_id, tegund, r)
 
   lengdir %>%
     dplyr::left_join(ratio) %>%
-    dplyr::mutate(fjoldi = fjoldi*r)
+    dplyr::mutate(fjoldi = fjoldi * r)
 }
 
 
