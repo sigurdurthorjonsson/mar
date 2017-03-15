@@ -60,7 +60,8 @@ afli_stofn <- function(mar) {
                   breidd = breidd*100,
                   lengd_lok = -lengd_lok*100,
                   breidd_lok = breidd_lok*100) %>%
-    fix_pos(col.names=c('lengd','breidd'),lon='lengd',lat='breidd')
+    fix_pos(col.names=c('lengd','breidd'),lon='lengd',lat='breidd') %>%
+    fix_pos(col.names=c('lengd_lok','breidd_lok'),lon='lengd_lok',lat='breidd_lok')
 
 
   # ## grásleppan er alveg sér
