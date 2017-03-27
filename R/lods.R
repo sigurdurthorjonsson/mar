@@ -3,6 +3,7 @@
 #' @description XXX
 #'
 #' @param mar src_oracle tenging við oracle
+#' @export
 lods_oslaegt <- function(mar) {
 
   d <- tbl_mar(mar, "kvoti.lods_oslaegt") %>%
@@ -26,6 +27,7 @@ lods_oslaegt <- function(mar) {
 #'
 #'
 #' @param mar src_oracle tenging við oracle
+#' @export
 lods_skipasaga <- function(mar) {
 
     d <- tbl_mar(mar, "kvoti.skipasaga") %>%
@@ -66,6 +68,7 @@ lesa_skipaskra <- function(mar) {
 #'
 #'
 #' @param mar src_oracle tenging við oracle
+#' @export
 landadur_afli <- function(mar) {
 
   d <-
