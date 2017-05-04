@@ -64,7 +64,7 @@ afli_sjalfvirkir_maelar <- function(mar) {
                   hnattstada_siriti = sign(lengd)) %>%
     dplyr::left_join(afli_stofn(mar) %>%
                        dplyr::mutate(hnattstada_stofn = -sign(lengd)) %>%
-                       dplyr::select(visir, veidarfaeri, hnattstada_stofn),
+                       dplyr::select(visir, veidarf, hnattstada_stofn),
               by = "visir") %>%
     # if hnattstada_stofn is undefined, visir is not found in stofn
     #   this should not really be possible
