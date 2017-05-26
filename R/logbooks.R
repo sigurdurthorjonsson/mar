@@ -102,23 +102,8 @@ afli_toga <- function(mar) {
 #' @export
 #'
 afli_lineha <- function(mar) {
-
-  tmp_func <- function(data){
-    txt <- setdiff(colnames(tog),colnames(data))
-    tmp <- rep('NA_real_',length(txt))
-    dplyr::mutate_(data,.dots = setNames(tmp,txt)) %>%
-      dplyr::select_(.dots = colnames(tog))
-  }
-
-  tog <-
     tbl_mar(mar,"afli.lineha") %>%
     dplyr::mutate(uppruni_lina = 'afli.lineha')
-
-  tog %>%
-    dplyr::union_all(tbl_mar(mar,"afli.smuga_lina") %>%
-                       dplyr::mutate(visir = visir + 1e9,
-                                     uppruni_toga = 'afli.smuga_toga') %>%
-                       tmp_func())
 }
 
 
