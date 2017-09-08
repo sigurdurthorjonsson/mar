@@ -12,4 +12,3 @@ lods_skipasaga(mar)
 \description{
 XXX
 }
-

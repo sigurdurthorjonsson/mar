@@ -16,4 +16,3 @@ stada = kvoti - afli
 eftir = stada - tilf
 eftir + upptaka = n_ar + onotad
 }
-

@@ -12,4 +12,3 @@ taggart(mar)
 \description{
 A flat dataframe of tags and recaptures
 }
-

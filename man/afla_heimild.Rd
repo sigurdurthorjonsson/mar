@@ -12,4 +12,3 @@ afla_heimild(mar)
 \description{
 Aflaheimild
 }
-

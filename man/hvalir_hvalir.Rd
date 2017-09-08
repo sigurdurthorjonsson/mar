@@ -15,4 +15,3 @@ tenging við hvalir_v
 \description{
 Hvalir
 }
-

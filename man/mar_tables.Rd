@@ -17,4 +17,3 @@ dataframe
 \description{
 Fallið myndar tengingu við schema all_tables
 }
-

@@ -12,4 +12,3 @@ heimild(mar)
 \description{
 Heimild
 }
-

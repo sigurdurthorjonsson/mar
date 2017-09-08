@@ -37,15 +37,15 @@ lesa_stodvar <- function(mar) {
     tbl_mar(mar,"fiskar.leidr_stodvar") %>%
     dplyr::select(-c(snt:sbn)) %>%
     dplyr::filter(!(synis_id %in% excl.list)) %>%
-    dplyr::rename(skip=skip_nr,
-                  kastad_n_breidd = kastad_breidd,
-                  kastad_v_lengd =  kastad_lengd,
-                  hift_n_breidd = hift_breidd,
-                  hift_v_lengd = hift_lengd,
-                  veidarfaeri = veidarf,
-                  londunarhofn = l_hofn,
-                  fjardarreitur = fj_reitur,
-                  yfirbordshiti = yfirb_hiti) %>%
+    dplyr::rename(skip=skip_nr) %>%
+    dplyr::rename(kastad_n_breidd = kastad_breidd) %>%
+    dplyr::rename(kastad_v_lengd =  kastad_lengd) %>%
+    dplyr::rename(hift_n_breidd = hift_breidd) %>%
+    dplyr::rename(hift_v_lengd = hift_lengd) %>%
+    dplyr::rename(veidarfaeri = veidarf) %>%
+    dplyr::rename(londunarhofn = l_hofn) %>%
+    dplyr::rename(fjardarreitur = fj_reitur) %>%
+    dplyr::rename(yfirbordshiti = yfirb_hiti) %>%
     dplyr::mutate(tog_lengd =-1, dregid_fra = NA) %>%
     dplyr::select(-orreitur) %>%
     dplyr::filter(dags < to_date('01.01.1986','dd.mm.yyyy') & dags > to_date('1910','yyyy')) %>%
@@ -63,11 +63,12 @@ lesa_stodvar <- function(mar) {
                   kastad_v_lengd = -kastad_v_lengd,
                   hift_v_lengd = -hift_v_lengd) %>%
     dplyr::distinct() %>%
-    dplyr::rename(aths_stodvar = aths,fj_reitur=fjardarreitur) %>%
+    dplyr::rename(aths_stodvar = aths) %>%
+    dplyr::rename(fj_reitur=fjardarreitur) %>%
     fix_pos(col.names=c('kastad_n_breidd','kastad_v_lengd',
                         'hift_n_breidd','hift_v_lengd'))
 
-    return(d)
+  return(d)
 
 }
 
@@ -235,11 +236,10 @@ lesa_kvarnir <- function(mar) {
     tbl_mar(mar,"fiskar.kvarnir") %>%
     dplyr::inner_join(st, by = "synis_id") %>%
     dplyr::select(-c(sbn:snt)) %>%
+    dplyr::rename(syking = sy) %>%
     dplyr::mutate(uppruni_kvarnir = 'kvarnir') %>%
     dplyr::union_all(oto.corr)  %>%
-    dplyr::rename(aths_kvarnir = aths)#%>%
-  # below returns an error
-  #dplyr::mutate(r = 1 + fj.talid/fj.maelt)
+    dplyr::rename(aths_kvarnir = aths)
 
   return(d)
 

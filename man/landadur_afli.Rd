@@ -14,4 +14,3 @@ Landaður afli. Dálkurinn flokkur vísar til skipaflokks,
 ef neikvæður þá er um erlent skip að ræða. Erlend skip eru
 einnig þegar þetta er skrifað (1. apríl 2016) með númer frá 3815:4999.
 }
-

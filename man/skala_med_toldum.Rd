@@ -15,4 +15,3 @@ fyrirspurn með sköluðum fjölda í lengdarbili
 \description{
 Þetta fall skala lengdardreifingar með töldum fiskum úr ralli
 }
-

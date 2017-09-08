@@ -12,4 +12,3 @@ fiskmerki_rafgogn(mar)
 \description{
 XXX
 }
-

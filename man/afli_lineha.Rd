@@ -16,4 +16,3 @@ dataframe
 Fallid myndar tengingu við toflu linea í
 afli gagnagrunninum.
 }
-

@@ -12,4 +12,3 @@ afli_tac(mar)
 \description{
 Landaður afli byggður á töflu sem Sigfús Jó stjórnar
 }
-

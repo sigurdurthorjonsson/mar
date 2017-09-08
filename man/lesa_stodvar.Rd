@@ -20,4 +20,3 @@ Fallid myndar tengingu við "view" toflu v_stodvar
 mar <- dplyrOracle::src_oracle("mar")
 dplyr::glimpse(lesa_stodvar(mar))
 }
-

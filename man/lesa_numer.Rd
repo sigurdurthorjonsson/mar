@@ -20,4 +20,3 @@ Fallid myndar tengingu við toflu numer
 mar <- dplyrOracle::src_oracle("mar")
 dplyr::glimpse(lesa_numer(mar))
 }
-

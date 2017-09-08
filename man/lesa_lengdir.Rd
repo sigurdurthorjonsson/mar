@@ -20,4 +20,3 @@ Fallid myndar tengingu við toflu lengdir
 mar <- dplyrOracle::src_oracle("mar")
 dplyr::glimpse(lesa_lengdir(mar))
 }
-

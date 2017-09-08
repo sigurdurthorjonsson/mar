@@ -12,4 +12,3 @@ kvoti_stada(mar)
 \description{
 XXX
 }
-
