@@ -27,27 +27,22 @@ You have to do this once, or when you want to update the packages already instal
 ```{r, eval = FALSE}
 install.packages("tidyverse")
 install.packages("devtools")
-devtools::install_github("fishvice/dplyrOracle", dependencies = FALSE)
-devtools::install_github("fishvice/mar",  dependencies = FALSE)
+devtools::install_github("edgararuiz/dbplyr", ref = 'translation-roracle')
+devtools::install_github("fishvice/mar",  dependencies = FALSE, ref = 'interim-branch')
 ```
 
-Windows users should note that the install of the dplyrOracle package may fail due failed dependency on 32 bit Oracle libraries. To fix this problem one can install the library with:
-
-```{r,eval=FALSE}
-devtools::install_github("fishvice/dplyrOracle",  dependencies = FALSE, args='--no-multiarch')
-```
 
 ### Establish connection
 
 ```{r, message = FALSE}
 library(tidyverse)
-library(dplyrOracle)
+library(ROracle)
 library(mar)
 ```
 
 Connection to MRI Oracle database:
 ```{r}
-mar <- src_oracle("mar")
+mar <- dbConnect(dbDriver('Oracle'))
 ```
 
 ### Some (hopefully) gentle introduction
@@ -62,8 +57,8 @@ What class is lengdir?:
 class(lengdir)
 ```
 The class here is somewhat obtuse. Lets not worry about that to much. What has happened behind the scene one can realize by:
-```{r}
-explain(lengdir)
+```{r,eval=FALSE}
+explain(lengdir) ## this doesn't work
 ```
 Ergo we generated an object, which one part is an SQL-query. The `explain` informs us how the database plans to execute the query.
 
@@ -85,7 +80,7 @@ lengdir <-
   select(synis_id, tegund, lengd, fjoldi, kyn, kynthroski) %>% 
   filter(synis_id == 48489,
          tegund == 1)
-explain(lengdir)
+#explain(lengdir)
 ```
 
 To pull down all the results into R one uses collect(), which returns a tidyverse data.frame (tbl_df):
@@ -121,7 +116,7 @@ d <-
   group_by(tegund) %>% 
   summarise(fjoldi = sum(fjoldi)) %>% 
   arrange(fjoldi)
-explain(d)
+#explain(d)
 ```
 
 The SQL query has now become a bunch of gibberish for some of us. But this demonstrates that in addition to **select** and **filter** the `dplyr`-verbs **group_by**, **summarise** and **arrange** are "translated" into SQL :-) To see the outcome we do:
@@ -188,7 +183,7 @@ smb1991_n <-
 
 Again we have not done much more than generate an SQL-query and not touched the database. For those interested seeing the SQL-code do:
 ```{r, eval = FALSE}
-explain(smb1991_n)
+#explain(smb1991_n)
 ```
 
 To turn this into action, lets execute the query, get the dataframe into R and plot the data:
@@ -215,7 +210,7 @@ d <- lods_oslaegt(mar) %>%
   group_by(timabil, gerd) %>%
   summarise(afli = sum(magn_oslaegt)) %>%
   arrange(timabil, gerd)
-explain(d)
+#explain(d)
 d %>% collect()
 ```
 
@@ -247,8 +242,8 @@ tmp <-
   mutate(weight = 0.01*lengd^3) %>% 
   right_join(st) %>% 
   left_join(faeda_thyngdir(mar)) %>% 
-  mutate(faeduhopur = if_else(is.na(faeduhopur),'Empty',faeduhopur),
-         thyngd = if_else(is.na(thyngd),0,thyngd))
+  mutate(faeduhopur = nvl(faeduhopur,'Empty'),
+         thyngd = nvl(thyngd,0))
 ```
 
 Look at the average percentage of body weight capelin in the stomach is in the spring survey compared to other species
