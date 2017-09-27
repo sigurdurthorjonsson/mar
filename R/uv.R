@@ -9,8 +9,8 @@ uv_veidisvaedi <- function(con) {
 #' @export
 uv_hnit <- function(con) {
   tbl_mar(con, "uv.hnit") %>%
-    dplyr::rename(hnit_id = id,
-                  id = veidisv)
+    dplyr::rename(hnit_id = id) %>%
+    dplyr::rename(id = veidisv)
 }
 
 #' @export
