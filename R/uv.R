@@ -1,24 +1,26 @@
 #' @export
-uv_veidisvaedi <- function(db) {
-  tbl_mar(db, "uv.veidisvaedi") %>%
+uv_veidisvaedi <- function(con) {
+  tbl_mar(con, "uv.veidisvaedi") %>%
     # fs_skyring is not readable into R
     dplyr::select(-c(snt:sbg, fs_skyring)) %>%
     dplyr::mutate(ar = to_number(to_char(dags_fra, "YYYY")))
 }
+
 #' @export
-uv_hnit <- function(db) {
-  tbl_mar(db, "uv.hnit") %>%
+uv_hnit <- function(con) {
+  tbl_mar(con, "uv.hnit") %>%
     dplyr::rename(hnit_id = id,
                   id = veidisv)
 }
+
 #' @export
-uv_veidisv_fteg <- function(db) {
+uv_tegund <- function(con) {
   d <-
-    tbl_mar(db, "uv.veidisv_fteg") %>%
+    tbl_mar(con, "uv.veidisv_fteg") %>%
     dplyr::select(fteg_id = fteg,
                   id = veidisv_id)
   d2 <-
-    tbl_mar(db, "uv.fteg") %>%
+    tbl_mar(con, "uv.fteg") %>%
     dplyr::select(fteg_id = id, tegund, fiskheiti = heiti)
   d %>%
     dplyr::left_join(d2, by = "fteg_id") %>%
@@ -27,13 +29,13 @@ uv_veidisv_fteg <- function(db) {
 
 
 #' @export
-uv_veidisv_veidarf <- function(db) {
+uv_veidarfaeri <- function(con) {
   d <-
-    tbl_mar(db, "uv.veidisv_veidarf") %>%
+    tbl_mar(con, "uv.veidisv_veidarf") %>%
     dplyr::select(id = veidisv_id,
                   veidarf_id = veidarf)
   d2 <-
-    tbl_mar(db, "uv.veidarfa") %>%
+    tbl_mar(con, "uv.veidarfa") %>%
     dplyr::select(-c(snt:sbg)) %>%
     dplyr::select(veidarf_id = id, veidarfaeri = heiti)
   d %>%
@@ -41,16 +43,18 @@ uv_veidisv_veidarf <- function(db) {
     dplyr::select(-veidarf_id)
 }
 
-uv_flat_file <- function(db) {
-  uv_veidisvaedi(db) %>%
-    dplyr::left_join(uv_veidisv_fteg(db), by = "id") %>%
-    dplyr::left_join(uv_veidisv_veidarf(db), by = "id")
+#' @export
+uv_flatfile <- function(con) {
+  uv_veidisvaedi(con) %>%
+    dplyr::left_join(uv_tegund(con), by = "id") %>%
+    dplyr::left_join(uv_veidarfaeri(con), by = "id")
 }
 
-get_skyndilokun <- function(db, year, nr) {
+#' @export
+get_skyndilokun <- function(con, year, nr) {
 
   stofn <-
-    uv_veidisvaedi(db) %>%
+    uv_veidisvaedi(con) %>%
     dplyr::filter(teg_veidisvaeda == "Skyndilokun",
                   ar %in% year)
 
@@ -64,7 +68,7 @@ get_skyndilokun <- function(db, year, nr) {
 
   hnit <-
     stofn %>%
-    dplyr::left_join(uv_hnit(db), by = "id") %>%
+    dplyr::left_join(uv_hnit(con), by = "id") %>%
     mar:::geoconvert(col.names = c("hnit_n", "hnit_v")) %>%
     dplyr::rename(lon = hnit_v, lat = hnit_n) %>%
     dplyr::mutate(lon = -lon)
