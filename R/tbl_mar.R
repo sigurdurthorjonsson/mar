@@ -9,9 +9,7 @@
 
 tbl_mar <- function(mar, tbl) {
   x <- strsplit(tbl,'\\.') %>% unlist()
-  d <- dplyr::tbl(mar,dbplyr::in_schema(x[1],x[2]))
-  for(nn in colnames(d)){
-    d <- d %>% dplyr::rename_(.dots = stats::setNames(nn,tolower(nn)))
-  }
+  d <- dplyr::tbl(mar,dbplyr::in_schema(x[1],x[2])) %>%
+    dplyr::select_all(tolower)
   return(d)
 }
