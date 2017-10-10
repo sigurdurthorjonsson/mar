@@ -1,5 +1,5 @@
 geoconvert <- function(data, inverse = FALSE, col.names = c("lat", "lon")){
-  if(!('tbl_oracle' %in% class(data))){
+  if(!('tbl_sql' %in% class(data))){
     return(geo::geoconvert(data,inverse,col.names))
   }
   if(!inverse){
@@ -14,7 +14,7 @@ geoconvert <- function(data, inverse = FALSE, col.names = c("lat", "lon")){
 }
 
 r2d <- function(data,cell.col='r',col.names=c('lat','lon')){
-  if(!('tbl_oracle' %in% class(data))){
+  if(!('tbl_sql' %in% class(data))){
     mod <- function(x,y) x%%y
   }
   r <-
@@ -32,7 +32,7 @@ r2d <- function(data,cell.col='r',col.names=c('lat','lon')){
 }
 
 sr2d <- function(data,cell.col='sr',col.names=c('lat','lon')){
-  if(!('tbl_oracle' %in% class(data))){
+  if(!('tbl_sql' %in% class(data))){
     mod <- function(x,y) x%%y
   }
 
@@ -59,22 +59,24 @@ fix_pos <- function(data,
                     lat='kastad_n_breidd',
                     lon='kastad_v_lengd',...){
 
-  skika.fix <-
-    tbl_mar(data$src,'fiskar.skikar') %>%
-    group_by(skiki,fj_reitur) %>%
-    summarise(sr.fix=max(reitur)*10+max(nvl(smareitur,0)))
+  # skika.fix <-
+  #   tbl_mar(data$src,'fiskar.skikar') %>%
+  #   group_by(skiki,fj_reitur) %>%
+  #   summarise(sr.fix=max(reitur)*10+max(nvl(smareitur,0)))
+  #
+  # tmp <-
+  #   c(sprintf("nvl2(%s,'unchanged','fixed')",lat),sprintf('nvl(%s,lat)',lat),sprintf('nvl(%s,lon)',lon))
+  #
+  # data %>%
+  #   dplyr::mutate(sr = reitur*10 + nvl(smareitur,0)) %>%
+  #   geoconvert(...) %>%
+  #   dplyr::left_join(skika.fix,by=c('skiki','fj_reitur')) %>%
+  #   dplyr::mutate(sr = nvl(sr,sr.fix)) %>%
+  #   sr2d() %>%
+  #   dplyr::mutate_(.dots=setNames(tmp,c('pos_fix',lat,lon))) %>%   select(kastad_n_breidd, kastad_v_lengd ,lat,lon,sr) %>% filter(nvl(kastad_n_breidd,0) == 0)
+  #   select_(.dots = c(colnames(data),'pos_fix'))
 
-  tmp <-
-    c(sprintf("nvl2(%s,'unchanged','fixed')",lat),sprintf('nvl(%s,lat)',lat),sprintf('nvl(%s,lon)',lon))
-
-  data %>%
-    dplyr::mutate(sr = reitur*10 + nvl(smareitur,0)) %>%
-    geoconvert(...) %>%
-    dplyr::left_join(skika.fix,by=c('skiki','fj_reitur')) %>%
-    dplyr::mutate(sr = nvl(sr,sr.fix)) %>%
-    sr2d() %>%
-    dplyr::mutate_(.dots=setNames(tmp,c('pos_fix',lat,lon))) %>%
-    select_(.dots = c(colnames(data),'pos_fix'))
+  data
 }
 
 

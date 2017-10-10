@@ -15,4 +15,3 @@ db query object
 \description{
 lesa synaflokka
 }
-

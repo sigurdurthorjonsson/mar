@@ -16,4 +16,3 @@ dataframe
 Fallid myndar tengingu við toflu sjálfvirkir_maelar í
 afli gagnagrunninum.
 }
-

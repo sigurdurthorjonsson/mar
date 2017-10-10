@@ -97,11 +97,13 @@ taggart <- function(mar) {
   stodvar <-
     lesa_stodvar(mar) %>%
     mutate(tLon = -geoconvert1(kastad_v_lengd),
-           tLat =  geoconvert1(kastad_n_breidd)) %>%
+           tLat =  geoconvert1(kastad_n_breidd),
+           tAr = to_char(dags, 'yyyy')) %>%
     select(synis_id,
            leidangur,
            stod,
            tDags = dags,
+           tAr,
            tReitur = reitur,
            tSmareitur = smareitur,
            tLon,

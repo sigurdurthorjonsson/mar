@@ -2,10 +2,10 @@
 % Please edit documentation in R/magi.R
 \name{faeda}
 \alias{faeda}
-\alias{faeda_lengdir}
-\alias{faeda_ranfiskar}
 \alias{faeda_tegundir}
+\alias{faeda_ranfiskar}
 \alias{faeda_thyngdir}
+\alias{faeda_lengdir}
 \title{Magasyni Hafrannsóknarstofnunar}
 \usage{
 faeda_tegundir(mar)
@@ -25,4 +25,3 @@ fyrirspurn
 \description{
 Magasyni Hafrannsóknarstofnunar
 }
-

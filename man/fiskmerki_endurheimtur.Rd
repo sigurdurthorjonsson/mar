@@ -12,4 +12,3 @@ fiskmerki_endurheimtur(mar)
 \description{
 XXX
 }
-

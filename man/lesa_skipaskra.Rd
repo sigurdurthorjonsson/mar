@@ -12,4 +12,3 @@ lesa_skipaskra(mar)
 \description{
 XXX
 }
-

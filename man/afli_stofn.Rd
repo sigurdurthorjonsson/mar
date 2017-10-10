@@ -16,4 +16,3 @@ dataframe
 Fallid myndar tengingu við toflu stofn í
 afli gagnagrunninum. Grásleppan er alveg sér á parti ennþá
 }
-

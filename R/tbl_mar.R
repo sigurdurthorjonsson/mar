@@ -8,7 +8,8 @@
 #'
 
 tbl_mar <- function(mar, tbl) {
-  d <- dplyr::tbl(mar,dplyr::sql(tbl)) %>%
-    dplyr::rename_(.dots=stats::setNames(colnames(.),tolower(colnames(.))))
+  x <- strsplit(tbl,'\\.') %>% unlist()
+  d <- dplyr::tbl(mar,dbplyr::in_schema(x[1],x[2])) %>%
+    dplyr::select_all(tolower)
   return(d)
 }

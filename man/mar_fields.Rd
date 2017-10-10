@@ -20,4 +20,3 @@ Fallið ...
 \note{
 NB - ætti frekar að laga dplyrOracle:::db_query_fields.OraConnection??
 }
-

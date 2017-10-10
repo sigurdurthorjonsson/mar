@@ -12,4 +12,3 @@ kvoti_studlar(mar)
 \description{
 XXX
 }
-

@@ -12,4 +12,3 @@ fiskmerki_fiskar(mar)
 \description{
 XXX
 }
-

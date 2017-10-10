@@ -17,4 +17,3 @@ fyrirspurn
 \description{
 Connection to mar
 }
-
