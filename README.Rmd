@@ -28,7 +28,7 @@ You have to do this once, or when you want to update the packages already instal
 install.packages("tidyverse")
 install.packages("devtools")
 devtools::install_github("edgararuiz/dbplyr", ref = 'translation-roracle')
-devtools::install_github("fishvice/mar",  dependencies = FALSE, ref = 'interim-branch')
+devtools::install_github("fishvice/mar",  dependencies = FALSE)
 ```
 
 
