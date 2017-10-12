@@ -17,18 +17,15 @@ afli_stofn <- function(mar) {
                   breidd = breidd*100,
                   lengd_lok = -lengd_lok*100,
                   breidd_lok = breidd_lok*100) %>%
-    fix_pos(col.names=c('lengd','breidd'),lon='lengd',lat='breidd') %>%
-    fix_pos(col.names=c('lengd_lok','breidd_lok'),lon='lengd_lok',lat='breidd_lok')
-
-
-  # ## grásleppan er alveg sér
-   # grasl <-
-   #   tbl_mar(mar,'afli.g_stofn') %>%
-   #   dplyr::mutate(vear = vear + 1900,
-   #                 stadur = NA,
-   #                 bokst_regl = NA,
-   #                 ahofn = NA) %>%
-   #   dplyr::union_all(tbl_mar(mar,'afli.grasl_stofn'))
+    dplyr::left_join(tbl_mar(mar,'fiskar.reitir'),by = c('reitur','smareitur')) %>%
+    dplyr::mutate(lengd = geoconvert1(lengd),
+                  breidd = geoconvert1(breidd),
+                  lengd_lok = geoconvert1(lengd_lok),
+                  breidd_lok = geoconvert1(breidd_lok)) %>%
+    dplyr::mutate(lengd = nvl(lengd,lon),
+                  breidd = nvl(breidd,lat)) %>%
+    dplyr::mutate(toglengd = arcdist(breidd,lengd,breidd_lok,lengd_lok)) %>%
+    select(-c(lat,lon))
 }
 
 #' afli.afli
