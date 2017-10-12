@@ -57,10 +57,10 @@ What class is lengdir?:
 class(lengdir)
 ```
 The class here is somewhat obtuse. Lets not worry about that to much. What has happened behind the scene one can realize by:
-```{r,eval=FALSE}
-explain(lengdir) ## this doesn't work
+```{r}
+show_query(lengdir) 
 ```
-Ergo we generated an object, which one part is an SQL-query. The `explain` informs us how the database plans to execute the query.
+Ergo we generated an object, which one part is an SQL-query. The `show_query` informs us how the database plans to execute the query.
 
 The operation has not yet touched the database. It’s not until you ask for the data (e.g. by printing lengdir) that dplyr generates the SQL and requests the results from the database. Even then it only pulls down 10 rows.
 ```{r}
@@ -80,7 +80,7 @@ lengdir <-
   select(synis_id, tegund, lengd, fjoldi, kyn, kynthroski) %>% 
   filter(synis_id == 48489,
          tegund == 1)
-#explain(lengdir)
+show_query(lengdir)
 ```
 
 To pull down all the results into R one uses collect(), which returns a tidyverse data.frame (tbl_df):
@@ -125,8 +125,7 @@ d %>% collect()
 ```
 
 Those familiar with the fiskar database know that these information are also available in the table **numer**. Here we can use the ``mar::lesa_numer` function:
-```{r, eval = FALSE}
-# BUG, not run
+```{r}
 lesa_numer(mar) %>% 
   filter(synis_id == 48489)
 ```
@@ -182,8 +181,8 @@ smb1991_n <-
 ```
 
 Again we have not done much more than generate an SQL-query and not touched the database. For those interested seeing the SQL-code do:
-```{r, eval = FALSE}
-#explain(smb1991_n)
+```{r}
+show_query(smb1991_n)
 ```
 
 To turn this into action, lets execute the query, get the dataframe into R and plot the data:
@@ -210,7 +209,7 @@ d <- lods_oslaegt(mar) %>%
   group_by(timabil, gerd) %>%
   summarise(afli = sum(magn_oslaegt)) %>%
   arrange(timabil, gerd)
-#explain(d)
+show_query(d)
 d %>% collect()
 ```
 

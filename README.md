@@ -59,9 +59,9 @@ class(lengdir)
 The class here is somewhat obtuse. Lets not worry about that to much. What has happened behind the scene one can realize by:
 
 ```r
-explain(lengdir) ## this doesn't work
+show_query(lengdir) 
 ```
-Ergo we generated an object, which one part is an SQL-query. The `explain` informs us how the database plans to execute the query.
+Ergo we generated an object, which one part is an SQL-query. The `show_query` informs us how the database plans to execute the query.
 
 The operation has not yet touched the database. It’s not until you ask for the data (e.g. by printing lengdir) that dplyr generates the SQL and requests the results from the database. Even then it only pulls down 10 rows.
 
@@ -114,7 +114,7 @@ lengdir <-
   select(synis_id, tegund, lengd, fjoldi, kyn, kynthroski) %>% 
   filter(synis_id == 48489,
          tegund == 1)
-#explain(lengdir)
+show_query(lengdir)
 ```
 
 To pull down all the results into R one uses collect(), which returns a tidyverse data.frame (tbl_df):
@@ -158,14 +158,13 @@ lesa_lengdir(mar) %>% glimpse()
 
 ```
 ## Observations: 25
-## Variables: 7
-## $ synis_id        <int> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2...
-## $ tegund          <int> 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48...
-## $ lengd           <dbl> 34, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46...
-## $ fjoldi          <int> 1, 1, 1, 3, 1, 1, 4, 2, 4, 2, 2, 1, 1, 2, 6, 1...
-## $ kyn             <int> 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1...
-## $ kynthroski      <int> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA...
-## $ uppruni_lengdir <chr> "leidr_lengdir", "leidr_lengdir", "leidr_lengd...
+## Variables: 6
+## $ synis_id   <int> 48208, 48208, 48200, 48200, 48200, 50603, 50603, 50...
+## $ tegund     <int> 1, 1, 1, 1, 1, 28, 28, 28, 28, 28, 28, 28, 28, 28, ...
+## $ lengd      <dbl> 38, 43, 13, 38, 43, 23, 35, 20, 21, 22, 24, 25, 26,...
+## $ fjoldi     <int> 3, 2, 2, 1, 1, 1, 1, 2, 2, 5, 4, 8, 5, 2, 3, 7, 5, ...
+## $ kyn        <int> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,...
+## $ kynthroski <int> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,...
 ```
 
 Here we have same columns as above with one additional column, **uppruni_lengdir**. This is because the function reads from two different tables, **fiskar.lengdir** and **fiskar.leidr_lengdir** and combines them into one. Hopefully this is only an interim measure - there are plans to merge these two data tables into one (lets keep our fingers crossed). 
@@ -204,9 +203,30 @@ d %>% collect()
 Those familiar with the fiskar database know that these information are also available in the table **numer**. Here we can use the ``mar::lesa_numer` function:
 
 ```r
-# BUG, not run
 lesa_numer(mar) %>% 
   filter(synis_id == 48489)
+```
+
+```
+## # Source:   lazy query [?? x 19]
+## # Database: OraConnection
+##    synis_id tegund fj_maelt fj_kvarnad gamalt_lnr gamalt_knr fj_talid
+##       <int>  <int>    <int>      <int>      <int>      <int>    <int>
+##  1    48489      1      119         56        209        209        0
+##  2    48489      2        1          1        208        208        0
+##  3    48489      5       39          0        209         NA        0
+##  4    48489     12       49          0        209         NA        0
+##  5    48489     22        6          0        202         NA        0
+##  6    48489     25        6          0        203         NA        0
+##  7    48489     28       60          0        209         NA        0
+##  8    48489     30        0          0         NA         NA       11
+##  9    48489     53        0          0         NA         NA        1
+## 10    48489     56        0          0         NA         NA        2
+## # ... with more rows, and 12 more variables: afli <dbl>,
+## #   fj_kyngreint <int>, fj_vigtad <int>, vigt_synis <dbl>,
+## #   fj_magasyna <int>, aths_numer <chr>, status_lengdir <int>,
+## #   status_kvarnir <int>, fj_merkt <int>, fj_aldursgr <int>,
+## #   kg_talning <int>, uppruni_numer <chr>
 ```
 
 
@@ -247,33 +267,34 @@ lesa_stodvar(mar) %>%
 
 ```
 ## Observations: 1
-## Variables: 65
+## Variables: 63
 ## $ synis_id         <int> 48489
 ## $ leidangur        <chr> "TA1-91"
 ## $ dags             <dttm> 1991-03-06
-## $ skip             <int> 1307
+## $ ar               <dbl> 1991
+## $ man              <dbl> 3
 ## $ stod             <int> 9
-## $ reitur           <int> 669
-## $ smareitur        <int> 4
-## $ kastad_n_breidd  <int> 663055
-## $ kastad_v_lengd   <dbl> -192363
-## $ hift_n_breidd    <int> 663345
-## $ hift_v_lengd     <dbl> -192272
+## $ reitur           <dbl> 669
+## $ smareitur        <dbl> 4
+## $ kastad_n_breidd  <dbl> 66.50917
+## $ kastad_v_lengd   <dbl> -19.39383
+## $ hift_n_breidd    <dbl> 66.5575
+## $ hift_v_lengd     <dbl> -19.37867
 ## $ dypi_kastad      <int> 311
 ## $ dypi_hift        <int> 311
 ## $ veidarfaeri      <int> 73
 ## $ moskvastaerd     <int> 40
-## $ grandaralengd    <int> 45
+## $ grandarlengd     <int> 45
 ## $ heildarafli      <int> NA
 ## $ londunarhofn     <int> NA
 ## $ skiki            <int> NA
-## $ fj_reitur        <int> NA
+## $ fjardarreitur    <int> NA
 ## $ hnattstada       <int> -1
-## $ landsyni         <dbl> 0
+## $ landsyni         <int> 0
 ## $ aths_stodvar     <chr> NA
 ## $ stada_stodvar    <int> NA
 ## $ net_nr           <int> NA
-## $ synaflokkur      <dbl> 30
+## $ synaflokkur      <int> 30
 ## $ veidisvaedi      <chr> NA
 ## $ hitamaelir_id    <dbl> NA
 ## $ maelingarmenn    <chr> NA
@@ -286,10 +307,10 @@ lesa_stodvar(mar) %>%
 ## $ toglengd         <dbl> 3
 ## $ vir_uti          <int> 375
 ## $ lodrett_opnun    <dbl> 2.2
-## $ tognumer         <dbl> 11
+## $ tognumer         <int> 11
 ## $ togstefna        <int> 15
 ## $ larett_opnun     <dbl> NA
-## $ togtimi          <dbl> 51
+## $ togtimi          <int> 51
 ## $ togdypi_kastad   <int> NA
 ## $ togdypi_hift     <int> NA
 ## $ togdypishiti     <dbl> NA
@@ -310,9 +331,6 @@ lesa_stodvar(mar) %>%
 ## $ straumhradi      <dbl> NA
 ## $ sjondypi         <int> NA
 ## $ vindhradi_hnutar <int> 9
-## $ uppruni_stodvar  <chr> "stodvar"
-## $ ar               <dbl> 1991
-## $ man              <dbl> 3
 ```
 
 For those familiar with what is stored in **fiskar.stodvar** recognize that the station is most likely part of the 1991 spring survey (veidarfaeri = 73 and synaflokkur = 30 provides the best hint). What if we were to start from this end and get all the stations from the 1991 survey and also limit the number of columns returned:
@@ -356,7 +374,7 @@ smb1991_n <-
 Again we have not done much more than generate an SQL-query and not touched the database. For those interested seeing the SQL-code do:
 
 ```r
-#explain(smb1991_n)
+show_query(smb1991_n)
 ```
 
 To turn this into action, lets execute the query, get the dataframe into R and plot the data:
@@ -452,11 +470,11 @@ devtools::session_info()
 ##  language (EN)                        
 ##  collate  en_US.UTF-8                 
 ##  tz       Atlantic/Reykjavik          
-##  date     2017-09-08                  
+##  date     2017-10-12                  
 ## 
 ##  package    * version    date      
 ##  assertthat   0.2.0      2017-04-11
-##  backports    1.1.0      2017-05-22
+##  backports    1.1.1      2017-09-25
 ##  base       * 3.4.1      2017-06-30
 ##  bindr        0.1        2016-11-13
 ##  bindrcpp   * 0.2        2017-06-17
@@ -491,7 +509,7 @@ devtools::session_info()
 ##  lazyeval     0.2.0      2016-06-12
 ##  lubridate    1.6.0      2016-09-13
 ##  magrittr     1.5        2014-11-22
-##  mar        * 0.0.3.9000 2017-09-04
+##  mar        * 0.0.3.9000 2017-10-12
 ##  memoise      1.1.0      2017-04-21
 ##  methods    * 3.4.1      2017-06-30
 ##  mnormt       1.5-5      2016-10-15
@@ -501,10 +519,10 @@ devtools::session_info()
 ##  parallel     3.4.1      2017-06-30
 ##  pkgconfig    2.0.1      2017-03-21
 ##  plyr         1.8.4      2016-06-08
-##  psych        1.7.5      2017-05-03
+##  psych        1.7.8      2017-09-09
 ##  purrr      * 0.2.3      2017-08-02
 ##  R6           2.2.2      2017-06-17
-##  Rcpp         0.12.12    2017-07-15
+##  Rcpp         0.12.13    2017-09-28
 ##  readr      * 1.1.1      2017-05-16
 ##  readxl       1.0.0      2017-04-18
 ##  reshape2     1.4.2      2016-10-22
@@ -519,8 +537,8 @@ devtools::session_info()
 ##  stringi      1.1.5      2017-04-07
 ##  stringr      1.2.0      2017-02-18
 ##  tibble     * 1.3.4      2017-08-22
-##  tidyr      * 0.7.0      2017-08-16
-##  tidyselect   0.2.0      2017-08-29
+##  tidyr      * 0.7.1      2017-09-01
+##  tidyselect   0.2.1      2017-10-09
 ##  tidyverse  * 1.1.1      2017-01-27
 ##  tools        3.4.1      2017-06-30
 ##  utils      * 3.4.1      2017-06-30
@@ -529,7 +547,7 @@ devtools::session_info()
 ##  yaml         2.1.14     2016-11-12
 ##  source                                    
 ##  CRAN (R 3.4.0)                            
-##  CRAN (R 3.4.0)                            
+##  CRAN (R 3.4.1)                            
 ##  local                                     
 ##  CRAN (R 3.4.0)                            
 ##  CRAN (R 3.4.0)                            
@@ -574,7 +592,7 @@ devtools::session_info()
 ##  local                                     
 ##  CRAN (R 3.4.0)                            
 ##  CRAN (R 3.4.0)                            
-##  CRAN (R 3.4.0)                            
+##  CRAN (R 3.4.1)                            
 ##  CRAN (R 3.4.1)                            
 ##  CRAN (R 3.4.0)                            
 ##  CRAN (R 3.4.1)                            
@@ -593,7 +611,7 @@ devtools::session_info()
 ##  CRAN (R 3.4.0)                            
 ##  CRAN (R 3.4.1)                            
 ##  CRAN (R 3.4.1)                            
-##  Github (tidyverse/tidyselect@57ad952)     
+##  CRAN (R 3.4.1)                            
 ##  CRAN (R 3.4.0)                            
 ##  local                                     
 ##  local                                     

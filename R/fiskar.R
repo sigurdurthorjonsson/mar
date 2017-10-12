@@ -12,28 +12,7 @@
 #' mar <- dplyrOracle::src_oracle("mar")
 #' dplyr::glimpse(lesa_stodvar(mar))
 lesa_stodvar <- function(mar) {
-
-  st <-
-    tbl_mar(mar,"fiskar.stodvar") %>%
-    dplyr::select(-c(snt:sbn))
-  tog <-
-    tbl_mar(mar,"fiskar.togstodvar")%>%
-    dplyr::select(-c(snt:sbn))
-  um <-
-    tbl_mar(mar,"fiskar.umhverfi")%>%
-    dplyr::select(-c(snt:sbn))
-
-  d <-
-    st %>%
-    dplyr::left_join(tog, by = "synis_id") %>%
-    dplyr::left_join(um, by = "synis_id") %>%
-    dplyr::rename(aths_stodvar = aths) %>%
-    dplyr::rename(fj_reitur=fjardarreitur) #%>%
-    #fix_pos(col.names=c('kastad_n_breidd','kastad_v_lengd',
-    #                    'hift_n_breidd','hift_v_lengd'))
-
-  return(d)
-
+  tbl_mar(mar,'fiskar.stodvar_mar_v')
 }
 
 
