@@ -16,12 +16,13 @@ afli_stofn <- function(mar) {
                   breidd = breidd*100,
                   lengd_lok = -lengd_lok*100,
                   breidd_lok = breidd_lok*100) %>%
-    dplyr::left_join(tbl_mar(mar,'fiskar.reitir'),by = c('reitur','smareitur')) %>%
     mar:::geoconvert(col.names = c('lengd','breidd','lengd_lok','breidd_lok')) %>%
-    dplyr::mutate(lengd = nvl(lengd,lon),
-                  breidd = nvl(breidd,lat)) %>%
+    dplyr::left_join(tbl_mar(mar,'fiskar.reitir'),by = c('reitur','smareitur')) %>%
+    dplyr::left_join(tbl_mar(mar,'fiskar.reitir') %>% select(reitur,lat2=lat,lon2=lon),by = 'reitur') %>%
+    dplyr::mutate(lengd = nvl(lengd,nvl(lon,lon2)),
+                  breidd = nvl(breidd,nvl(lat,lat2))) %>%
     dplyr::mutate(toglengd = arcdist(breidd,lengd,breidd_lok,lengd_lok)) %>%
-    select(-c(lat,lon))
+    select(-c(lat,lon,lat2,lon2))
 }
 
 #' afli.afli
@@ -61,8 +62,8 @@ afli_sjalfvirkir_maelar <- function(mar) {
               by = "visir") %>%
     # if hnattstada_stofn is undefined, visir is not found in stofn
     #   this should not really be possible
-    dplyr::mutate(hnattstada_stofn = ifelse(is.na(hnattstada_stofn), 1, hnattstada_stofn),
-           lengd = lengd * hnattstada_stofn * hnattstada_siriti)
+    dplyr::mutate(hnattstada_stofn = nvl(hnattstada_stofn, 1),
+                  lengd = lengd * hnattstada_stofn * hnattstada_siriti)
 
   return(d)
 
