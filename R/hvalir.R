@@ -12,6 +12,6 @@ hvalir_hvalir <- function(mar){
                   veiddur_lengd = to_number(veiddur_lengd)) %>%
     dplyr::select_(.dots = colnames(tbl_mar(mar,"hvalir.hvalir_v"))) %>%
     dplyr::mutate(ar = to_char(dags_veidi,'yyyy'),
-                  er_fostur = ifelse(substr(radnumer,-1)=='F',1,0))
+                  er_fostur = ifelse(substr(radnumer,-1,0)=='F',1,0))
 }
 

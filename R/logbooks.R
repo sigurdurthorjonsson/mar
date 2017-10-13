@@ -131,5 +131,7 @@ afli_grasl <- function(mar){
     sr2d() %>%
     dplyr::select(-sr) %>%
     dplyr::mutate(ar=to_char(vedags,'YYYY'),
-                  man=to_char(vedags,'MM'))
+                  man=to_char(vedags,'MM')) %>%
+    left_join(tbl_mar(mar,'afli.grasleppureitur'), by = 'reitur') %>%
+    dplyr::rename(veidisvaedi = bokst_rel)
   }
