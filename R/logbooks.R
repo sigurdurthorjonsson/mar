@@ -9,7 +9,6 @@
 #' @export
 
 afli_stofn <- function(mar) {
-
     tbl_mar(mar, "afli.stofn") %>%
     dplyr::mutate(ar =   to_number(to_char(vedags, "YYYY")),
                   man =  to_number(to_char(vedags, "MM")),
@@ -18,10 +17,7 @@ afli_stofn <- function(mar) {
                   lengd_lok = -lengd_lok*100,
                   breidd_lok = breidd_lok*100) %>%
     dplyr::left_join(tbl_mar(mar,'fiskar.reitir'),by = c('reitur','smareitur')) %>%
-    dplyr::mutate(lengd = geoconvert1(lengd),
-                  breidd = geoconvert1(breidd),
-                  lengd_lok = geoconvert1(lengd_lok),
-                  breidd_lok = geoconvert1(breidd_lok)) %>%
+    mar:::geoconvert(col.names = c('lengd','breidd','lengd_lok','breidd_lok')) %>%
     dplyr::mutate(lengd = nvl(lengd,lon),
                   breidd = nvl(breidd,lat)) %>%
     dplyr::mutate(toglengd = arcdist(breidd,lengd,breidd_lok,lengd_lok)) %>%
@@ -99,8 +95,7 @@ afli_toga <- function(mar) {
 #' @export
 #'
 afli_lineha <- function(mar) {
-    tbl_mar(mar,"afli.lineha") %>%
-    dplyr::mutate(uppruni_lina = 'afli.lineha')
+    tbl_mar(mar,"afli.lineha")
 }
 
 
