@@ -7,9 +7,7 @@ The small print: Package in the making
 
 ## Tidyverse connection to MRI oracle database
 
-The [`dplyr`-package](https://cran.rstudio.com/web/packages/dplyr/vignettes/introduction.html) is designed so that, in addition to working with local R-data.frames, it works with remote on-disk data stored in databases. [Inbuilt functions within dplyr](https://cran.rstudio.com/web/packages/dplyr/vignettes/databases.html) allow seamless connectivity with sqlite, mysql and postgresql.
-
-The `dplyrOracle`-package provides a generic connection to Oracle databases. Due to some idiosyncrasies associated with schema as well as issues related to case-sensitivity make "default" communication with Oracle not straight forward. These as well as other convenience wrappers are taken care of in the `mar`-packages.
+The [`dplyr`-package](https://cran.rstudio.com/web/packages/dplyr/vignettes/introduction.html) is designed so that, in addition to working with local R-data.frames, it works with remote on-disk data stored in databases. [Inbuilt functions within dplyr](https://cran.rstudio.com/web/packages/dplyr/vignettes/databases.html) allow seamless connectivity with sqlite, mysql and postgresql. Due to some idiosyncrasies associated with schema as well as issues related to case-sensitivity make "default" communication with Oracle not straight forward. These as well as other convenience wrappers are taken care of in the `mar`-packages.
 
 ### Installation
 
@@ -470,7 +468,7 @@ devtools::session_info()
 ##  language (EN)                        
 ##  collate  en_US.UTF-8                 
 ##  tz       Atlantic/Reykjavik          
-##  date     2017-10-12                  
+##  date     2017-10-18                  
 ## 
 ##  package    * version    date      
 ##  assertthat   0.2.0      2017-04-11
@@ -509,7 +507,7 @@ devtools::session_info()
 ##  lazyeval     0.2.0      2016-06-12
 ##  lubridate    1.6.0      2016-09-13
 ##  magrittr     1.5        2014-11-22
-##  mar        * 0.0.3.9000 2017-10-12
+##  mar        * 0.0.3.9000 2017-10-13
 ##  memoise      1.1.0      2017-04-21
 ##  methods    * 3.4.1      2017-06-30
 ##  mnormt       1.5-5      2016-10-15
