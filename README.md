@@ -17,7 +17,7 @@ You have to do this once, or when you want to update the packages already instal
 ```r
 install.packages("tidyverse")
 install.packages("devtools")
-devtools::install_github("edgararuiz/dbplyr", ref = 'translation-roracle')
+devtools::install_github("tidyverse/dbplyr")
 devtools::install_github("fishvice/mar",  dependencies = FALSE)
 ```
 
@@ -468,7 +468,7 @@ devtools::session_info()
 ##  language (EN)                        
 ##  collate  en_US.UTF-8                 
 ##  tz       Atlantic/Reykjavik          
-##  date     2017-10-18                  
+##  date     2017-10-25                  
 ## 
 ##  package    * version    date      
 ##  assertthat   0.2.0      2017-04-11
@@ -482,10 +482,10 @@ devtools::session_info()
 ##  compiler     3.4.1      2017-06-30
 ##  datasets   * 3.4.1      2017-06-30
 ##  DBI        * 0.7        2017-06-18
-##  dbplyr       1.1.0.9000 2017-08-17
+##  dbplyr       1.1.0.9000 2017-10-25
 ##  devtools     1.13.3     2017-08-02
 ##  digest       0.6.12     2017-01-27
-##  dplyr      * 0.7.3      2017-09-04
+##  dplyr      * 0.7.4      2017-09-28
 ##  evaluate     0.10.1     2017-06-24
 ##  forcats      0.2.0      2017-01-23
 ##  foreign      0.8-69     2017-06-21
@@ -507,7 +507,7 @@ devtools::session_info()
 ##  lazyeval     0.2.0      2016-06-12
 ##  lubridate    1.6.0      2016-09-13
 ##  magrittr     1.5        2014-11-22
-##  mar        * 0.0.3.9000 2017-10-13
+##  mar        * 0.0.3.9000 2017-10-18
 ##  memoise      1.1.0      2017-04-21
 ##  methods    * 3.4.1      2017-06-30
 ##  mnormt       1.5-5      2016-10-15
@@ -518,13 +518,13 @@ devtools::session_info()
 ##  pkgconfig    2.0.1      2017-03-21
 ##  plyr         1.8.4      2016-06-08
 ##  psych        1.7.8      2017-09-09
-##  purrr      * 0.2.3      2017-08-02
+##  purrr      * 0.2.4      2017-10-18
 ##  R6           2.2.2      2017-06-17
 ##  Rcpp         0.12.13    2017-09-28
 ##  readr      * 1.1.1      2017-05-16
 ##  readxl       1.0.0      2017-04-18
 ##  reshape2     1.4.2      2016-10-22
-##  rlang        0.1.2.9000 2017-09-04
+##  rlang        0.1.2.9000 2017-10-25
 ##  rmarkdown    1.6        2017-06-15
 ##  ROracle    * 1.3-1      2016-10-26
 ##  rprojroot    1.2        2017-01-16
@@ -535,8 +535,8 @@ devtools::session_info()
 ##  stringi      1.1.5      2017-04-07
 ##  stringr      1.2.0      2017-02-18
 ##  tibble     * 1.3.4      2017-08-22
-##  tidyr      * 0.7.1      2017-09-01
-##  tidyselect   0.2.1      2017-10-09
+##  tidyr      * 0.7.2      2017-10-16
+##  tidyselect   0.2.2      2017-10-10
 ##  tidyverse  * 1.1.1      2017-01-27
 ##  tools        3.4.1      2017-06-30
 ##  utils      * 3.4.1      2017-06-30
@@ -555,10 +555,10 @@ devtools::session_info()
 ##  local                                     
 ##  local                                     
 ##  CRAN (R 3.4.0)                            
-##  Github (edgararuiz/dbplyr@6990bee)        
+##  Github (tidyverse/dbplyr@a71e0d6)         
 ##  CRAN (R 3.4.1)                            
 ##  CRAN (R 3.4.1)                            
-##  Github (tidyverse/dplyr@16fa8a8)          
+##  CRAN (R 3.4.1)                            
 ##  CRAN (R 3.4.1)                            
 ##  CRAN (R 3.4.0)                            
 ##  CRAN (R 3.4.1)                            
@@ -597,7 +597,7 @@ devtools::session_info()
 ##  CRAN (R 3.4.0)                            
 ##  CRAN (R 3.4.0)                            
 ##  CRAN (R 3.4.0)                            
-##  Github (tidyverse/rlang@53ebc71)          
+##  Github (tidyverse/rlang@cbdc3f3)          
 ##  CRAN (R 3.4.0)                            
 ##  CRAN (R 3.4.0)                            
 ##  CRAN (R 3.4.0)                            
