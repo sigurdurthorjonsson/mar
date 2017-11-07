@@ -9,7 +9,12 @@
 
 tbl_mar <- function(mar, tbl) {
   x <- strsplit(tbl,'\\.') %>% unlist()
-  d <- dplyr::tbl(mar,dbplyr::in_schema(x[1],x[2])) %>%
-    dplyr::select_all(tolower)
+  if(length(x)==1){
+    d <- dplyr::tbl(mar,dplyr::sql(x[1])) %>%
+      dplyr::select_all(tolower)
+  } else{
+    d <- dplyr::tbl(mar,dbplyr::in_schema(x[1],x[2])) %>%
+      dplyr::select_all(tolower)
+  }
   return(d)
 }
