@@ -29,6 +29,15 @@ devtools::install_github("tidyverse/dbplyr")
 devtools::install_github("fishvice/mar",  dependencies = FALSE)
 ```
 
+Windows users may encounter issues when installing the mar - package related to different binary modes (32 bit vs 64 bit) where the user is prompted with the following error 
+
+> ERROR: loading failed for 'i386'
+
+This issue can be bypassed by installing mar using: 
+```{r, eval = FALSE}
+devtools::install_github("fishvice/mar",  dependencies = FALSE, args='--no-multiarch')
+```
+
 
 ### Establish connection
 
@@ -210,6 +219,20 @@ d <- lods_oslaegt(mar) %>%
 show_query(d)
 d %>% collect()
 ```
+### Metadata
+
+List of tables available to the user:
+```{r}
+mar_tables(mar,schema = 'fiskar')
+```
+
+Description of the columns of a particular table:
+
+```{r}
+mar_fields(mar,'fiskar.stodvar')
+```
+
+
 
 ### Something else (more advanced)
 ____

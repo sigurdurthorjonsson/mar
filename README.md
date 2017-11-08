@@ -21,6 +21,16 @@ devtools::install_github("tidyverse/dbplyr")
 devtools::install_github("fishvice/mar",  dependencies = FALSE)
 ```
 
+Windows users may encounter issues when installing the mar - package related to different binary modes (32 bit vs 64 bit) where the user is prompted with the following error 
+
+> ERROR: loading failed for 'i386'
+
+This issue can be bypassed by installing mar using: 
+
+```r
+devtools::install_github("fishvice/mar",  dependencies = FALSE, args='--no-multiarch')
+```
+
 
 ### Establish connection
 
@@ -265,10 +275,11 @@ lesa_stodvar(mar) %>%
 
 ```
 ## Observations: 1
-## Variables: 63
+## Variables: 64
 ## $ synis_id         <int> 48489
 ## $ leidangur        <chr> "TA1-91"
 ## $ dags             <dttm> 1991-03-06
+## $ skip             <int> 1307
 ## $ ar               <dbl> 1991
 ## $ man              <dbl> 3
 ## $ stod             <int> 9
@@ -394,6 +405,59 @@ smb1991_n %>%
 
 
 
+### Metadata
+
+List of tables available to the user:
+
+```r
+mar_tables(mar,schema = 'fiskar')
+```
+
+```
+## # Source:   lazy query [?? x 7]
+## # Database: OraConnection
+##     owner        table_name tablespace_name num_rows       last_analyzed
+##     <chr>             <chr>           <chr>    <dbl>              <dttm>
+##  1 FISKAR            REITIR             NYT     2864 2017-10-12 22:00:15
+##  2 FISKAR       KVARNALOGUN             NYT      107 2017-10-12 22:00:15
+##  3 FISKAR             BEITA             NYT        2 2017-06-28 11:32:50
+##  4 FISKAR           FLOKKAR             NYT        0 2017-06-28 11:35:33
+##  5 FISKAR FLOKKAR_SENDINGAR             NYT    13527 2017-06-28 11:35:33
+##  6 FISKAR         G_TROSSUR             NYT      222 2017-06-28 11:47:35
+##  7 FISKAR         G_VIKMORK             NYT      253 2017-06-28 11:47:36
+##  8 FISKAR             HAFIS             NYT       10 2017-06-28 11:47:42
+##  9 FISKAR     ICES_TEGUNDIR             NYT       21 2017-06-28 11:48:32
+## 10 FISKAR   INNSLATT_STATUS             NYT       17 2017-06-28 11:48:50
+## # ... with more rows, and 2 more variables: table_type <chr>,
+## #   comments <chr>
+```
+
+Description of the columns of a particular table:
+
+
+```r
+mar_fields(mar,'fiskar.stodvar')
+```
+
+```
+## # Source:   lazy query [?? x 4]
+## # Database: OraConnection
+##     owner table_name     column_name
+##     <chr>      <chr>           <chr>
+##  1 fiskar    stodvar        synis_id
+##  2 fiskar    stodvar       leidangur
+##  3 fiskar    stodvar            dags
+##  4 fiskar    stodvar            skip
+##  5 fiskar    stodvar            stod
+##  6 fiskar    stodvar          reitur
+##  7 fiskar    stodvar       smareitur
+##  8 fiskar    stodvar kastad_n_breidd
+##  9 fiskar    stodvar  kastad_v_lengd
+## 10 fiskar    stodvar   hift_n_breidd
+## # ... with more rows, and 1 more variables: comments <chr>
+```
+
+
 
 ### Something else (more advanced)
 ____
@@ -451,7 +515,7 @@ tmp %>%
   ggplot(aes(ar,prop,fill=Prey)) + geom_bar(stat = 'identity')
 ```
 
-![](README_files/figure-html/unnamed-chunk-23-1.png)<!-- -->
+![](README_files/figure-html/unnamed-chunk-26-1.png)<!-- -->
 
 
 
@@ -468,7 +532,7 @@ devtools::session_info()
 ##  language (EN)                        
 ##  collate  en_US.UTF-8                 
 ##  tz       Atlantic/Reykjavik          
-##  date     2017-10-25                  
+##  date     2017-11-08                  
 ## 
 ##  package    * version    date      
 ##  assertthat   0.2.0      2017-04-11
@@ -480,6 +544,7 @@ devtools::session_info()
 ##  cellranger   1.1.0      2016-07-27
 ##  colorspace   1.3-2      2016-12-14
 ##  compiler     3.4.1      2017-06-30
+##  data.table   1.10.4-3   2017-10-27
 ##  datasets   * 3.4.1      2017-06-30
 ##  DBI        * 0.7        2017-06-18
 ##  dbplyr       1.1.0.9000 2017-10-25
@@ -489,8 +554,8 @@ devtools::session_info()
 ##  evaluate     0.10.1     2017-06-24
 ##  forcats      0.2.0      2017-01-23
 ##  foreign      0.8-69     2017-06-21
-##  ggplot2    * 2.2.1.9000 2017-08-22
-##  gisland      0.0.03     2015-11-26
+##  ggplot2    * 2.2.1.9000 2017-11-03
+##  gisland      0.0.07     2017-11-03
 ##  glue         1.1.1      2017-06-21
 ##  graphics   * 3.4.1      2017-06-30
 ##  grDevices  * 3.4.1      2017-06-30
@@ -504,10 +569,10 @@ devtools::session_info()
 ##  knitr        1.17       2017-08-10
 ##  labeling     0.3        2014-08-23
 ##  lattice      0.20-35    2017-03-25
-##  lazyeval     0.2.0      2016-06-12
+##  lazyeval     0.2.1      2017-10-29
 ##  lubridate    1.6.0      2016-09-13
 ##  magrittr     1.5        2014-11-22
-##  mar        * 0.0.3.9000 2017-10-18
+##  mar        * 0.0.3.9000 2017-11-07
 ##  memoise      1.1.0      2017-04-21
 ##  methods    * 3.4.1      2017-06-30
 ##  mnormt       1.5-5      2016-10-15
@@ -524,12 +589,12 @@ devtools::session_info()
 ##  readr      * 1.1.1      2017-05-16
 ##  readxl       1.0.0      2017-04-18
 ##  reshape2     1.4.2      2016-10-22
-##  rlang        0.1.2.9000 2017-10-25
+##  rlang        0.1.2.9000 2017-11-03
 ##  rmarkdown    1.6        2017-06-15
 ##  ROracle    * 1.3-1      2016-10-26
 ##  rprojroot    1.2        2017-01-16
 ##  rvest        0.3.2      2016-06-17
-##  scales       0.5.0      2017-08-24
+##  scales       0.5.0.9000 2017-11-03
 ##  sp         * 1.2-5      2017-06-29
 ##  stats      * 3.4.1      2017-06-30
 ##  stringi      1.1.5      2017-04-07
@@ -540,7 +605,7 @@ devtools::session_info()
 ##  tidyverse  * 1.1.1      2017-01-27
 ##  tools        3.4.1      2017-06-30
 ##  utils      * 3.4.1      2017-06-30
-##  withr        2.0.0      2017-08-22
+##  withr        2.1.0.9000 2017-11-03
 ##  xml2         1.1.1      2017-01-24
 ##  yaml         2.1.14     2016-11-12
 ##  source                                    
@@ -553,6 +618,7 @@ devtools::session_info()
 ##  CRAN (R 3.4.0)                            
 ##  CRAN (R 3.4.0)                            
 ##  local                                     
+##  cran (@1.10.4-)                           
 ##  local                                     
 ##  CRAN (R 3.4.0)                            
 ##  Github (tidyverse/dbplyr@a71e0d6)         
@@ -562,8 +628,8 @@ devtools::session_info()
 ##  CRAN (R 3.4.1)                            
 ##  CRAN (R 3.4.0)                            
 ##  CRAN (R 3.4.1)                            
-##  Github (tidyverse/ggplot2@41f154f)        
-##  Github (einarhjorleifsson/gisland@55bbcc8)
+##  Github (tidyverse/ggplot2@9979112)        
+##  Github (einarhjorleifsson/gisland@e15c0ad)
 ##  cran (@1.1.1)                             
 ##  local                                     
 ##  local                                     
@@ -577,43 +643,43 @@ devtools::session_info()
 ##  CRAN (R 3.4.1)                            
 ##  CRAN (R 3.4.0)                            
 ##  CRAN (R 3.4.0)                            
-##  CRAN (R 3.4.0)                            
-##  CRAN (R 3.4.0)                            
-##  CRAN (R 3.4.0)                            
-##  local                                     
-##  CRAN (R 3.4.0)                            
-##  local                                     
-##  CRAN (R 3.4.0)                            
-##  CRAN (R 3.4.1)                            
+##  cran (@0.2.1)                             
 ##  CRAN (R 3.4.0)                            
 ##  CRAN (R 3.4.0)                            
 ##  local                                     
 ##  CRAN (R 3.4.0)                            
+##  local                                     
 ##  CRAN (R 3.4.0)                            
 ##  CRAN (R 3.4.1)                            
-##  CRAN (R 3.4.1)                            
-##  CRAN (R 3.4.0)                            
-##  CRAN (R 3.4.1)                            
 ##  CRAN (R 3.4.0)                            
 ##  CRAN (R 3.4.0)                            
-##  CRAN (R 3.4.0)                            
-##  Github (tidyverse/rlang@cbdc3f3)          
-##  CRAN (R 3.4.0)                            
-##  CRAN (R 3.4.0)                            
-##  CRAN (R 3.4.0)                            
-##  CRAN (R 3.4.0)                            
-##  CRAN (R 3.4.1)                            
-##  CRAN (R 3.4.1)                            
 ##  local                                     
 ##  CRAN (R 3.4.0)                            
 ##  CRAN (R 3.4.0)                            
 ##  CRAN (R 3.4.1)                            
 ##  CRAN (R 3.4.1)                            
+##  CRAN (R 3.4.0)                            
+##  CRAN (R 3.4.1)                            
+##  CRAN (R 3.4.0)                            
+##  CRAN (R 3.4.0)                            
+##  CRAN (R 3.4.0)                            
+##  Github (tidyverse/rlang@bf67fd5)          
+##  CRAN (R 3.4.0)                            
+##  CRAN (R 3.4.0)                            
+##  CRAN (R 3.4.0)                            
+##  CRAN (R 3.4.0)                            
+##  Github (hadley/scales@d767915)            
+##  CRAN (R 3.4.1)                            
+##  local                                     
+##  CRAN (R 3.4.0)                            
+##  CRAN (R 3.4.0)                            
+##  CRAN (R 3.4.1)                            
+##  CRAN (R 3.4.1)                            
 ##  CRAN (R 3.4.1)                            
 ##  CRAN (R 3.4.0)                            
 ##  local                                     
 ##  local                                     
-##  Github (jimhester/withr@0c4a86d)          
+##  Github (jimhester/withr@8ba5e46)          
 ##  CRAN (R 3.4.0)                            
 ##  CRAN (R 3.4.0)
 ```
