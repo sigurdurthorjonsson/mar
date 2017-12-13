@@ -220,15 +220,14 @@ d %>% collect(n = Inf)
 ```
 ### Metadata
 
-List of tables available to the user:
+List of tables available to the user (only first 10 tables shown here):
 ```{r}
-mar_tables(con, schema = 'fiskar') %>% knitr::kable()
+mar_tables(con, schema = 'fiskar')
 ```
 
-Description of the columns of a particular table:
-
+Description of the variables of a particular table (only first 10 variables shown here): 
 ```{r}
-mar_fields(con,'fiskar.stodvar') %>% knitr::kable()
+mar_fields(con,'fiskar.stodvar')
 ```
 
 

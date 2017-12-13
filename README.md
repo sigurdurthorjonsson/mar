@@ -425,129 +425,54 @@ smb1991_n %>%
 
 ### Metadata
 
-List of tables available to the user:
+List of tables available to the user (only first 10 tables shown here):
 
 ```r
-mar_tables(con, schema = 'fiskar') %>% knitr::kable()
+mar_tables(con, schema = 'fiskar')
 ```
 
+```
+## # Source:   lazy query [?? x 7]
+## # Database: OraConnection
+##     owner        table_name tablespace_name num_rows       last_analyzed
+##     <chr>             <chr>           <chr>    <dbl>              <dttm>
+##  1 FISKAR            REITIR             NYT     2864 2017-10-12 22:00:15
+##  2 FISKAR       KVARNALOGUN             NYT      801 2017-11-17 22:00:17
+##  3 FISKAR             BEITA             NYT        2 2017-06-28 11:32:50
+##  4 FISKAR               BOX             NYT    29833 2017-10-17 22:00:45
+##  5 FISKAR           FLOKKAR             NYT        0 2017-06-28 11:35:33
+##  6 FISKAR FLOKKAR_SENDINGAR             NYT    13527 2017-06-28 11:35:33
+##  7 FISKAR         G_TROSSUR             NYT      222 2017-06-28 11:47:35
+##  8 FISKAR         G_VIKMORK             NYT      253 2017-06-28 11:47:36
+##  9 FISKAR             HAFIS             NYT       10 2017-06-28 11:47:42
+## 10 FISKAR     ICES_TEGUNDIR             NYT       21 2017-06-28 11:48:32
+## # ... with more rows, and 2 more variables: table_type <chr>,
+## #   comments <chr>
+```
 
-
-owner    table_name               tablespace_name    num_rows  last_analyzed         table_type   comments                                                                                                                                                                                                                                                      
--------  -----------------------  ----------------  ---------  --------------------  -----------  --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-FISKAR   REITIR                   NYT                    2864  2017-10-12 22:00:15   TABLE        NA                                                                                                                                                                                                                                                            
-FISKAR   KVARNALOGUN              NYT                     801  2017-11-17 22:00:17   TABLE        Tafla fyrir greiningu á lögun kvarna.                                                                                                                                                                                                                         
-FISKAR   BEITA                    NYT                       2  2017-06-28 11:32:50   TABLE        Ekki beit/beita.  tengt túnfisks ransóknum                                                                                                                                                                                                                    
-FISKAR   BOX                      NYT                   29833  2017-10-17 22:00:45   TABLE        NA                                                                                                                                                                                                                                                            
-FISKAR   FLOKKAR                  NYT                       0  2017-06-28 11:35:33   TABLE        Tengt fiskflokkurum (vilhal)                                                                                                                                                                                                                                  
-FISKAR   FLOKKAR_SENDINGAR        NYT                   13527  2017-06-28 11:35:33   TABLE        Tengt fiskflokkurum (vilhal)                                                                                                                                                                                                                                  
-FISKAR   G_TROSSUR                NYT                     222  2017-06-28 11:47:35   TABLE        Nöfn á veiðislóðum vegna netaralls.                                                                                                                                                                                                                           
-FISKAR   G_VIKMORK                NYT                     253  2017-06-28 11:47:36   TABLE        Tengt villuleitinni.  skoða view fiskar.vikmork                                                                                                                                                                                                               
-FISKAR   HAFIS                    NYT                      10  2017-06-28 11:47:42   TABLE        Uppflettitafla umhverfisþátta. Hafískóðar og lýsingar. LYKILL: hafis                                                                                                                                                                                          
-FISKAR   ICES_TEGUNDIR            NYT                      21  2017-06-28 11:48:32   TABLE        ices fisktengurndir á ensku                                                                                                                                                                                                                                   
-FISKAR   INNSLATT_STATUS          NYT                      17  2017-06-28 11:48:50   TABLE        Gamall insláttar status fyrir lengdir, kvarnir og stöðvar                                                                                                                                                                                                     
-FISKAR   INNYFLAFITA              NYT                       4  2017-06-28 11:48:50   TABLE        Uppflettitafla fyrir innslátt á innyflafitukóða. LYKILL: fita,tegund. Eingöngu notað ennþá í kvarnainnslætti fyrir síld.                                                                                                                                      
-FISKAR   KVARNAFLOKKAR            NYT                       6  2017-06-28 11:50:17   TABLE        Uppflettitafla sem geymir lýsingar og greiningar á kvörnum. LYKILL: flokkur,tegund. Notað við skráningu í töflu KVARNIR (eingöngu fyrir þorsk).                                                                                                               
-FISKAR   KVARNIR                  NYT                 5713298  2017-09-30 14:00:53   TABLE        Grunntafla sem inniheldur upplýsingar úr greiningu stakra fiska (oft kvarnaðra eða hreistraðra) og þá helst aldursgreining,lengd,kyn,kynthroski,þyngd fisks.
-LYKILL: synis_id,tegund                                                                          
-FISKAR   KYN                      NYT                       2  2017-06-28 11:51:35   TABLE        Kyn merktra fiska                                                                                                                                                                                                                                             
-FISKAR   KYNTHROSKI               NYT                    2812  2017-06-28 11:51:35   TABLE        Uppflettitafla fyrir lýsingu á kynþroskastigi fiska/dýra. LYKILL: throski,tegund. Notað við innslátt á kynthroska í lengda- og kvarnainnslætti.                                                                                                               
-FISKAR   LEIDANGRAR               NYT                    9366  2017-06-28 11:52:38   TABLE        Uppflettitafla sem geymir upplýsingar um hvern leiðangur Hafrannsóknastofnunarinnar. LYKILL:leidangur                                                                                                                                                         
-FISKAR   LEIDR_KVARNIR            NYT                 1570478  2017-06-28 11:52:43   TABLE        NA                                                                                                                                                                                                                                                            
-FISKAR   LEIDR_LENGDIR            NYT                 2329341  2017-06-28 11:52:47   TABLE        NA                                                                                                                                                                                                                                                            
-FISKAR   LEIDR_NUMER              NYT                  230381  2017-06-28 11:52:48   TABLE        NA                                                                                                                                                                                                                                                            
-FISKAR   LEIDR_STODVAR            NYT                   65481  2017-06-28 11:52:50   TABLE        NA                                                                                                                                                                                                                                                            
-FISKAR   LENGDIR                  NYT                14040360  2017-09-30 14:01:39   TABLE        Grunntafla sem inniheldur aðallega lengdardreifingu sýnis fyrir hverja tegund.
-LYKILL: synis_id,tegund                                                                                                                                                        
-FISKAR   L_HAFNIR                 NYT                      92  2017-06-28 11:53:18   TABLE        Staðsetningar og númer löndunarhafna                                                                                                                                                                                                                          
-FISKAR   LINIR                    NYT                   34469  2017-06-28 11:53:23   TABLE        NA                                                                                                                                                                                                                                                            
-FISKAR   MELTING_BRADAR           NYT                       3  2017-06-28 11:58:06   TABLE        Tengis túnfiski                                                                                                                                                                                                                                               
-FISKAR   MELTING_KVARNA           NYT                       3  2017-06-28 11:58:06   TABLE        Tengis túnfiski                                                                                                                                                                                                                                               
-FISKAR   NUMER                    NYT                 1333832  2017-09-30 14:01:25   TABLE        Grunntafla sem inniheldur upplýsingar fyrir hverja tegund sem er talin,mæld,kvörnuð,hreistruð o.sv.frv. á sömu stöð; einnig innsláttarupplýsingar og ef við á gömlu lnr og knr úr Prelude gagnagrunnskerfinu 
- LYKILL: synis_id,tegund                        
-FISKAR   OSKJUR                   NYT                  321813  2017-06-28 11:59:07   TABLE        Bókhald yfir staðsetningu kvarna                                                                                                                                                                                                                              
-FISKAR   SJOR                     NYT                      10  2017-06-28 12:02:19   TABLE        Uppflettitafla umhverfisþátta; lýsing á ástandi sjávar. Lykill sjor.                                                                                                                                                                                          
-FISKAR   SKIKAR                   NYT                     267  2017-06-28 12:02:20   TABLE        Rækju rannsókninar                                                                                                                                                                                                                                            
-FISKAR   SKY                      NYT                      10  2017-06-28 12:04:34   TABLE        Uppflettitafla umhverfisþátta; lýsing á skýjafari. LYKILL: sky.                                                                                                                                                                                               
-FISKAR   SPURN                    NYT                       3  2017-06-28 12:04:52   TABLE        NA                                                                                                                                                                                                                                                            
-FISKAR   STADA_KVARNIR            NYT                      15  2017-06-28 12:04:54   TABLE        Staða innsláttar kvarna, lesið/ólesi o.s.fr.                                                                                                                                                                                                                  
-FISKAR   STADA_LENGDIR            NYT                       5  2017-06-28 12:04:54   TABLE        Staða innsláttar lengda, lesið/ólesi o.s.fr.                                                                                                                                                                                                                  
-FISKAR   STADA_STODVA             NYT                       8  2017-06-28 12:04:59   TABLE        Lýsing hvernig til tókst.                                                                                                                                                                                                                                     
-FISKAR   STODVAR                  NYT                  378788  2017-09-30 14:01:48   TABLE        Grunntafla sem inniheldur aðalstöðvarupplýsingar sem skráðar eru við sýnatöku allra fisktegunda. Aðeins ein færsla er fyrir hverja stöð. EINKVÆMUR LYKILL: synis_id                                                                                           
-FISKAR   SYNAFLOKKAR              NYT                      37  2017-06-28 12:05:52   TABLE        Uppflettitafla yfir synatökuflokka. Tilgangur sýnaflokka er að flokka í sundur mismunandi tegunda rannsókna s.s SMB,SMR og Seiðarannsóknir. Með tilkomu synaflokka á að vera óþarfi að nota veiðarfæri eða leiðangursauðkenni til að vinsa t.d. SMB úr Oracle 
-FISKAR   TOGEYKTIR                NYT                      12  2017-06-28 12:06:43   TABLE        Uppflettitafla með skýringum um eyktarkóða þegar sólarhringnum er skipt niður í tólf hluta. LYKILL: eykt.                                                                                                                                                     
-FISKAR   TOGSTODVAR               NYT                  293198  2017-09-30 14:01:20   TABLE        Grunntafla sem inniheldur togupplýsingar sem skráðar eru við sýnatöku allra fiskategunda svo sem tognúmer,toghraði,toglengd; Í þessa töflu er eingöngu skráð ef togþættir eru fyrir hendi í frumgögnum.
-LYKILL: sýnis_id                                      
-FISKAR   TUNA_BRAD                NYT                    3975  2017-06-28 12:13:08   TABLE        NA                                                                                                                                                                                                                                                            
-FISKAR   TUNA_FERSKIR             NYT                      62  2017-06-28 12:13:09   TABLE        NA                                                                                                                                                                                                                                                            
-FISKAR   TUNA_HARDIR              NYT                    7857  2017-06-28 12:13:09   TABLE        NA                                                                                                                                                                                                                                                            
-FISKAR   TUNFISK_FAEDA            NYT                     310  2017-06-28 12:13:09   TABLE        NA                                                                                                                                                                                                                                                            
-FISKAR   TYPA                     NYT                      17  2017-06-28 12:13:12   TABLE        Síld                                                                                                                                                                                                                                                          
-FISKAR   UMHVERFI                 NYT                  219662  2017-09-30 14:01:45   TABLE        Grunntafla sem inniheldur umhverfiupplýsingar sem skráðar eru við sýnatöku allra fiskategunda svo sem vindátt,vindhraði,loftþrýstingur; Í þessa töflu er eingöngu skráð ef umhverfisþættir eru fyrir hendi í frumgögnum
-LYKILL: synis_id                      
-FISKAR   UTIBU                    NYT                       7  2017-06-28 12:13:45   TABLE        Uppflettitafla yfir útibú Hafrannsóknastofnunar.                                                                                                                                                                                                              
-FISKAR   VALKVARNIR               NYT                   20884  2017-06-28 12:13:49   TABLE        Kvarnatafla með völdum fiskum (lengdir ekki settar í fiskar lengdir)                                                                                                                                                                                          
-FISKAR   VEDUR                    NYT                      10  2017-06-28 12:13:50   TABLE        NA                                                                                                                                                                                                                                                            
-FISKAR   VINDATT                  NYT                      18  2017-06-28 12:18:59   TABLE        NA                                                                                                                                                                                                                                                            
-FISKAR   VINDHRADI                NYT                      13  2017-06-28 12:18:59   TABLE        NA                                                                                                                                                                                                                                                            
-FISKAR   FRJOSEMI                 NYT                    1209  2017-06-28 11:35:49   TABLE        NA                                                                                                                                                                                                                                                            
-FISKAR   FRJOSEMI_EGGJATHVERMAL   NYT                       0  2017-06-28 11:35:49   TABLE        NA                                                                                                                                                                                                                                                            
-FISKAR   STODVAR_LOG              NYT                 1198802  2017-09-22 22:00:34   TABLE        NA                                                                                                                                                                                                                                                            
-FISKAR   LEIDANGRAR_LOG           NYT                    9413  2017-09-22 22:00:15   TABLE        NA                                                                                                                                                                                                                                                            
-FISKAR   TOGSTODVAR_LOG           NYT                 1131117  2017-09-22 22:00:23   TABLE        NA                                                                                                                                                                                                                                                            
-FISKAR   UMHVERFI_LOG             NYT                  444834  2017-09-22 22:00:16   TABLE        NA                                                                                                                                                                                                                                                            
-FISKAR   NUMER_LOG                NYT                 1816227  2017-09-30 14:01:57   TABLE        NA                                                                                                                                                                                                                                                            
-FISKAR   LENGDIR_LOG              NYT                28853470  2017-09-30 14:02:53   TABLE        NA                                                                                                                                                                                                                                                            
-FISKAR   KVARNIR_LOG              NYT                 7192049  2017-09-30 14:01:19   TABLE        NA                                                                                                                                                                                                                                                            
-FISKAR   HORPUDISKUR              NYT                      13  2017-11-15 22:00:13   TABLE        Tafla fyrir greiningu tegund á (hörpudisk)myndum                                                                                                                                                                                                              
-
-Description of the columns of a particular table:
-
+Description of the variables of a particular table (only first 10 variables shown here): 
 
 ```r
-mar_fields(con,'fiskar.stodvar') %>% knitr::kable()
+mar_fields(con,'fiskar.stodvar')
 ```
 
-
-
-owner    table_name   column_name       comments                                                                                               
--------  -----------  ----------------  -------------------------------------------------------------------------------------------------------
-fiskar   stodvar      synis_id          Lykilnúmer stöðvar og tengir það  saman öll fiskasýni á sömu stöð                                      
-fiskar   stodvar      leidangur         Leiðangurs auðkenni t.d 'B9-90' vísar í töflu LEIÐANGRAR.                                              
-fiskar   stodvar      dags              Dagsetning sýnatöku/mælidagur ef um sjálfvikasínatöku er um að ræða                                    
-fiskar   stodvar      skip              Skipaskráarnúmer skips                                                                                 
-fiskar   stodvar      stod              Númer stöðvar                                                                                          
-fiskar   stodvar      reitur            Tilkynningarskyldureitur sýnatöku                                                                      
-fiskar   stodvar      smareitur         Hólf innan tilkynningarskyldureits                                                                     
-fiskar   stodvar      kastad_n_breidd   Staðsetning á norðurbreidd við kast í gráðum,mínútum og hundraðshluta úr mínútu                        
-fiskar   stodvar      kastad_v_lengd    Staðsetning á vesturlengd við kast í gráðum,mínútum og hundraðshluta úr mínútu                         
-fiskar   stodvar      hift_n_breidd     Staðsetning á norðurbreidd við hífingu í gráðum,mínútum og hundraðshluta úr mínútu                     
-fiskar   stodvar      hift_v_lengd      Staðsetning á vesturlengd við hífingu í gráðum,mínútum og 1/100 úr mínútu                              
-fiskar   stodvar      dypi_kastad       Botndýpi í metrum við kast                                                                             
-fiskar   stodvar      dypi_hift         Botndýpi í metrum við hífingu                                                                          
-fiskar   stodvar      veidarfaeri       Veiðarfærakóði vísar í töflu FISKAR.VEIDARFAERI                                                        
-fiskar   stodvar      moskvastaerd      Möskvastærð veiðarfæris í millimetrum                                                                  
-fiskar   stodvar      grandaralengd     Grandaralengd í föðmum                                                                                 
-fiskar   stodvar      heildarafli       Þyngd afla samtals í heilum kílóum                                                                     
-fiskar   stodvar      londunarhofn      Kóði löndunarhafnar; vísar í töflu FISKAR.LONDUNARHAFNIR                                               
-fiskar   stodvar      skiki             Svæði samkvæmt tilkynningarskyldu rækjubáta: eingöngu skráð í rækjukönnun; vísar í töflu FISKAR.SKIKAR 
-fiskar   stodvar      fjardarreitur     Reitur innan skika inn í fjörðum; eingöngu skráð í rækjukönnun; vísar í töflu FISKAR.SKIKAR            
-fiskar   stodvar      snt               Stimpill fyrir nýja færslu: dags. skráningar (SYSDATE)                                                 
-fiskar   stodvar      snn               Stimpill fyrir nýja færslu: hver skráði (USER)                                                         
-fiskar   stodvar      sbt               Stimpill fyrir breytingu á færslu: dags. breytingar (SYSDATE)                                          
-fiskar   stodvar      sbn               Stimpill fyrir breytingu á færslu: hver skráði (USER)                                                  
-fiskar   stodvar      hnattstada        Kóði fyrir hnattfjórðung (0-n.br/a.le, 1->n.br/v.le, 2->s.br/a.le, 3->s.br/v.le)                       
-fiskar   stodvar      landsyni          Er sýni tekið í landi (1) eða út á sjó (0) ?                                                           
-fiskar   stodvar      aths              Athugasemdir varðandi stöð og lýsing á togi                                                            
-fiskar   stodvar      stada_stodvar     NA                                                                                                     
-fiskar   stodvar      net_nr            NA                                                                                                     
-fiskar   stodvar      synaflokkur       Sýnaflokkur, vísar í töfluna SYNAFLOKKAR                                                               
-fiskar   stodvar      veidisvaedi       NA                                                                                                     
-fiskar   stodvar      hitamaelir_id     NA                                                                                                     
-fiskar   stodvar      maelingarmenn     NA                                                                                                     
-fiskar   stodvar      veidarfaeri_id    NA                                                                                                     
-fiskar   stodvar      tog_aths          NA                                                                                                     
-fiskar   stodvar      medferd_afla      NA                                                                                                     
+```
+## # Source:   lazy query [?? x 4]
+## # Database: OraConnection
+##     owner table_name     column_name
+##     <chr>      <chr>           <chr>
+##  1 fiskar    stodvar        synis_id
+##  2 fiskar    stodvar       leidangur
+##  3 fiskar    stodvar            dags
+##  4 fiskar    stodvar            skip
+##  5 fiskar    stodvar            stod
+##  6 fiskar    stodvar          reitur
+##  7 fiskar    stodvar       smareitur
+##  8 fiskar    stodvar kastad_n_breidd
+##  9 fiskar    stodvar  kastad_v_lengd
+## 10 fiskar    stodvar   hift_n_breidd
+## # ... with more rows, and 1 more variables: comments <chr>
+```
 
 
 
@@ -656,7 +581,6 @@ devtools::session_info()
 ##  grid         3.4.2      2017-10-30
 ##  gtable       0.2.0      2016-02-26
 ##  haven        1.1.0      2017-07-09
-##  highr        0.6        2016-05-09
 ##  hms          0.3        2016-11-22
 ##  htmltools    0.3.6      2017-04-28
 ##  httr         1.3.1      2017-08-20
@@ -734,7 +658,6 @@ devtools::session_info()
 ##  local                                     
 ##  cran (@0.2.0)                             
 ##  CRAN (R 3.4.0)                            
-##  cran (@0.6)                               
 ##  CRAN (R 3.4.0)                            
 ##  CRAN (R 3.4.0)                            
 ##  CRAN (R 3.4.1)                            
