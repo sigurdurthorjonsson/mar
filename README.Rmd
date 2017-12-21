@@ -219,6 +219,7 @@ d <- lods_oslaegt(mar) %>%
 show_query(d)
 d %>% collect()
 ```
+
 ### Metadata
 
 List of tables available to the user:

@@ -15,7 +15,8 @@ afli_stofn <- function(mar) {
                   lengd = -lengd*100,
                   breidd = breidd*100,
                   lengd_lok = -lengd_lok*100,
-                  breidd_lok = breidd_lok*100) %>%
+                  breidd_lok = breidd_lok*100,
+                  smareitur = nvl(smareitur,1)) %>%  ## ath
     mar:::geoconvert(col.names = c('lengd','breidd','lengd_lok','breidd_lok')) %>%
     dplyr::left_join(tbl_mar(mar,'fiskar.reitir'),by = c('reitur','smareitur')) %>%
     dplyr::left_join(tbl_mar(mar,'fiskar.reitir') %>% select(reitur,lat2=lat,lon2=lon),by = 'reitur') %>%

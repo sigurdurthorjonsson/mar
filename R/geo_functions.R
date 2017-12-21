@@ -80,10 +80,22 @@ fix_pos <- function(data,
 }
 
 
+#' Encode zchords
+#'
+#' @param data database query
+#' @param col.names column names containing lat and lon coordinates
+#' @param dx rounding in the x direction
+#' @param dy rounding in the y direction
+#' @param invalids logical
+#'
+#' @return database query with aggregated box
+#' @export
 encode_zchords <- function(data,col.names=c('lat','lon'),dx=1,dy=0.5,invalids=TRUE){
 
   tmp <-
-    c(sprintf('floor(%s/dx)*dx',col.names[2]),sprintf('floor(%s/dy)*dy',col.names[1]),col.names)
+    c(sprintf('floor(%s/dx)*dx',col.names[2]),
+      sprintf('floor(%s/dy)*dy',col.names[1]),
+      col.names)
 
   data %>%
     dplyr::mutate(dx = dx,
