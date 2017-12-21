@@ -1,5 +1,10 @@
-# mar
-Bjarki Þór Elvarsson and Einar Hjörleifsson  
+---
+title: "mar"
+author: Bjarki Þór Elvarsson and Einar Hjörleifsson
+output: 
+  html_document: 
+    keep_md: yes
+---
 
 
 
@@ -44,7 +49,7 @@ library(mar)
 Connection to MRI Oracle database:
 
 ```r
-mar <- dbConnect(dbDriver('Oracle'))
+con <- connect_mar()
 ```
 
 ### Some (hopefully) gentle introduction
@@ -53,7 +58,7 @@ ___
 The core function in the `mar`-package is the `tbl-mar`-function. It takes two arguments, the "connection" and the name of the oracle table. E.g. to establish a connection to the table "lengdir" in the schema "fiskar" one can do:
 
 ```r
-lengdir <- tbl_mar(mar, "fiskar.lengdir")
+lengdir <- tbl_mar(con, "fiskar.lengdir")
 ```
 What class is lengdir?:
 
@@ -99,26 +104,32 @@ Now, there are columns returned that we have little interest in (sbt:snn). Using
 
 ```r
 lengdir %>% 
-  select(synis_id, tegund, lengd, fjoldi, kyn, kynthroski) %>% 
-  glimpse()
+  select(synis_id, tegund, lengd, fjoldi, kyn, kynthroski)
 ```
 
 ```
-## Observations: 25
-## Variables: 6
-## $ synis_id   <int> 48208, 48208, 48200, 48200, 48200, 50603, 50603, 50...
-## $ tegund     <int> 1, 1, 1, 1, 1, 28, 28, 28, 28, 28, 28, 28, 28, 28, ...
-## $ lengd      <dbl> 38, 43, 13, 38, 43, 23, 35, 20, 21, 22, 24, 25, 26,...
-## $ fjoldi     <int> 3, 2, 2, 1, 1, 1, 1, 2, 2, 5, 4, 8, 5, 2, 3, 7, 5, ...
-## $ kyn        <int> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,...
-## $ kynthroski <int> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,...
+## # Source:   lazy query [?? x 6]
+## # Database: OraConnection
+##    synis_id tegund lengd fjoldi   kyn kynthroski
+##       <int>  <int> <dbl>  <int> <int>      <int>
+##  1    48208      1    38      3    NA         NA
+##  2    48208      1    43      2    NA         NA
+##  3    48200      1    13      2    NA         NA
+##  4    48200      1    38      1    NA         NA
+##  5    48200      1    43      1    NA         NA
+##  6    50603     28    23      1    NA         NA
+##  7    50603     28    35      1    NA         NA
+##  8    50604     28    20      2    NA         NA
+##  9    50604     28    21      2    NA         NA
+## 10    50604     28    22      5    NA         NA
+## # ... with more rows
 ```
 
 Now if one were only interested in one species and one station we may extend the above as:
 
 ```r
 lengdir <- 
-  tbl_mar(mar, "fiskar.lengdir") %>% 
+  tbl_mar(con, "fiskar.lengdir") %>% 
   select(synis_id, tegund, lengd, fjoldi, kyn, kynthroski) %>% 
   filter(synis_id == 48489,
          tegund == 1)
@@ -130,7 +141,7 @@ To pull down all the results into R one uses collect(), which returns a tidyvers
 ```r
 d <- 
   lengdir %>% 
-  collect()
+  collect(n = Inf)
 class(d)
 ```
 
@@ -149,7 +160,6 @@ dim(d)
 A quick visualization of the data can be obtained via:
 
 ```r
-library(ggplot2)
 d %>% 
   ggplot() +
   geom_bar(aes(lengd, fjoldi), stat = "identity")
@@ -161,18 +171,25 @@ So we have the length distribution of measured cod from one sample (station). We
 
 
 ```r
-lesa_lengdir(mar) %>% glimpse()
+lesa_lengdir(con)
 ```
 
 ```
-## Observations: 25
-## Variables: 6
-## $ synis_id   <int> 48208, 48208, 48200, 48200, 48200, 50603, 50603, 50...
-## $ tegund     <int> 1, 1, 1, 1, 1, 28, 28, 28, 28, 28, 28, 28, 28, 28, ...
-## $ lengd      <dbl> 38, 43, 13, 38, 43, 23, 35, 20, 21, 22, 24, 25, 26,...
-## $ fjoldi     <int> 3, 2, 2, 1, 1, 1, 1, 2, 2, 5, 4, 8, 5, 2, 3, 7, 5, ...
-## $ kyn        <int> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,...
-## $ kynthroski <int> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,...
+## # Source:   lazy query [?? x 6]
+## # Database: OraConnection
+##    synis_id tegund lengd fjoldi   kyn kynthroski
+##       <int>  <int> <dbl>  <int> <int>      <int>
+##  1    48208      1    38      3    NA         NA
+##  2    48208      1    43      2    NA         NA
+##  3    48200      1    13      2    NA         NA
+##  4    48200      1    38      1    NA         NA
+##  5    48200      1    43      1    NA         NA
+##  6    50603     28    23      1    NA         NA
+##  7    50603     28    35      1    NA         NA
+##  8    50604     28    20      2    NA         NA
+##  9    50604     28    21      2    NA         NA
+## 10    50604     28    22      5    NA         NA
+## # ... with more rows
 ```
 
 Here we have same columns as above with one additional column, **uppruni_lengdir**. This is because the function reads from two different tables, **fiskar.lengdir** and **fiskar.leidr_lengdir** and combines them into one. Hopefully this is only an interim measure - there are plans to merge these two data tables into one (lets keep our fingers crossed). 
@@ -181,18 +198,18 @@ Lets used `lesa_lengdir` as our starting point, this time lets ask the question 
 
 ```r
 d <-
-  lesa_lengdir(mar) %>% 
+  lesa_lengdir(con) %>% 
   filter(synis_id == 48489) %>% 
   group_by(tegund) %>% 
   summarise(fjoldi = sum(fjoldi)) %>% 
   arrange(fjoldi)
-#explain(d)
+show_query(d)
 ```
 
 The SQL query has now become a bunch of gibberish for some of us. But this demonstrates that in addition to **select** and **filter** the `dplyr`-verbs **group_by**, **summarise** and **arrange** are "translated" into SQL :-) To see the outcome we do:
 
 ```r
-d %>% collect()
+d %>% collect(n = Inf)
 ```
 
 ```
@@ -211,7 +228,7 @@ d %>% collect()
 Those familiar with the fiskar database know that these information are also available in the table **numer**. Here we can use the ``mar::lesa_numer` function:
 
 ```r
-lesa_numer(mar) %>% 
+lesa_numer(con) %>% 
   filter(synis_id == 48489)
 ```
 
@@ -239,11 +256,11 @@ lesa_numer(mar) %>%
 
 
 ```r
-tbl_mar(mar, "fiskar.numer") %>% 
+tbl_mar(con, "fiskar.numer") %>% 
   filter(synis_id == 48489) %>% 
   select(tegund, fj_maelt, fj_talid) %>% 
   arrange(fj_maelt) %>% 
-  collect()
+  collect(n = Inf)
 ```
 
 ```
@@ -268,8 +285,9 @@ So we get a dataframe that has more species than those obtained from `lesa_lengd
 Information about the station that corresponds to synis_id = 48489 reside in the station table:
 
 ```r
-lesa_stodvar(mar) %>% 
+lesa_stodvar(con) %>% 
   filter(synis_id == 48489) %>% 
+  collect() %>% 
   glimpse()
 ```
 
@@ -346,7 +364,7 @@ For those familiar with what is stored in **fiskar.stodvar** recognize that the 
 
 ```r
 smb1991 <-
-  lesa_stodvar(mar) %>% 
+  lesa_stodvar(con) %>% 
   filter(ar == 1991,
          veidarfaeri == 73,
          synaflokkur == 30) %>% 
@@ -359,7 +377,7 @@ To get a quick plot of the station location we could do:
 
 ```r
 smb1991 %>% 
-  collect() %>% 
+  collect(n = Inf) %>% 
   ggplot(aes(lon, lat)) +
   geom_polygon(data = gisland::iceland, aes(long, lat, group = group)) +
   geom_point(col = "red") +
@@ -372,7 +390,7 @@ Looks about right. But what if we were interested in getting the total number of
 
 ```r
 nu <- 
-  tbl_mar(mar, "fiskar.numer") %>% 
+  tbl_mar(con, "fiskar.numer") %>% 
   group_by(synis_id) %>% 
   summarise(n = sum(fj_maelt + fj_talid))
 smb1991_n <-
@@ -390,7 +408,7 @@ To turn this into action, lets execute the query, get the dataframe into R and p
 
 ```r
 smb1991_n %>% 
-  collect() %>% 
+  collect(n = Inf) %>% 
   ggplot() +
   theme_bw() +
   geom_polygon(data = gisland::iceland, aes(long, lat, group = group), fill = "grey") +
@@ -407,10 +425,10 @@ smb1991_n %>%
 
 ### Metadata
 
-List of tables available to the user:
+List of tables available to the user (only first 10 tables shown here):
 
 ```r
-mar_tables(mar,schema = 'fiskar')
+mar_tables(con, schema = 'fiskar')
 ```
 
 ```
@@ -419,24 +437,23 @@ mar_tables(mar,schema = 'fiskar')
 ##     owner        table_name tablespace_name num_rows       last_analyzed
 ##     <chr>             <chr>           <chr>    <dbl>              <dttm>
 ##  1 FISKAR            REITIR             NYT     2864 2017-10-12 22:00:15
-##  2 FISKAR       KVARNALOGUN             NYT      107 2017-10-12 22:00:15
+##  2 FISKAR       KVARNALOGUN             NYT      801 2017-11-17 22:00:17
 ##  3 FISKAR             BEITA             NYT        2 2017-06-28 11:32:50
-##  4 FISKAR           FLOKKAR             NYT        0 2017-06-28 11:35:33
-##  5 FISKAR FLOKKAR_SENDINGAR             NYT    13527 2017-06-28 11:35:33
-##  6 FISKAR         G_TROSSUR             NYT      222 2017-06-28 11:47:35
-##  7 FISKAR         G_VIKMORK             NYT      253 2017-06-28 11:47:36
-##  8 FISKAR             HAFIS             NYT       10 2017-06-28 11:47:42
-##  9 FISKAR     ICES_TEGUNDIR             NYT       21 2017-06-28 11:48:32
-## 10 FISKAR   INNSLATT_STATUS             NYT       17 2017-06-28 11:48:50
+##  4 FISKAR               BOX             NYT    29833 2017-10-17 22:00:45
+##  5 FISKAR           FLOKKAR             NYT        0 2017-06-28 11:35:33
+##  6 FISKAR FLOKKAR_SENDINGAR             NYT    13527 2017-06-28 11:35:33
+##  7 FISKAR         G_TROSSUR             NYT      222 2017-06-28 11:47:35
+##  8 FISKAR         G_VIKMORK             NYT      253 2017-06-28 11:47:36
+##  9 FISKAR             HAFIS             NYT       10 2017-06-28 11:47:42
+## 10 FISKAR     ICES_TEGUNDIR             NYT       21 2017-06-28 11:48:32
 ## # ... with more rows, and 2 more variables: table_type <chr>,
 ## #   comments <chr>
 ```
 
-Description of the columns of a particular table:
-
+Description of the variables of a particular table (only first 10 variables shown here): 
 
 ```r
-mar_fields(mar,'fiskar.stodvar')
+mar_fields(con,'fiskar.stodvar')
 ```
 
 ```
@@ -473,7 +490,7 @@ Let's look at stomach samples. Restrict our analysis to fish from the spring sur
 
 ```r
 st <- 
-  lesa_stodvar(mar) %>% 
+  lesa_stodvar(con) %>% 
   filter(synaflokkur == 30, ar > 1992) %>% 
   select(synis_id,ar)
 ```
@@ -483,11 +500,11 @@ and only look at stomachs from cods between 40 and 80 fish
 
 ```r
 tmp <- 
-  faeda_ranfiskar(mar) %>% 
+  faeda_ranfiskar(con) %>% 
   filter(lengd %in% 40:80,ranfiskur == 1) %>% 
   mutate(weight = 0.01*lengd^3) %>% 
   right_join(st) %>% 
-  left_join(faeda_thyngdir(mar)) %>% 
+  left_join(faeda_thyngdir(con)) %>% 
   mutate(faeduhopur = nvl(faeduhopur,'Empty'),
          thyngd = nvl(thyngd,0))
 ```
@@ -526,40 +543,42 @@ devtools::session_info()
 
 ```
 ##  setting  value                       
-##  version  R version 3.4.1 (2017-06-30)
+##  version  R version 3.4.2 (2017-09-28)
 ##  system   x86_64, linux-gnu           
 ##  ui       X11                         
 ##  language (EN)                        
-##  collate  en_US.UTF-8                 
+##  collate  is_IS.UTF-8                 
 ##  tz       Atlantic/Reykjavik          
-##  date     2017-11-08                  
+##  date     2017-12-13                  
 ## 
 ##  package    * version    date      
 ##  assertthat   0.2.0      2017-04-11
 ##  backports    1.1.1      2017-09-25
-##  base       * 3.4.1      2017-06-30
+##  base       * 3.4.2      2017-10-30
 ##  bindr        0.1        2016-11-13
 ##  bindrcpp   * 0.2        2017-06-17
 ##  broom        0.4.2      2017-02-13
 ##  cellranger   1.1.0      2016-07-27
+##  cli          1.0.0      2017-11-05
 ##  colorspace   1.3-2      2016-12-14
-##  compiler     3.4.1      2017-06-30
-##  data.table   1.10.4-3   2017-10-27
-##  datasets   * 3.4.1      2017-06-30
+##  compiler     3.4.2      2017-10-30
+##  crayon       1.3.4      2017-11-15
+##  data.table   1.10.5     2017-12-01
+##  datasets   * 3.4.2      2017-10-30
 ##  DBI        * 0.7        2017-06-18
-##  dbplyr       1.1.0.9000 2017-10-25
+##  dbplyr       1.1.0.9000 2017-11-15
 ##  devtools     1.13.3     2017-08-02
 ##  digest       0.6.12     2017-01-27
 ##  dplyr      * 0.7.4      2017-09-28
 ##  evaluate     0.10.1     2017-06-24
-##  forcats      0.2.0      2017-01-23
+##  forcats    * 0.2.0      2017-01-23
 ##  foreign      0.8-69     2017-06-21
-##  ggplot2    * 2.2.1.9000 2017-11-03
-##  gisland      0.0.07     2017-11-03
-##  glue         1.1.1      2017-06-21
-##  graphics   * 3.4.1      2017-06-30
-##  grDevices  * 3.4.1      2017-06-30
-##  grid         3.4.1      2017-06-30
+##  ggplot2    * 2.2.1.9000 2017-12-01
+##  gisland      0.0.07     2017-12-12
+##  glue         1.2.0      2017-10-29
+##  graphics   * 3.4.2      2017-10-30
+##  grDevices  * 3.4.2      2017-10-30
+##  grid         3.4.2      2017-10-30
 ##  gtable       0.2.0      2016-02-26
 ##  haven        1.1.0      2017-07-09
 ##  hms          0.3        2016-11-22
@@ -570,116 +589,120 @@ devtools::session_info()
 ##  labeling     0.3        2014-08-23
 ##  lattice      0.20-35    2017-03-25
 ##  lazyeval     0.2.1      2017-10-29
-##  lubridate    1.6.0      2016-09-13
+##  lubridate    1.7.1      2017-11-03
 ##  magrittr     1.5        2014-11-22
-##  mar        * 0.0.3.9000 2017-11-07
+##  mar        * 0.0.3.9000 2017-12-13
 ##  memoise      1.1.0      2017-04-21
-##  methods    * 3.4.1      2017-06-30
+##  methods    * 3.4.2      2017-10-30
 ##  mnormt       1.5-5      2016-10-15
 ##  modelr       0.1.1      2017-07-24
 ##  munsell      0.4.3      2016-02-13
 ##  nlme         3.1-131    2017-02-06
-##  parallel     3.4.1      2017-06-30
+##  parallel     3.4.2      2017-10-30
 ##  pkgconfig    2.0.1      2017-03-21
 ##  plyr         1.8.4      2016-06-08
 ##  psych        1.7.8      2017-09-09
 ##  purrr      * 0.2.4      2017-10-18
 ##  R6           2.2.2      2017-06-17
-##  Rcpp         0.12.13    2017-09-28
+##  Rcpp         0.12.14    2017-11-23
 ##  readr      * 1.1.1      2017-05-16
 ##  readxl       1.0.0      2017-04-18
 ##  reshape2     1.4.2      2016-10-22
-##  rlang        0.1.2.9000 2017-11-03
-##  rmarkdown    1.6        2017-06-15
+##  rlang        0.1.4      2017-11-05
+##  rmarkdown    1.7.7      2017-11-15
 ##  ROracle    * 1.3-1      2016-10-26
 ##  rprojroot    1.2        2017-01-16
+##  rstudioapi   0.7        2017-09-07
 ##  rvest        0.3.2      2016-06-17
-##  scales       0.5.0.9000 2017-11-03
+##  scales       0.5.0.9000 2017-09-11
 ##  sp         * 1.2-5      2017-06-29
-##  stats      * 3.4.1      2017-06-30
-##  stringi      1.1.5      2017-04-07
-##  stringr      1.2.0      2017-02-18
+##  stats      * 3.4.2      2017-10-30
+##  stringi      1.1.6      2017-11-17
+##  stringr    * 1.2.0      2017-02-18
 ##  tibble     * 1.3.4      2017-08-22
 ##  tidyr      * 0.7.2      2017-10-16
-##  tidyselect   0.2.2      2017-10-10
-##  tidyverse  * 1.1.1      2017-01-27
-##  tools        3.4.1      2017-06-30
-##  utils      * 3.4.1      2017-06-30
-##  withr        2.1.0.9000 2017-11-03
+##  tidyselect   0.2.3      2017-11-06
+##  tidyverse  * 1.2.1      2017-11-14
+##  tools        3.4.2      2017-10-30
+##  utils      * 3.4.2      2017-10-30
+##  withr        2.1.0.9000 2017-12-01
 ##  xml2         1.1.1      2017-01-24
 ##  yaml         2.1.14     2016-11-12
 ##  source                                    
-##  CRAN (R 3.4.0)                            
+##  cran (@0.2.0)                             
 ##  CRAN (R 3.4.1)                            
 ##  local                                     
-##  CRAN (R 3.4.0)                            
-##  CRAN (R 3.4.0)                            
-##  CRAN (R 3.4.0)                            
-##  CRAN (R 3.4.0)                            
+##  cran (@0.1)                               
+##  cran (@0.2)                               
+##  CRAN (R 3.4.1)                            
+##  CRAN (R 3.3.1)                            
+##  cran (@1.0.0)                             
 ##  CRAN (R 3.4.0)                            
 ##  local                                     
-##  cran (@1.10.4-)                           
+##  Github (r-lib/crayon@b5221ab)             
+##  Github (Rdatatable/data.table@8bf7334)    
 ##  local                                     
+##  CRAN (R 3.4.1)                            
+##  Github (tidyverse/dbplyr@a424f67)         
+##  CRAN (R 3.4.1)                            
+##  CRAN (R 3.3.2)                            
+##  cran (@0.7.4)                             
 ##  CRAN (R 3.4.0)                            
-##  Github (tidyverse/dbplyr@a71e0d6)         
-##  CRAN (R 3.4.1)                            
-##  CRAN (R 3.4.1)                            
-##  CRAN (R 3.4.1)                            
-##  CRAN (R 3.4.1)                            
 ##  CRAN (R 3.4.0)                            
-##  CRAN (R 3.4.1)                            
-##  Github (tidyverse/ggplot2@9979112)        
-##  Github (einarhjorleifsson/gisland@e15c0ad)
-##  cran (@1.1.1)                             
+##  CRAN (R 3.4.0)                            
+##  Github (hadley/ggplot2@7b5c185)           
+##  Github (einarhjorleifsson/gisland@480343a)
+##  cran (@1.2.0)                             
 ##  local                                     
 ##  local                                     
 ##  local                                     
+##  cran (@0.2.0)                             
+##  CRAN (R 3.4.0)                            
+##  CRAN (R 3.4.0)                            
 ##  CRAN (R 3.4.0)                            
 ##  CRAN (R 3.4.1)                            
 ##  CRAN (R 3.4.0)                            
-##  CRAN (R 3.4.0)                            
-##  CRAN (R 3.4.1)                            
-##  CRAN (R 3.4.0)                            
-##  CRAN (R 3.4.1)                            
-##  CRAN (R 3.4.0)                            
+##  cran (@1.17)                              
+##  CRAN (R 3.2.0)                            
 ##  CRAN (R 3.4.0)                            
 ##  cran (@0.2.1)                             
-##  CRAN (R 3.4.0)                            
-##  CRAN (R 3.4.0)                            
+##  CRAN (R 3.4.2)                            
+##  CRAN (R 3.1.2)                            
 ##  local                                     
 ##  CRAN (R 3.4.0)                            
 ##  local                                     
 ##  CRAN (R 3.4.0)                            
 ##  CRAN (R 3.4.1)                            
-##  CRAN (R 3.4.0)                            
+##  cran (@0.4.3)                             
 ##  CRAN (R 3.4.0)                            
 ##  local                                     
+##  cran (@2.0.1)                             
+##  cran (@1.8.4)                             
+##  CRAN (R 3.4.1)                            
+##  CRAN (R 3.4.1)                            
+##  cran (@2.2.2)                             
+##  cran (@0.12.14)                           
+##  CRAN (R 3.4.0)                            
+##  CRAN (R 3.3.2)                            
+##  cran (@1.4.2)                             
+##  cran (@0.1.4)                             
+##  Github (rstudio/rmarkdown@2b418a2)        
 ##  CRAN (R 3.4.0)                            
 ##  CRAN (R 3.4.0)                            
 ##  CRAN (R 3.4.1)                            
-##  CRAN (R 3.4.1)                            
-##  CRAN (R 3.4.0)                            
-##  CRAN (R 3.4.1)                            
-##  CRAN (R 3.4.0)                            
-##  CRAN (R 3.4.0)                            
-##  CRAN (R 3.4.0)                            
-##  Github (tidyverse/rlang@bf67fd5)          
-##  CRAN (R 3.4.0)                            
-##  CRAN (R 3.4.0)                            
-##  CRAN (R 3.4.0)                            
-##  CRAN (R 3.4.0)                            
+##  CRAN (R 3.3.2)                            
 ##  Github (hadley/scales@d767915)            
-##  CRAN (R 3.4.1)                            
-##  local                                     
-##  CRAN (R 3.4.0)                            
-##  CRAN (R 3.4.0)                            
-##  CRAN (R 3.4.1)                            
-##  CRAN (R 3.4.1)                            
-##  CRAN (R 3.4.1)                            
 ##  CRAN (R 3.4.0)                            
 ##  local                                     
+##  cran (@1.1.6)                             
+##  cran (@1.2.0)                             
+##  CRAN (R 3.4.2)                            
+##  cran (@0.7.2)                             
+##  cran (@0.2.3)                             
+##  CRAN (R 3.4.2)                            
 ##  local                                     
-##  Github (jimhester/withr@8ba5e46)          
-##  CRAN (R 3.4.0)                            
-##  CRAN (R 3.4.0)
+##  local                                     
+##  Github (jimhester/withr@fe81c00)          
+##  CRAN (R 3.3.2)                            
+##  cran (@2.1.14)
 ```

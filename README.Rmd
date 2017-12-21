@@ -49,7 +49,7 @@ library(mar)
 
 Connection to MRI Oracle database:
 ```{r}
-mar <- dbConnect(dbDriver('Oracle'))
+con <- connect_mar()
 ```
 
 ### Some (hopefully) gentle introduction
@@ -57,7 +57,7 @@ ___
 
 The core function in the `mar`-package is the `tbl-mar`-function. It takes two arguments, the "connection" and the name of the oracle table. E.g. to establish a connection to the table "lengdir" in the schema "fiskar" one can do:
 ```{r}
-lengdir <- tbl_mar(mar, "fiskar.lengdir")
+lengdir <- tbl_mar(con, "fiskar.lengdir")
 ```
 What class is lengdir?:
 ```{r}
@@ -76,14 +76,13 @@ lengdir
 Now, there are columns returned that we have little interest in (sbt:snn). Using the `dplyr`-verbs (functions) one can easily build upon the base query, e.g.:
 ```{r}
 lengdir %>% 
-  select(synis_id, tegund, lengd, fjoldi, kyn, kynthroski) %>% 
-  glimpse()
+  select(synis_id, tegund, lengd, fjoldi, kyn, kynthroski)
 ```
 
 Now if one were only interested in one species and one station we may extend the above as:
 ```{r}
 lengdir <- 
-  tbl_mar(mar, "fiskar.lengdir") %>% 
+  tbl_mar(con, "fiskar.lengdir") %>% 
   select(synis_id, tegund, lengd, fjoldi, kyn, kynthroski) %>% 
   filter(synis_id == 48489,
          tegund == 1)
@@ -94,14 +93,13 @@ To pull down all the results into R one uses collect(), which returns a tidyvers
 ```{r}
 d <- 
   lengdir %>% 
-  collect()
+  collect(n = Inf)
 class(d)
 dim(d)
 ```
 
 A quick visualization of the data can be obtained via:
 ```{r ldist}
-library(ggplot2)
 d %>% 
   ggplot() +
   geom_bar(aes(lengd, fjoldi), stat = "identity")
@@ -110,7 +108,7 @@ d %>%
 So we have the length distribution of measured cod from one sample (station). We do not however know what this sample is, because the column **synis_id** is just some gibberish automatically generated within Oracle. Before we deal with that, lets introduce `lesa_lengdir`-function that resides in the `mar`-package:
 
 ```{r}
-lesa_lengdir(mar) %>% glimpse()
+lesa_lengdir(con)
 ```
 
 Here we have same columns as above with one additional column, **uppruni_lengdir**. This is because the function reads from two different tables, **fiskar.lengdir** and **fiskar.leidr_lengdir** and combines them into one. Hopefully this is only an interim measure - there are plans to merge these two data tables into one (lets keep our fingers crossed). 
@@ -118,46 +116,47 @@ Here we have same columns as above with one additional column, **uppruni_lengdir
 Lets used `lesa_lengdir` as our starting point, this time lets ask the question how many fish by species were length measured from this yet unknown station:
 ```{r}
 d <-
-  lesa_lengdir(mar) %>% 
+  lesa_lengdir(con) %>% 
   filter(synis_id == 48489) %>% 
   group_by(tegund) %>% 
   summarise(fjoldi = sum(fjoldi)) %>% 
   arrange(fjoldi)
-#explain(d)
+show_query(d)
 ```
 
 The SQL query has now become a bunch of gibberish for some of us. But this demonstrates that in addition to **select** and **filter** the `dplyr`-verbs **group_by**, **summarise** and **arrange** are "translated" into SQL :-) To see the outcome we do:
 ```{r}
-d %>% collect()
+d %>% collect(n = Inf)
 ```
 
 Those familiar with the fiskar database know that these information are also available in the table **numer**. Here we can use the ``mar::lesa_numer` function:
 ```{r}
-lesa_numer(mar) %>% 
+lesa_numer(con) %>% 
   filter(synis_id == 48489)
 ```
 
 ```{r}
-tbl_mar(mar, "fiskar.numer") %>% 
+tbl_mar(con, "fiskar.numer") %>% 
   filter(synis_id == 48489) %>% 
   select(tegund, fj_maelt, fj_talid) %>% 
   arrange(fj_maelt) %>% 
-  collect()
+  collect(n = Inf)
 ```
 
 So we get a dataframe that has more species than those obtained from `lesa_lengdir`. This is because the sample (station) also contained some species that were not measured, only counted.
 
 Information about the station that corresponds to synis_id = 48489 reside in the station table:
 ```{r}
-lesa_stodvar(mar) %>% 
+lesa_stodvar(con) %>% 
   filter(synis_id == 48489) %>% 
+  collect() %>% 
   glimpse()
 ```
 
 For those familiar with what is stored in **fiskar.stodvar** recognize that the station is most likely part of the 1991 spring survey (veidarfaeri = 73 and synaflokkur = 30 provides the best hint). What if we were to start from this end and get all the stations from the 1991 survey and also limit the number of columns returned:
 ```{r}
 smb1991 <-
-  lesa_stodvar(mar) %>% 
+  lesa_stodvar(con) %>% 
   filter(ar == 1991,
          veidarfaeri == 73,
          synaflokkur == 30) %>% 
@@ -169,7 +168,7 @@ smb1991 <-
 To get a quick plot of the station location we could do:
 ```{r smb1991_stodvar}
 smb1991 %>% 
-  collect() %>% 
+  collect(n = Inf) %>% 
   ggplot(aes(lon, lat)) +
   geom_polygon(data = gisland::iceland, aes(long, lat, group = group)) +
   geom_point(col = "red") +
@@ -179,7 +178,7 @@ smb1991 %>%
 Looks about right. But what if we were interested in getting the total number of fish recorded at each station? Here we need to obtain the information from **fiskar.numer** for the station (synis_id) in question. This we do by using `left_join`:
 ```{r}
 nu <- 
-  tbl_mar(mar, "fiskar.numer") %>% 
+  tbl_mar(con, "fiskar.numer") %>% 
   group_by(synis_id) %>% 
   summarise(n = sum(fj_maelt + fj_talid))
 smb1991_n <-
@@ -195,7 +194,7 @@ show_query(smb1991_n)
 To turn this into action, lets execute the query, get the dataframe into R and plot the data:
 ```{r smb1991_n}
 smb1991_n %>% 
-  collect() %>% 
+  collect(n = Inf) %>% 
   ggplot() +
   theme_bw() +
   geom_polygon(data = gisland::iceland, aes(long, lat, group = group), fill = "grey") +
@@ -208,8 +207,8 @@ smb1991_n %>%
 
 
 ```{r, eval = FALSE, echo = FALSE}
-d <- lods_oslaegt(mar) %>%
-  left_join(skipaskra(mar) %>% select(skip_nr, flokkur), by = "skip_nr") %>% 
+d <- lods_oslaegt(con) %>%
+  left_join(skipaskra(con) %>% select(skip_nr, flokkur), by = "skip_nr") %>% 
   filter(fteg == 1,
          flokkur != -4,
          veidisvaedi == "I") %>%
@@ -217,20 +216,19 @@ d <- lods_oslaegt(mar) %>%
   summarise(afli = sum(magn_oslaegt)) %>%
   arrange(timabil, gerd)
 show_query(d)
-d %>% collect()
+d %>% collect(n = Inf)
 ```
 
 ### Metadata
 
-List of tables available to the user:
+List of tables available to the user (only first 10 tables shown here):
 ```{r}
-mar_tables(mar,schema = 'fiskar')
+mar_tables(con, schema = 'fiskar')
 ```
 
-Description of the columns of a particular table:
-
+Description of the variables of a particular table (only first 10 variables shown here): 
 ```{r}
-mar_fields(mar,'fiskar.stodvar')
+mar_fields(con,'fiskar.stodvar')
 ```
 
 
@@ -248,7 +246,7 @@ Let's look at stomach samples. Restrict our analysis to fish from the spring sur
 
 ```{r}
 st <- 
-  lesa_stodvar(mar) %>% 
+  lesa_stodvar(con) %>% 
   filter(synaflokkur == 30, ar > 1992) %>% 
   select(synis_id,ar)
 
@@ -258,11 +256,11 @@ and only look at stomachs from cods between 40 and 80 fish
 
 ```{r}
 tmp <- 
-  faeda_ranfiskar(mar) %>% 
+  faeda_ranfiskar(con) %>% 
   filter(lengd %in% 40:80,ranfiskur == 1) %>% 
   mutate(weight = 0.01*lengd^3) %>% 
   right_join(st) %>% 
-  left_join(faeda_thyngdir(mar)) %>% 
+  left_join(faeda_thyngdir(con)) %>% 
   mutate(faeduhopur = nvl(faeduhopur,'Empty'),
          thyngd = nvl(thyngd,0))
 ```
