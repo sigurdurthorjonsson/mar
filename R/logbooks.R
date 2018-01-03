@@ -20,7 +20,7 @@ afli_stofn <- function(mar) {
     mar:::geoconvert(col.names = c('lengd','breidd','lengd_lok','breidd_lok')) %>%
     dplyr::left_join(tbl_mar(mar,'fiskar.reitir'),by = c('reitur','smareitur')) %>%
     dplyr::mutate(lengd = nvl(lengd,lon),
-                  breidd = nvl(breidd,lon)) %>%
+                  breidd = nvl(breidd,lat)) %>%
     dplyr::mutate(toglengd = arcdist(breidd,lengd,breidd_lok,lengd_lok)) %>%
     select(-c(lat,lon))
 }
