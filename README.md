@@ -21,8 +21,7 @@ You have to do this once, or when you want to update the packages already instal
 
 ```r
 install.packages("tidyverse")
-install.packages("devtools")
-devtools::install_github("tidyverse/dbplyr")
+# install.packages("devtools")
 devtools::install_github("fishvice/mar",  dependencies = FALSE)
 ```
 
@@ -41,8 +40,6 @@ devtools::install_github("fishvice/mar",  dependencies = FALSE, args='--no-multi
 
 
 ```r
-library(tidyverse)
-library(ROracle)
 library(mar)
 ```
 
@@ -55,7 +52,7 @@ con <- connect_mar()
 ### Some (hopefully) gentle introduction
 ___
 
-The core function in the `mar`-package is the `tbl-mar`-function. It takes two arguments, the "connection" and the name of the oracle table. E.g. to establish a connection to the table "lengdir" in the schema "fiskar" one can do:
+The core function in the `mar`-package is the `tbl_mar`-function. It takes two arguments, the "connection" and the name of the oracle table. E.g. to establish a connection to the table "lengdir" in the schema "fiskar" one can do:
 
 ```r
 lengdir <- tbl_mar(con, "fiskar.lengdir")
@@ -85,20 +82,19 @@ lengdir
 ```
 ## # Source:   lazy query [?? x 10]
 ## # Database: OraConnection
-##    synis_id tegund lengd fjoldi   kyn kynthroski                 sbt
-##       <int>  <int> <dbl>  <int> <int>      <int>              <dttm>
-##  1    48208      1    38      3    NA         NA 1996-08-21 01:00:23
-##  2    48208      1    43      2    NA         NA 1996-08-21 01:00:23
-##  3    48200      1    13      2    NA         NA 1996-08-21 01:00:23
-##  4    48200      1    38      1    NA         NA 1996-08-21 01:00:23
-##  5    48200      1    43      1    NA         NA 1996-08-21 01:00:23
-##  6    50603     28    23      1    NA         NA 1996-08-21 01:00:14
-##  7    50603     28    35      1    NA         NA 1996-08-21 01:00:14
-##  8    50604     28    20      2    NA         NA 1996-08-21 01:00:14
-##  9    50604     28    21      2    NA         NA 1996-08-21 01:00:14
-## 10    50604     28    22      5    NA         NA 1996-08-21 01:00:14
-## # ... with more rows, and 3 more variables: sbn <chr>, snt <dttm>,
-## #   snn <chr>
+##    synis_id tegund lengd fjoldi   kyn kynthroski sbt                 sbn  
+##       <int>  <int> <dbl>  <int> <int>      <int> <dttm>              <chr>
+##  1    48208      1  38.0      3    NA         NA 1996-08-21 01:00:23 FISK…
+##  2    48208      1  43.0      2    NA         NA 1996-08-21 01:00:23 FISK…
+##  3    48200      1  13.0      2    NA         NA 1996-08-21 01:00:23 FISK…
+##  4    48200      1  38.0      1    NA         NA 1996-08-21 01:00:23 FISK…
+##  5    48200      1  43.0      1    NA         NA 1996-08-21 01:00:23 FISK…
+##  6    50603     28  23.0      1    NA         NA 1996-08-21 01:00:14 FISK…
+##  7    50603     28  35.0      1    NA         NA 1996-08-21 01:00:14 FISK…
+##  8    50604     28  20.0      2    NA         NA 1996-08-21 01:00:14 FISK…
+##  9    50604     28  21.0      2    NA         NA 1996-08-21 01:00:14 FISK…
+## 10    50604     28  22.0      5    NA         NA 1996-08-21 01:00:14 FISK…
+## # ... with more rows, and 2 more variables: snt <dttm>, snn <chr>
 ```
 Now, there are columns returned that we have little interest in (sbt:snn). Using the `dplyr`-verbs (functions) one can easily build upon the base query, e.g.:
 
@@ -112,16 +108,16 @@ lengdir %>%
 ## # Database: OraConnection
 ##    synis_id tegund lengd fjoldi   kyn kynthroski
 ##       <int>  <int> <dbl>  <int> <int>      <int>
-##  1    48208      1    38      3    NA         NA
-##  2    48208      1    43      2    NA         NA
-##  3    48200      1    13      2    NA         NA
-##  4    48200      1    38      1    NA         NA
-##  5    48200      1    43      1    NA         NA
-##  6    50603     28    23      1    NA         NA
-##  7    50603     28    35      1    NA         NA
-##  8    50604     28    20      2    NA         NA
-##  9    50604     28    21      2    NA         NA
-## 10    50604     28    22      5    NA         NA
+##  1    48208      1  38.0      3    NA         NA
+##  2    48208      1  43.0      2    NA         NA
+##  3    48200      1  13.0      2    NA         NA
+##  4    48200      1  38.0      1    NA         NA
+##  5    48200      1  43.0      1    NA         NA
+##  6    50603     28  23.0      1    NA         NA
+##  7    50603     28  35.0      1    NA         NA
+##  8    50604     28  20.0      2    NA         NA
+##  9    50604     28  21.0      2    NA         NA
+## 10    50604     28  22.0      5    NA         NA
 ## # ... with more rows
 ```
 
@@ -179,16 +175,16 @@ lesa_lengdir(con)
 ## # Database: OraConnection
 ##    synis_id tegund lengd fjoldi   kyn kynthroski
 ##       <int>  <int> <dbl>  <int> <int>      <int>
-##  1    48208      1    38      3    NA         NA
-##  2    48208      1    43      2    NA         NA
-##  3    48200      1    13      2    NA         NA
-##  4    48200      1    38      1    NA         NA
-##  5    48200      1    43      1    NA         NA
-##  6    50603     28    23      1    NA         NA
-##  7    50603     28    35      1    NA         NA
-##  8    50604     28    20      2    NA         NA
-##  9    50604     28    21      2    NA         NA
-## 10    50604     28    22      5    NA         NA
+##  1    48208      1  38.0      3    NA         NA
+##  2    48208      1  43.0      2    NA         NA
+##  3    48200      1  13.0      2    NA         NA
+##  4    48200      1  38.0      1    NA         NA
+##  5    48200      1  43.0      1    NA         NA
+##  6    50603     28  23.0      1    NA         NA
+##  7    50603     28  35.0      1    NA         NA
+##  8    50604     28  20.0      2    NA         NA
+##  9    50604     28  21.0      2    NA         NA
+## 10    50604     28  22.0      5    NA         NA
 ## # ... with more rows
 ```
 
@@ -216,13 +212,13 @@ d %>% collect(n = Inf)
 ## # A tibble: 7 x 2
 ##   tegund fjoldi
 ##    <int>  <dbl>
-## 1      2      1
-## 2     25      6
-## 3     22      6
-## 4      5     39
-## 5     12     49
-## 6     28     60
-## 7      1    119
+## 1      2   1.00
+## 2     25   6.00
+## 3     22   6.00
+## 4      5  39.0 
+## 5     12  49.0 
+## 6     28  60.0 
+## 7      1 119
 ```
 
 Those familiar with the fiskar database know that these information are also available in the table **numer**. Here we can use the ``mar::lesa_numer` function:
@@ -235,23 +231,21 @@ lesa_numer(con) %>%
 ```
 ## # Source:   lazy query [?? x 19]
 ## # Database: OraConnection
-##    synis_id tegund fj_maelt fj_kvarnad gamalt_lnr gamalt_knr fj_talid
-##       <int>  <int>    <int>      <int>      <int>      <int>    <int>
-##  1    48489      1      119         56        209        209        0
-##  2    48489      2        1          1        208        208        0
-##  3    48489      5       39          0        209         NA        0
-##  4    48489     12       49          0        209         NA        0
-##  5    48489     22        6          0        202         NA        0
-##  6    48489     25        6          0        203         NA        0
-##  7    48489     28       60          0        209         NA        0
-##  8    48489     30        0          0         NA         NA       11
-##  9    48489     53        0          0         NA         NA        1
-## 10    48489     56        0          0         NA         NA        2
-## # ... with more rows, and 12 more variables: afli <dbl>,
-## #   fj_kyngreint <int>, fj_vigtad <int>, vigt_synis <dbl>,
-## #   fj_magasyna <int>, aths_numer <chr>, status_lengdir <int>,
-## #   status_kvarnir <int>, fj_merkt <int>, fj_aldursgr <int>,
-## #   kg_talning <int>, uppruni_numer <chr>
+##    syni… tegu… fj_m… fj_k… gama… gama… fj_t…  afli fj_k… fj_v… vigt… fj_m…
+##    <int> <int> <int> <int> <int> <int> <int> <dbl> <int> <int> <dbl> <int>
+##  1 48489     1   119    56   209   209     0    NA    NA    NA    NA    NA
+##  2 48489     2     1     1   208   208     0    NA    NA    NA    NA    NA
+##  3 48489     5    39     0   209    NA     0    NA    NA    NA    NA    NA
+##  4 48489    12    49     0   209    NA     0    NA    NA    NA    NA    NA
+##  5 48489    22     6     0   202    NA     0    NA    NA    NA    NA    NA
+##  6 48489    25     6     0   203    NA     0    NA    NA    NA    NA    NA
+##  7 48489    28    60     0   209    NA     0    NA    NA    NA    NA    NA
+##  8 48489    30     0     0    NA    NA    11    NA    NA    NA    NA    NA
+##  9 48489    53     0     0    NA    NA     1    NA    NA    NA    NA    NA
+## 10 48489    56     0     0    NA    NA     2    NA    NA    NA    NA    NA
+## # ... with more rows, and 7 more variables: aths_numer <chr>,
+## #   status_lengdir <int>, status_kvarnir <int>, fj_merkt <int>,
+## #   fj_aldursgr <int>, kg_talning <int>, uppruni_numer <chr>
 ```
 
 
@@ -423,6 +417,7 @@ smb1991_n %>%
 
 
 
+
 ### Metadata
 
 List of tables available to the user (only first 10 tables shown here):
@@ -434,20 +429,19 @@ mar_tables(con, schema = 'fiskar')
 ```
 ## # Source:   lazy query [?? x 7]
 ## # Database: OraConnection
-##     owner        table_name tablespace_name num_rows       last_analyzed
-##     <chr>             <chr>           <chr>    <dbl>              <dttm>
-##  1 FISKAR            REITIR             NYT     2864 2017-10-12 22:00:15
-##  2 FISKAR       KVARNALOGUN             NYT      801 2017-11-17 22:00:17
-##  3 FISKAR             BEITA             NYT        2 2017-06-28 11:32:50
-##  4 FISKAR               BOX             NYT    29833 2017-10-17 22:00:45
-##  5 FISKAR           FLOKKAR             NYT        0 2017-06-28 11:35:33
-##  6 FISKAR FLOKKAR_SENDINGAR             NYT    13527 2017-06-28 11:35:33
-##  7 FISKAR         G_TROSSUR             NYT      222 2017-06-28 11:47:35
-##  8 FISKAR         G_VIKMORK             NYT      253 2017-06-28 11:47:36
-##  9 FISKAR             HAFIS             NYT       10 2017-06-28 11:47:42
-## 10 FISKAR     ICES_TEGUNDIR             NYT       21 2017-06-28 11:48:32
-## # ... with more rows, and 2 more variables: table_type <chr>,
-## #   comments <chr>
+##    owner  table_name        table… num_r… last_analyzed       tabl… comme…
+##    <chr>  <chr>             <chr>   <dbl> <dttm>              <chr> <chr> 
+##  1 FISKAR REITIR            NYT    2.86e³ 2017-10-12 22:00:15 TABLE <NA>  
+##  2 FISKAR KVARNALOGUN       NYT    8.01e² 2017-11-17 22:00:17 TABLE Tafla…
+##  3 FISKAR BEITA             NYT    2.00e⁰ 2017-06-28 11:32:50 TABLE Ekki …
+##  4 FISKAR BOX               NYT    2.98e⁴ 2017-12-19 22:01:27 TABLE <NA>  
+##  5 FISKAR FLOKKAR           NYT    0      2017-06-28 11:35:33 TABLE Tengt…
+##  6 FISKAR FLOKKAR_SENDINGAR NYT    1.35e⁴ 2017-06-28 11:35:33 TABLE Tengt…
+##  7 FISKAR G_TROSSUR         NYT    2.22e² 2017-06-28 11:47:35 TABLE Nöfn …
+##  8 FISKAR G_VIKMORK         NYT    2.53e² 2017-06-28 11:47:36 TABLE Tengt…
+##  9 FISKAR HAFIS             NYT    1.00e¹ 2017-06-28 11:47:42 TABLE Uppfl…
+## 10 FISKAR ICES_TEGUNDIR     NYT    2.10e¹ 2017-06-28 11:48:32 TABLE ices …
+## # ... with more rows
 ```
 
 Description of the variables of a particular table (only first 10 variables shown here): 
@@ -459,19 +453,19 @@ mar_fields(con,'fiskar.stodvar')
 ```
 ## # Source:   lazy query [?? x 4]
 ## # Database: OraConnection
-##     owner table_name     column_name
-##     <chr>      <chr>           <chr>
-##  1 fiskar    stodvar        synis_id
-##  2 fiskar    stodvar       leidangur
-##  3 fiskar    stodvar            dags
-##  4 fiskar    stodvar            skip
-##  5 fiskar    stodvar            stod
-##  6 fiskar    stodvar          reitur
-##  7 fiskar    stodvar       smareitur
-##  8 fiskar    stodvar kastad_n_breidd
-##  9 fiskar    stodvar  kastad_v_lengd
-## 10 fiskar    stodvar   hift_n_breidd
-## # ... with more rows, and 1 more variables: comments <chr>
+##    owner  table_name column_name     comments                             
+##    <chr>  <chr>      <chr>           <chr>                                
+##  1 fiskar stodvar    synis_id        Lykilnúmer stöðvar og tengir það  sa…
+##  2 fiskar stodvar    leidangur       Leiðangurs auðkenni t.d 'B9-90' vísa…
+##  3 fiskar stodvar    dags            Dagsetning sýnatöku/mælidagur ef um …
+##  4 fiskar stodvar    skip            Skipaskráarnúmer skips               
+##  5 fiskar stodvar    stod            Númer stöðvar                        
+##  6 fiskar stodvar    reitur          Tilkynningarskyldureitur sýnatöku    
+##  7 fiskar stodvar    smareitur       Hólf innan tilkynningarskyldureits   
+##  8 fiskar stodvar    kastad_n_breidd Staðsetning á norðurbreidd við kast …
+##  9 fiskar stodvar    kastad_v_lengd  Staðsetning á vesturlengd við kast í…
+## 10 fiskar stodvar    hift_n_breidd   Staðsetning á norðurbreidd við hífin…
+## # ... with more rows
 ```
 
 
@@ -549,7 +543,7 @@ devtools::session_info()
 ##  language (EN)                        
 ##  collate  is_IS.UTF-8                 
 ##  tz       Atlantic/Reykjavik          
-##  date     2017-12-13                  
+##  date     2018-01-05                  
 ## 
 ##  package    * version    date      
 ##  assertthat   0.2.0      2017-04-11
@@ -557,7 +551,7 @@ devtools::session_info()
 ##  base       * 3.4.2      2017-10-30
 ##  bindr        0.1        2016-11-13
 ##  bindrcpp   * 0.2        2017-06-17
-##  broom        0.4.2      2017-02-13
+##  broom        0.4.3      2017-11-20
 ##  cellranger   1.1.0      2016-07-27
 ##  cli          1.0.0      2017-11-05
 ##  colorspace   1.3-2      2016-12-14
@@ -566,10 +560,10 @@ devtools::session_info()
 ##  data.table   1.10.5     2017-12-01
 ##  datasets   * 3.4.2      2017-10-30
 ##  DBI        * 0.7        2017-06-18
-##  dbplyr       1.1.0.9000 2017-11-15
+##  dbplyr       1.2.0      2018-01-03
 ##  devtools     1.13.3     2017-08-02
 ##  digest       0.6.12     2017-01-27
-##  dplyr      * 0.7.4      2017-09-28
+##  dplyr      * 0.7.4.9000 2018-01-03
 ##  evaluate     0.10.1     2017-06-24
 ##  forcats    * 0.2.0      2017-01-23
 ##  foreign      0.8-69     2017-06-21
@@ -581,7 +575,7 @@ devtools::session_info()
 ##  grid         3.4.2      2017-10-30
 ##  gtable       0.2.0      2016-02-26
 ##  haven        1.1.0      2017-07-09
-##  hms          0.3        2016-11-22
+##  hms          0.4.0      2017-11-23
 ##  htmltools    0.3.6      2017-04-28
 ##  httr         1.3.1      2017-08-20
 ##  jsonlite     1.5        2017-06-01
@@ -591,7 +585,7 @@ devtools::session_info()
 ##  lazyeval     0.2.1      2017-10-29
 ##  lubridate    1.7.1      2017-11-03
 ##  magrittr     1.5        2014-11-22
-##  mar        * 0.0.3.9000 2017-12-13
+##  mar        * 0.0.3.9000 2018-01-04
 ##  memoise      1.1.0      2017-04-21
 ##  methods    * 3.4.2      2017-10-30
 ##  mnormt       1.5-5      2016-10-15
@@ -599,6 +593,7 @@ devtools::session_info()
 ##  munsell      0.4.3      2016-02-13
 ##  nlme         3.1-131    2017-02-06
 ##  parallel     3.4.2      2017-10-30
+##  pillar       0.0.0.9000 2017-12-01
 ##  pkgconfig    2.0.1      2017-03-21
 ##  plyr         1.8.4      2016-06-08
 ##  psych        1.7.8      2017-09-09
@@ -608,7 +603,7 @@ devtools::session_info()
 ##  readr      * 1.1.1      2017-05-16
 ##  readxl       1.0.0      2017-04-18
 ##  reshape2     1.4.2      2016-10-22
-##  rlang        0.1.4      2017-11-05
+##  rlang        0.1.6      2017-12-21
 ##  rmarkdown    1.7.7      2017-11-15
 ##  ROracle    * 1.3-1      2016-10-26
 ##  rprojroot    1.2        2017-01-16
@@ -619,11 +614,12 @@ devtools::session_info()
 ##  stats      * 3.4.2      2017-10-30
 ##  stringi      1.1.6      2017-11-17
 ##  stringr    * 1.2.0      2017-02-18
-##  tibble     * 1.3.4      2017-08-22
+##  tibble     * 1.4.1      2017-12-25
 ##  tidyr      * 0.7.2      2017-10-16
 ##  tidyselect   0.2.3      2017-11-06
 ##  tidyverse  * 1.2.1      2017-11-14
 ##  tools        3.4.2      2017-10-30
+##  utf8         1.1.1      2017-11-29
 ##  utils      * 3.4.2      2017-10-30
 ##  withr        2.1.0.9000 2017-12-01
 ##  xml2         1.1.1      2017-01-24
@@ -634,7 +630,7 @@ devtools::session_info()
 ##  local                                     
 ##  cran (@0.1)                               
 ##  cran (@0.2)                               
-##  CRAN (R 3.4.1)                            
+##  CRAN (R 3.4.2)                            
 ##  CRAN (R 3.3.1)                            
 ##  cran (@1.0.0)                             
 ##  CRAN (R 3.4.0)                            
@@ -643,10 +639,10 @@ devtools::session_info()
 ##  Github (Rdatatable/data.table@8bf7334)    
 ##  local                                     
 ##  CRAN (R 3.4.1)                            
-##  Github (tidyverse/dbplyr@a424f67)         
+##  CRAN (R 3.4.2)                            
 ##  CRAN (R 3.4.1)                            
 ##  CRAN (R 3.3.2)                            
-##  cran (@0.7.4)                             
+##  Github (tidyverse/dplyr@b3837f5)          
 ##  CRAN (R 3.4.0)                            
 ##  CRAN (R 3.4.0)                            
 ##  CRAN (R 3.4.0)                            
@@ -658,7 +654,7 @@ devtools::session_info()
 ##  local                                     
 ##  cran (@0.2.0)                             
 ##  CRAN (R 3.4.0)                            
-##  CRAN (R 3.4.0)                            
+##  CRAN (R 3.4.2)                            
 ##  CRAN (R 3.4.0)                            
 ##  CRAN (R 3.4.1)                            
 ##  CRAN (R 3.4.0)                            
@@ -668,7 +664,7 @@ devtools::session_info()
 ##  cran (@0.2.1)                             
 ##  CRAN (R 3.4.2)                            
 ##  CRAN (R 3.1.2)                            
-##  local                                     
+##  Github (fishvice/mar@ecdb7dc)             
 ##  CRAN (R 3.4.0)                            
 ##  local                                     
 ##  CRAN (R 3.4.0)                            
@@ -676,6 +672,7 @@ devtools::session_info()
 ##  cran (@0.4.3)                             
 ##  CRAN (R 3.4.0)                            
 ##  local                                     
+##  Github (r-lib/pillar@5a082e1)             
 ##  cran (@2.0.1)                             
 ##  cran (@1.8.4)                             
 ##  CRAN (R 3.4.1)                            
@@ -685,7 +682,7 @@ devtools::session_info()
 ##  CRAN (R 3.4.0)                            
 ##  CRAN (R 3.3.2)                            
 ##  cran (@1.4.2)                             
-##  cran (@0.1.4)                             
+##  cran (@0.1.6)                             
 ##  Github (rstudio/rmarkdown@2b418a2)        
 ##  CRAN (R 3.4.0)                            
 ##  CRAN (R 3.4.0)                            
@@ -696,11 +693,12 @@ devtools::session_info()
 ##  local                                     
 ##  cran (@1.1.6)                             
 ##  cran (@1.2.0)                             
-##  CRAN (R 3.4.2)                            
+##  cran (@1.4.1)                             
 ##  cran (@0.7.2)                             
 ##  cran (@0.2.3)                             
 ##  CRAN (R 3.4.2)                            
 ##  local                                     
+##  cran (@1.1.1)                             
 ##  local                                     
 ##  Github (jimhester/withr@fe81c00)          
 ##  CRAN (R 3.3.2)                            

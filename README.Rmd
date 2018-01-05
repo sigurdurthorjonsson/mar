@@ -24,8 +24,7 @@ You have to do this once, or when you want to update the packages already instal
 
 ```{r, eval = FALSE}
 install.packages("tidyverse")
-install.packages("devtools")
-devtools::install_github("tidyverse/dbplyr")
+# install.packages("devtools")
 devtools::install_github("fishvice/mar",  dependencies = FALSE)
 ```
 
@@ -42,8 +41,6 @@ devtools::install_github("fishvice/mar",  dependencies = FALSE, args='--no-multi
 ### Establish connection
 
 ```{r, message = FALSE}
-library(tidyverse)
-library(ROracle)
 library(mar)
 ```
 
@@ -55,7 +52,7 @@ con <- connect_mar()
 ### Some (hopefully) gentle introduction
 ___
 
-The core function in the `mar`-package is the `tbl-mar`-function. It takes two arguments, the "connection" and the name of the oracle table. E.g. to establish a connection to the table "lengdir" in the schema "fiskar" one can do:
+The core function in the `mar`-package is the `tbl_mar`-function. It takes two arguments, the "connection" and the name of the oracle table. E.g. to establish a connection to the table "lengdir" in the schema "fiskar" one can do:
 ```{r}
 lengdir <- tbl_mar(con, "fiskar.lengdir")
 ```
