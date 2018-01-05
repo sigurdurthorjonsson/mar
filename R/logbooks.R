@@ -19,11 +19,10 @@ afli_stofn <- function(mar) {
                   smareitur = nvl(smareitur,1)) %>%  ## ath
     mar:::geoconvert(col.names = c('lengd','breidd','lengd_lok','breidd_lok')) %>%
     dplyr::left_join(tbl_mar(mar,'fiskar.reitir'),by = c('reitur','smareitur')) %>%
-    dplyr::left_join(tbl_mar(mar,'fiskar.reitir') %>% select(reitur,lat2=lat,lon2=lon),by = 'reitur') %>%
-    dplyr::mutate(lengd = nvl(lengd,nvl(lon,lon2)),
-                  breidd = nvl(breidd,nvl(lat,lat2))) %>%
+    dplyr::mutate(lengd = nvl(lengd,lon),
+                  breidd = nvl(breidd,lat)) %>%
     dplyr::mutate(toglengd = arcdist(breidd,lengd,breidd_lok,lengd_lok)) %>%
-    select(-c(lat,lon,lat2,lon2))
+    select(-c(lat,lon))
 }
 
 #' afli.afli
