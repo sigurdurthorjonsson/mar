@@ -19,7 +19,10 @@ mar_tables <- function(mar, schema) {
 
   d %>%
     dplyr::select(owner, table_name, tablespace_name, num_rows, last_analyzed) %>%
-    dplyr::left_join(tbl_mar(mar,'sys.all_tab_comments'))
+    dplyr::left_join(tbl_mar(mar,'sys.all_tab_comments')) %>%
+    dplyr::mutate(owner = lower(owner),
+                  table_name = lower(table_name)) %>%
+    dplyr::select(owner, table_name, comments, tablespace_name, num_rows, last_analyzed)
 
 }
 
