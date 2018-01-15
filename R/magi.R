@@ -83,6 +83,13 @@ faeda_lengdir <- function(mar){
                                      uppruni = 'f_kynthroski') %>%
                        dplyr::select(synis_id, faerslunumer, flokk_id, ranfiskur, faeduhopur,
                                      brad_kyn, lengd=brad_lengd, fjoldi,  haed, lengd_rf,len_fl,uppruni,brad_kynth)) %>%
+    dplyr::union_all(tbl_mar(mar,'faeda.f_staerdir') %>%
+                       dplyr::mutate(haed = NA,
+                                     len_fl = NA,
+                                     uppruni = 'f_staerdir',
+                                     brad_kynth = NA) %>%
+                       dplyr::select(synis_id, faerslunumer, flokk_id, ranfiskur, faeduhopur,
+                                     brad_kyn, lengd, fjoldi,  haed, lengd_rf,len_fl,uppruni,brad_kynth)) %>%
     dplyr::mutate(len_fl =
                     if_else(lengd < 5,0,
                             if_else(lengd <7,1,
