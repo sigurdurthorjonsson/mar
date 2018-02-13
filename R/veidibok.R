@@ -54,5 +54,8 @@ veidibok_fisktegundir <- function(mar) {
 #' @export
 veidibok_veidibok <- function(mar) {
   tbl_mar(mar, "veidibok.veidibok_v") %>%
-    dplyr::select(-c(snt:sbg))
+    dplyr::select(-c(snt:sbg)) %>%
+    mutate(ar =   to_number(to_char(vedags, "YYYY")),
+           man =  to_number(to_char(vedags, "MM")),
+           vika = to_number(to_char(vedags, "WW")))
 }

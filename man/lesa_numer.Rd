@@ -16,7 +16,3 @@ dataframe
 Fallid myndar tengingu við toflu numer
 í fiskar gagnagrunninum.
 }
-\examples{
-mar <- dplyrOracle::src_oracle("mar")
-dplyr::glimpse(lesa_numer(mar))
-}

@@ -4,10 +4,10 @@
 \alias{siritar_hitastig}
 \title{Síritagögn}
 \usage{
-siritar_hitastig(mar)
+siritar_hitastig(con)
 }
 \arguments{
-\item{mar}{}
+\item{con}{}
 }
 \value{
 töfluskronster
