@@ -25,7 +25,7 @@ lesa_vms <- function(con, year) {
   }
 
   q %>%
-    select(mobileid, vid = skip_nr, date = posdate, lon, lat, speed,
+    select(mobileid, vid = skip_nr, date = posdate, recdate, lon, lat, speed,
            heading, in_out_of_harbor, harborid)
 
 }
