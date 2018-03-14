@@ -17,7 +17,7 @@ lesa_vms <- function(con, year) {
            speed = speed * 1.852)
   if(!missing(year)) {
     y1 <- paste0(year, "-01-01")
-    y2 <- paste0(year - 1, "-01-01")
+    y2 <- paste0(year + 1, "-01-01")
     q <-
       q %>%
       filter(recdate >= to_date(y1, "YYYY:MM:DD"),
