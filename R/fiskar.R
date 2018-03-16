@@ -96,18 +96,13 @@ lesa_kvarnir <- function(mar) {
 #' @param lengdir fyrirspurn á fiskar.lengdir
 #'
 #' @return fyrirspurn með sköluðum fjölda í lengdarbili
-#'
-#'
-
+#' @export
 skala_med_toldum <- function(lengdir){
 
   ratio <-
     lesa_numer(lengdir$src) %>%
-    dplyr::mutate(r = ifelse(fj_talid==0 | is.na(fj_talid),
-                             1,
-                             1 + fj_talid / ifelse(fj_maelt == 0 | is.na(fj_maelt),
-                                               1,
-                                               fj_maelt))) %>%
+    dplyr::mutate(r = ifelse(nvl(fj_talid,0)==0 ,1,
+                             1 + fj_talid /fj_maelt)) %>%
     dplyr::select(synis_id, tegund, r)
 
   lengdir %>%

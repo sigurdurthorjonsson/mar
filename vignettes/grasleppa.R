@@ -1,8 +1,7 @@
 ## ----message=FALSE-------------------------------------------------------
 library(tidyverse)
-library(dplyrOracle)
 library(mar)
-mar <- src_oracle("mar")
+mar <- connect_mar()
 
 ## ----fig.width=7---------------------------------------------------------
 afli_grasl(mar) %>% 
