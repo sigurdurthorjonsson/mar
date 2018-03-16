@@ -13,9 +13,8 @@ vignette: >
 
 ```{r,message=FALSE}
 library(tidyverse)
-library(dplyrOracle)
 library(mar)
-mar <- src_oracle("mar")
+mar <- connect_mar()
 ```
 
 ```{r,fig.width=7}

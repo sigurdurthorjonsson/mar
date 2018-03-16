@@ -2,41 +2,41 @@
 #'
 #' sækir gögn úr síritum veiðarfæra
 #'
-#' @param mar
+#' @param con
 #'
 #' @return töfluskronster
 #' @export
 #'
-siritar_hitastig <- function(mar){
-  tbl_mar(mar,'siritar.hitastig') %>%
+siritar_hitastig <- function(con){
+  tbl_mar(con,'siritar.hitastig') %>%
     select(-c(sng:sbt))
 }
 
 #' @describeIn siritar_hitastig
 #' @export
-siritar_skjal <- function(mar){
-  tbl_mar(mar,'siritar.skjal') %>%
+siritar_skjal <- function(con){
+  tbl_mar(con,'siritar.skjal') %>%
     select(-c(sng:sbt))
 }
 
 #' @describeIn siritar_hitastig
 #' @export
-siritar_skjal_stod <- function(mar){
-  tbl_mar(mar,'siritar.skjal_stod') %>%
+siritar_skjal_stod <- function(con){
+  tbl_mar(con,'siritar.skjal_stod') %>%
     select(-c(sng:sbt))
 }
 
 #' @describeIn siritar_hitastig
 #' @export
-siritar_scanmar <- function(mar){
-  tbl_mar(mar,'siritar.scanmar') %>%
+siritar_scanmar <- function(con){
+  tbl_mar(con,'siritar.scanmar') %>%
     select(-c(sng:sbt))
 }
 
 #' @describeIn siritar_hitastig
 #' @export
-siritar_stadsetning <- function(mar){
-  tbl_mar(mar,'siritar.stadsetning') %>%
+siritar_stadsetning <- function(con){
+  tbl_mar(con,'siritar.stadsetning') %>%
     select(-c(sng:sbt))
 }
 

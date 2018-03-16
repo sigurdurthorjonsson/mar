@@ -28,9 +28,7 @@ lesa_stodvar <- function(mar) {
 #' @return dataframe
 #' @export
 #'
-#' @examples
-#' mar <- dplyrOracle::src_oracle("mar")
-#' dplyr::glimpse(lesa_lengdir(mar))
+
 lesa_lengdir <- function(mar) {
 
   d <-
@@ -52,9 +50,7 @@ lesa_lengdir <- function(mar) {
 #' @return dataframe
 #' @export
 #'
-#' @examples
-#' mar <- dplyrOracle::src_oracle("mar")
-#' dplyr::glimpse(lesa_numer(mar))
+
 lesa_numer <- function(mar) {
 
   d <-
@@ -78,9 +74,7 @@ lesa_numer <- function(mar) {
 #' @return dataframe
 #' @export
 #'
-#' @examples
-#' mar <- dplyrOracle::src_oracle("mar")
-#' dplyr::glimpse(lesa_numer(mar))
+
 lesa_kvarnir <- function(mar) {
 
  d <-
@@ -102,19 +96,23 @@ lesa_kvarnir <- function(mar) {
 #' @param lengdir fyrirspurn á fiskar.lengdir
 #'
 #' @return fyrirspurn með sköluðum fjölda í lengdarbili
-#' @export
 #'
-#' @examples
+#'
+
 skala_med_toldum <- function(lengdir){
 
   ratio <-
     lesa_numer(lengdir$src) %>%
-    dplyr::mutate(r = ifelse(fj_talid==0, 1, fj_talid / ifelse(fj_maelt == 0, 1, fj_maelt))) %>%
+    dplyr::mutate(r = ifelse(fj_talid==0 | is.na(fj_talid),
+                             1,
+                             1 + fj_talid / ifelse(fj_maelt == 0 | is.na(fj_maelt),
+                                               1,
+                                               fj_maelt))) %>%
     dplyr::select(synis_id, tegund, r)
 
   lengdir %>%
     dplyr::left_join(ratio) %>%
-    dplyr::mutate(fjoldi = fjoldi * r)
+    dplyr::mutate(fjoldi_alls = fjoldi * r)
 }
 
 skala_med_toglengd <- function(st_len,
