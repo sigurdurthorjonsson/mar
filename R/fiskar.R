@@ -117,6 +117,15 @@ skala_med_toldum <- function(lengdir){
     dplyr::mutate(fjoldi = fjoldi * r)
 }
 
+skala_med_toglengd <- function(st_len,
+                               min_towlength = 2,
+                               max_towlength = 8,
+                               std_towlength = 4){
+  st_len %>%
+    mutate(toglengd = if_else(toglengd > max_towlength, max_towlength, toglengd),
+           toglengd = if_else(toglengd < min_towlength, min_towlength, toglengd)) %>%
+    mutate(fjoldi = fjoldi * std_towlength/toglengd)
+}
 
 
 
