@@ -107,7 +107,8 @@ skala_med_toldum <- function(lengdir){
 
   lengdir %>%
     dplyr::left_join(ratio) %>%
-    dplyr::mutate(fjoldi_alls = fjoldi * r)
+    dplyr::mutate(fjoldi_oskalad = fjoldi) %>%
+    dplyr::mutate(fjoldi = fjoldi * r)
 }
 
 skala_med_toglengd <- function(st_len,
