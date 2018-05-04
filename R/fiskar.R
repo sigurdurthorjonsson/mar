@@ -101,8 +101,9 @@ skala_med_toldum <- function(lengdir){
 
   ratio <-
     lesa_numer(lengdir$src) %>%
+    dplyr::mutate(fj_maelt = nvl(fj_maelt,1)) %>%
     dplyr::mutate(r = ifelse(nvl(fj_talid,0)==0 ,1,
-                             1 + fj_talid /fj_maelt)) %>%
+                             1 + fj_talid/ifelse(fj_maelt>0,fj_maelt,1))) %>%
     dplyr::select(synis_id, tegund, r)
 
   lengdir %>%
