@@ -6,6 +6,6 @@
 #' @return A connection to the Oracle database
 #' @export
 
-connect_mar <- function() {
-  DBI::dbConnect(DBI::dbDriver("Oracle"))
+connect_mar <- function(...) {
+  DBI::dbConnect(DBI::dbDriver("Oracle"),...)
 }

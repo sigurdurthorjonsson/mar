@@ -4,7 +4,7 @@
 \alias{connect_mar}
 \title{Connect to MFRI database}
 \usage{
-connect_mar()
+connect_mar(...)
 }
 \value{
 A connection to the Oracle database

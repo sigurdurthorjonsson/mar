@@ -15,7 +15,7 @@ Depends:
 Imports:
     dplyr,
     dbplyr,
-    geo,
+    geo, 
     magrittr,
     stats
 License: GPL (>= 2)

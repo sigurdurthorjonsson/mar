@@ -21,44 +21,7 @@ lods_oslaegt <- function(mar) {
 
 }
 
-#' @title Skipasaga
-#'
-#' @description XXX
-#'
-#'
-#' @param mar src_oracle tenging við oracle
-#' @export
-lods_skipasaga <- function(mar) {
 
-    d <- tbl_mar(mar, "kvoti.skipasaga") %>%
-      dplyr::select(-(snt:sbn))
-
-  return(d)
-
-}
-
-#' @title Skipaskra
-#'
-#' @description XXX
-#'
-#' @export
-#'
-#' @param mar src_oracle tenging við oracle
-# #' @example
-# #' mar <- dplyrOracle::src_oracle("mar")
-# #' mar:::lods_skipasaga(mar) %>%
-# #'  filter(heiti == 'Ljósafell') %>%
-# #'  rename(skip=skip_nr) %>%
-# #'  left_join(lesa_stodvar(mar)) %>%
-# #'  filter(dags > i_gildi,dags<ur_gildi) %>%
-# #'  select(i_gildi,ur_gildi,dags)
-lesa_skipaskra <- function(mar) {
-
-  d <- tbl_mar(mar, "orri.skipaskra")
-
-  return(d)
-
-}
 
 #' @title Landadur afli
 #'
@@ -147,6 +110,9 @@ kvoti_stada_summarised <- function(mar) {
 
   d <-
     kvoti_stada(mar) %>%
+    ## sleppum millifærslum í skiptipott v. skerðinga (skip -11),
+    ## þetta virðast vera innri færslur
+    dplyr::filter(skip_nr!=-11) %>%
     dplyr::left_join(kvoti_studlar(mar) %>%
                        dplyr::select(fteg = ftegund, timabil, i_oslaegt),
                      by = c("fteg", "timabil")) %>%
