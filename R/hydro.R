@@ -1,28 +1,29 @@
 #' @export
-hydro_hitamaelar <- function(mar) {
-  tbl_mar(mar,"hydro.hitamaelar") %>%
+hydro_hitamaelar <- function(con) {
+  tbl_mar(con,"hydro.hitamaelar") %>%
     select(-c(snt:sbn)) %>%
     mutate(ar = to_number(to_char(timi, "YYYY")))
 }
 #' @export
-hydro_stadir <- function(mar) {
-  tbl_mar(mar, "hydro.stadir")
-}
-#' @export
-hydro_stodvanofn <- function(mar) {
-  tbl_mar(mar, "hydro.stodvanofn") %>%
-    mutate(lon = -lengd * 100,
-           lat = breidd * 100) %>%
-    mar:::geoconvert()
-}
-#' @export
-hydro_observation <- function(mar) {
-  tbl_mar(mar, "hydro.observation") %>%
+hydro_stadir <- function(con) {
+  tbl_mar(con, "hydro.stadir") %>%
     select(-c(snt:sbn))
 }
 #' @export
-hydro_trolltog <- function(mar) {
-  tbl_mar(mar, "hydro.trolltog") %>%
+hydro_stodvanofn <- function(con) {
+  tbl_mar(con, "hydro.stodvanofn") %>%
+    mutate(lengd = -lengd * 100,
+           breidd = breidd * 100) %>%
+    mar:::geoconvert()
+}
+#' @export
+hydro_observation <- function(con) {
+  tbl_mar(con, "hydro.observation") %>%
+    select(-c(snt:sbn))
+}
+#' @export
+hydro_trolltog <- function(con) {
+  tbl_mar(con, "hydro.trolltog") %>%
     select(-c(snt:sbn))
 }
 #' @export
@@ -36,4 +37,8 @@ hydro_station <- function(con) {
            lat = ifelse(la_id == "N",  lat, -lat)) %>%
     select(t_id:id, lon, lat, q_cont:name)
 }
-
+#' @export
+hydro_sonda <- function(con) {
+  tbl_mar(con, "hydro.sonda") %>%
+    select(-c(snt:sbg))
+}
