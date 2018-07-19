@@ -4,10 +4,10 @@
 \alias{heimild}
 \title{Heimild}
 \usage{
-heimild(mar)
+heimild(con)
 }
 \arguments{
-\item{mar}{src_oracle tenging við oracle}
+\item{con}{src_oracle tenging við oracle}
 }
 \description{
 Heimild

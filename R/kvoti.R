@@ -33,7 +33,7 @@ afla_heimild <- function(con) {
 
 }
 
-#' Heimild
+#' Úthlutun kvóta
 #'
 #' @param con src_oracle tenging við oracle
 #' @export
