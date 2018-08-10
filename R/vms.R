@@ -14,7 +14,7 @@ lesa_vms <- function(con, year) {
     mutate(lon = poslon * 45 / atan(1),
            lat = poslat * 45 / atan(1),
            heading = heading * 45 / atan(1),
-           speed = speed * 1.852)
+           speed = speed * 3600/1852)
   if(!missing(year)) {
     y1 <- paste0(year, "-01-01")
     y2 <- paste0(year + 1, "-01-01")
