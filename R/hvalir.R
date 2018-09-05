@@ -1,12 +1,11 @@
 #' Hvalir
 #'
-#' @param mar
+#' @param con
 #'
 #' @return tenging við hvalir_v
 #' @export
 #'
-#' @examples
-hvalir_hvalir <- function(mar){
+hvalir_hvalir <- function(con) {
   tbl_mar(mar,'hvalir.hvalir_v') %>%
     dplyr::mutate(veiddur_breidd = to_number(replace(veiddur_breidd,',','.')),
                   veiddur_lengd = to_number(replace(veiddur_lengd,',','.'))) %>%

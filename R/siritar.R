@@ -2,7 +2,7 @@
 #'
 #' sækir gögn úr síritum veiðarfæra
 #'
-#' @param con
+#' @param con XXX
 #'
 #' @return töfluskronster
 #' @export
@@ -12,28 +12,33 @@ siritar_hitastig <- function(con){
     select(-c(sng:sbt))
 }
 
-#' @describeIn siritar_hitastig
+#' Siritar skjal
+#'
+#' @param con XXX
 #' @export
 siritar_skjal <- function(con){
   tbl_mar(con,'siritar.skjal') %>%
     select(-c(sng:sbt))
 }
 
-#' @describeIn siritar_hitastig
+#' Siritar skjal stöð
+#' @param con XXX
 #' @export
 siritar_skjal_stod <- function(con){
   tbl_mar(con,'siritar.skjal_stod') %>%
     select(-c(sng:sbt))
 }
 
-#' @describeIn siritar_hitastig
+#' siritar_scanmar
+#' @param con XXX
 #' @export
 siritar_scanmar <- function(con){
   tbl_mar(con,'siritar.scanmar') %>%
     select(-c(sng:sbt))
 }
 
-#' @describeIn siritar_hitastig
+#' siritar_stadsetning
+#' @param con XXX
 #' @export
 siritar_stadsetning <- function(con){
   tbl_mar(con,'siritar.stadsetning') %>%

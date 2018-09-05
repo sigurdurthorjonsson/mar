@@ -4,10 +4,10 @@
 \alias{hvalir_hvalir}
 \title{Hvalir}
 \usage{
-hvalir_hvalir(mar)
+hvalir_hvalir(con)
 }
 \arguments{
-\item{mar}{}
+\item{con}{}
 }
 \value{
 tenging við hvalir_v

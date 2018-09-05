@@ -7,7 +7,7 @@
 siritar_hitastig(con)
 }
 \arguments{
-\item{con}{}
+\item{con}{XXX}
 }
 \value{
 töfluskronster

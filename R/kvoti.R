@@ -39,5 +39,5 @@ afla_heimild <- function(con) {
 #' @export
 kvoti_uthlutanir <- function(con) {
   tbl_mar(con, "kvoti.uthlutanir") %>%
-    select(tilvisun:ath, id:lokid)
+    dplyr::select(tilvisun:ath, id:lokid)
 }
