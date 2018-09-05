@@ -118,7 +118,7 @@ taggart <- function(con) {
 
   fiskar <-
     fiskmerki_fiskar(con) %>%
-    select(id,
+    select(fiskur_id,
            synis_id,
            tTegund = tegund,
            tLengd = lengd,
@@ -128,7 +128,7 @@ taggart <- function(con) {
 
   merki <-
     fiskmerki_merki(con) %>%
-    select(id,
+    select(tid,
            fiskur_id,
            audkenni,
            numer)
