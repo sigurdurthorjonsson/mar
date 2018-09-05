@@ -4,10 +4,10 @@
 \alias{taggart}
 \title{taggart}
 \usage{
-taggart(mar)
+taggart(con)
 }
 \arguments{
-\item{mar}{src_oracle tenging við oracle}
+\item{con}{src_oracle tenging við oracle}
 }
 \description{
 A flat dataframe of tags and recaptures

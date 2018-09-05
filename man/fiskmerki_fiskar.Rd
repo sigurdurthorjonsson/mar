@@ -4,10 +4,10 @@
 \alias{fiskmerki_fiskar}
 \title{fiskar}
 \usage{
-fiskmerki_fiskar(mar)
+fiskmerki_fiskar(con)
 }
 \arguments{
-\item{mar}{src_oracle tenging við oracle}
+\item{con}{src_oracle tenging við oracle}
 }
 \description{
 XXX

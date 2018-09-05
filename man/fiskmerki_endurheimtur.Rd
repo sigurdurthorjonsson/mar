@@ -4,10 +4,10 @@
 \alias{fiskmerki_endurheimtur}
 \title{endurheimtur}
 \usage{
-fiskmerki_endurheimtur(mar)
+fiskmerki_endurheimtur(con)
 }
 \arguments{
-\item{mar}{src_oracle tenging við oracle}
+\item{con}{src_oracle tenging við oracle}
 }
 \description{
 XXX

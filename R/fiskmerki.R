@@ -2,10 +2,12 @@
 #'
 #' @description XXX
 #'
-#' @param mar src_oracle tenging við oracle
+#' @param con src_oracle tenging við oracle
+#'
+#' @export
 
-fiskmerki_merki <- function(mar) {
-  d <- tbl_mar(mar, "fiskmerki.merki") %>%
+fiskmerki_merki <- function(con) {
+  d <- tbl_mar(con, "fiskmerki.merki") %>%
     dplyr::rename(tid = id)
   return(d)
 }
@@ -14,11 +16,12 @@ fiskmerki_merki <- function(mar) {
 #'
 #' @description XXX
 #'
+#' @param con src_oracle tenging við oracle
 #'
-#' @param mar src_oracle tenging við oracle
-fiskmerki_fiskar <- function(mar) {
+#' @export
+fiskmerki_fiskar <- function(con) {
 
-  d <- tbl_mar(mar, "fiskmerki.fiskar") %>%
+  d <- tbl_mar(con, "fiskmerki.fiskar") %>%
     dplyr::rename(fiskur_id = id)
 
     return(d)
@@ -28,10 +31,11 @@ fiskmerki_fiskar <- function(mar) {
 #'
 #' @description XXX
 #'
+#' @param con src_oracle tenging við oracle
 #'
-#' @param mar src_oracle tenging við oracle
-fiskmerki_endurheimtur <- function(mar) {
-  d <- tbl_mar(mar, "fiskmerki.endurheimtur") %>%
+#' @export
+fiskmerki_endurheimtur <- function(con) {
+  d <- tbl_mar(con, "fiskmerki.endurheimtur") %>%
     dplyr::select(rid = id,
                   tid = merki_id,
                   rDags = dags_fundid,
@@ -60,11 +64,12 @@ fiskmerki_endurheimtur <- function(mar) {
 #'
 #' @description XXX
 #'
+#' @param con src_oracle tenging við oracle
 #'
-#' @param mar src_oracle tenging við oracle
-fiskmerki_rafaudkenni <- function(mar) {
+#' @export
+fiskmerki_rafaudkenni <- function(con) {
 
-  d <- tbl_mar(mar, "fiskmerki.rafaudkenni") %>%
+  d <- tbl_mar(con, "fiskmerki.rafaudkenni") %>%
     dplyr::rename(tid = merki_id,
                   dst_id = taudkenni)
   return(d)
@@ -74,11 +79,11 @@ fiskmerki_rafaudkenni <- function(mar) {
 #'
 #' @description XXX
 #'
-#'
-#' @param mar src_oracle tenging við oracle
-fiskmerki_rafgogn <- function(mar) {
+#' @param con src_oracle tenging við oracle
+#' @export
+fiskmerki_rafgogn <- function(con) {
 
-  d <- tbl_mar(mar, "fiskmerki.rafgogn") %>%
+  d <- tbl_mar(con, "fiskmerki.rafgogn") %>%
     dplyr::rename(dst_id = taudkenni)
 
     return(d)
@@ -91,11 +96,11 @@ fiskmerki_rafgogn <- function(mar) {
 #'
 #' @export
 #'
-#' @param mar src_oracle tenging við oracle
-taggart <- function(mar) {
+#' @param con src_oracle tenging við oracle
+taggart <- function(con) {
 
   stodvar <-
-    lesa_stodvar(mar) %>%
+    lesa_stodvar(con) %>%
     mutate(tLon = kastad_v_lengd,
            tLat =  kastad_n_breidd,
            tAr = to_char(dags, 'yyyy')) %>%
@@ -112,8 +117,8 @@ taggart <- function(mar) {
            tVeidarfaeri = veidarfaeri)
 
   fiskar <-
-    tbl_mar(mar, "fiskmerki.fiskar") %>%
-    select(fiskur_id = id,
+    fiskmerki_fiskar(con) %>%
+    select(id,
            synis_id,
            tTegund = tegund,
            tLengd = lengd,
@@ -122,8 +127,8 @@ taggart <- function(mar) {
            tKynthroski = kynthroski)
 
   merki <-
-    tbl_mar(mar, "fiskmerki.merki") %>%
-    select(tid = id,
+    fiskmerki_merki(con) %>%
+    select(id,
            fiskur_id,
            audkenni,
            numer)
@@ -132,8 +137,8 @@ taggart <- function(mar) {
     fiskar %>%
     dplyr::left_join(merki, by = "fiskur_id") %>%
     dplyr::left_join(stodvar, by = "synis_id") %>%
-    dplyr::left_join(fiskmerki_endurheimtur(mar), by = "tid") %>%
-    dplyr::left_join(fiskmerki_rafaudkenni(mar),  by = "tid") %>%
+    dplyr::left_join(fiskmerki_endurheimtur(con), by = "tid") %>%
+    dplyr::left_join(fiskmerki_rafaudkenni(con),  by = "tid") %>%
     select(-id, -tid)
 
   return(d)

@@ -4,10 +4,10 @@
 \alias{fiskmerki_rafaudkenni}
 \title{rafaudkenni}
 \usage{
-fiskmerki_rafaudkenni(mar)
+fiskmerki_rafaudkenni(con)
 }
 \arguments{
-\item{mar}{src_oracle tenging við oracle}
+\item{con}{src_oracle tenging við oracle}
 }
 \description{
 XXX
