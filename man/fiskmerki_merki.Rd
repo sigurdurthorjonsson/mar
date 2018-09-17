@@ -7,7 +7,7 @@
 fiskmerki_merki(con)
 }
 \arguments{
-\item{con}{src_oracle tenging við oracle}
+\item{con}{Connection to mar Oracle database}
 }
 \description{
 XXX

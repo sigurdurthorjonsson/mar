@@ -2,7 +2,7 @@
 #'
 #' @description XXX
 #'
-#' @param con src_oracle tenging við oracle
+#' @param con Connection to mar Oracle database
 #'
 #' @export
 
