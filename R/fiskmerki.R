@@ -54,8 +54,8 @@ fiskmerki_endurheimtur <- function(con) {
                   rKyn = kyn,
                   rKynthroski = kynthroski,
                   rAge = aldur) %>%
-    mutate(lon = -geoconvert1(rLon * 100),
-           lat =  geoconvert1(rLat * 100))
+    mutate(rLon = -geoconvert1(rLon * 100),
+           rLat =  geoconvert1(rLat * 100))
 
   return(d)
 }
@@ -103,7 +103,7 @@ taggart <- function(con) {
     lesa_stodvar(con) %>%
     mutate(tLon = kastad_v_lengd,
            tLat =  kastad_n_breidd,
-           tAr = to_char(dags, 'yyyy')) %>%
+           tAr = to_number(to_char(dags, 'yyyy'))) %>%
     select(synis_id,
            leidangur,
            stod,
