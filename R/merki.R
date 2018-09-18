@@ -49,7 +49,8 @@ merki_endurheimtur_jj <- function(con) {
                   rLengd = e_lengd,
                   rKyn = kyn,
                   rAldur = aldur) %>%
-    dplyr::mutate(ar = to_number(ar) + 1900,
+    dplyr::mutate(rTegund = 1,
+                  ar = to_number(ar) + 1900,
                   rLon = -rLon * 100,
                   rLat =  rLat * 100) %>%
     mar:::geoconvert(col.names = c("rLat", "rLon")) %>%
@@ -58,9 +59,8 @@ merki_endurheimtur_jj <- function(con) {
     dplyr::left_join(tbl_mar(con, "merki.tjoderni") %>%
                        dplyr::rename(tjod = kodi,
                                      rNation = skyring)) %>%
-    dplyr::mutate(source = "jj",
-                  recaptured = 1) %>%
-    dplyr::select(-c(nafn:ar, tjod))
+    dplyr::mutate(source = "jj") %>%
+    dplyr::select(-c(tjod:ar))
 }
 
 
