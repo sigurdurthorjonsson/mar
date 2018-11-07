@@ -22,7 +22,7 @@ afli_stofn <- function(mar) {
     dplyr::mutate(lengd = nvl(lengd,lon),
                   breidd = nvl(breidd,lat)) %>%
     dplyr::mutate(toglengd = arcdist(breidd,lengd,breidd_lok,lengd_lok)) %>%
-    select(-c(lat,lon))
+    dplyr::select(-c(lat,lon))
 }
 
 #' afli.afli
