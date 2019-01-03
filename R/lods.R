@@ -23,6 +23,7 @@ lods_oslaegt <- function(mar) {
 
 
 
+
 #' @title Landadur afli
 #'
 #' @description Landaður afli. Dálkurinn flokkur vísar til skipaflokks,
@@ -36,6 +37,12 @@ landadur_afli <- function(mar) {
 
   d <-
     lods_oslaegt(mar) %>%
+#   dplyr::mutate(skip_nr = to_number(skip_nr),
+#                  hofn = to_number(hofn),
+#                  fteg = to_number(fteg),
+#                  stada = to_number(stada),
+#                  ar = to_number(ar),
+#                  man = to_number(man))
     dplyr::left_join(lesa_skipaskra(mar) %>%
                        dplyr::select(skip_nr, flokkur),
                      by = "skip_nr")
@@ -44,6 +51,38 @@ landadur_afli <- function(mar) {
 
 }
 
+
+#' Gamall afli (fyrir 94)
+#'
+#' Afli skráður af Fiskifélaginu
+#' @param mar tenging við mar
+#'
+#' @return aflatölur eftir höfn, skipi, veiðarfærði, árum og mánuðum
+#' @export
+fiskifelag_oslaegt <- function(mar){
+  tbl_mar(mar,'fiskifelagid.landed_catch_pre94') %>%
+    dplyr::mutate(komunr = -1,
+                  l_dags = to_date(concat(ar,concat('.',man)),'yyyy.mm'),
+                  gerd = '',
+                  kfteg = to_number(-1),
+                  stada = to_number(-1),
+                  flokkur = to_number(-1),
+                  skip_nr = to_number(skip_nr),
+                  timabil = to_char(ar)) %>%
+    dplyr::select(skip_nr,
+                  hofn,
+                  komunr,
+                  l_dags,
+                  gerd,
+                  fteg,
+                  kfteg,
+                  magn_oslaegt,
+                  veidisvaedi,
+                  stada,
+                  veidarfaeri,
+                  ar,   man,  flokkur,timabil)
+
+}
 
 #' @title Landaður afli (Lóðs)
 #'
