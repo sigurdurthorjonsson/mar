@@ -3,9 +3,6 @@
 \name{siritar_stadsetning}
 \alias{siritar_stadsetning}
 \title{siritar_stadsetning}
-\usage{
-siritar_stadsetning(con)
-}
 \arguments{
 \item{con}{XXX}
 }

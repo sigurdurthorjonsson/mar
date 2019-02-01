@@ -2,6 +2,8 @@
 #'
 #' @description XXX
 #'
+#' @name lods_oslaegt
+#'
 #' @param mar src_oracle tenging við oracle
 #' @export
 lods_oslaegt <- function(mar) {
@@ -30,6 +32,7 @@ lods_oslaegt <- function(mar) {
 #' ef neikvæður þá er um erlent skip að ræða. Erlend skip eru
 #' einnig þegar þetta er skrifað (1. apríl 2016) með númer frá 3815:4999.
 #'
+#' @name landadur_afli
 #'
 #' @param mar src_oracle tenging við oracle
 #' @export
@@ -55,6 +58,9 @@ landadur_afli <- function(mar) {
 #' Gamall afli (fyrir 94)
 #'
 #' Afli skráður af Fiskifélaginu
+#'
+#' @name fiskifelag_oslaegt
+#'
 #' @param mar tenging við mar
 #'
 #' @return aflatölur eftir höfn, skipi, veiðarfærði, árum og mánuðum
@@ -88,6 +94,7 @@ fiskifelag_oslaegt <- function(mar){
 #'
 #' @description Landaður afli byggður á töflu sem Sigfús Jó stjórnar
 #'
+#' @name afli_tac
 #'
 #' @param mar src_oracle tenging við oracle
 #'
@@ -108,6 +115,7 @@ afli_tac <- function(mar) {
 #'
 #' @description XXX
 #'
+#' @name kvoti_studlar
 #'
 #' @param mar src_oracle tenging við oracle
 kvoti_studlar <- function(mar) {
@@ -122,6 +130,7 @@ kvoti_studlar <- function(mar) {
 #'
 #' @description XXX
 #'
+#' @name kvoti_stada
 #'
 #' @param mar src_oracle tenging við oracle
 kvoti_stada <- function(mar) {
@@ -143,6 +152,7 @@ kvoti_stada <- function(mar) {
 #' eftir = stada - tilf
 #' eftir + upptaka = n_ar + onotad
 #'
+#' @name kvoti_stada_summarised
 #'
 #' @param mar src_oracle tenging við oracle
 kvoti_stada_summarised <- function(mar) {

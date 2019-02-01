@@ -1,5 +1,7 @@
 #' Stodvarupplysingar
 #'
+#' @name lesa_stodvar
+#'
 #' @description Fallid myndar tengingu við "view" toflu v_stodvar
 #' í fiskar gagnagrunninum.
 #'
@@ -19,6 +21,8 @@ lesa_stodvar <- function(mar) {
 
 
 #' Lengdarmaelingar
+#'
+#' @name lesa_lengdir
 #'
 #' @description Fallid myndar tengingu við toflu lengdir
 #' í fiskar gagnagrunninum.
@@ -41,6 +45,8 @@ lesa_lengdir <- function(mar) {
 
 
 #' Talningar
+#'
+#' @name lesa_numer
 #'
 #' @description Fallid myndar tengingu við toflu numer
 #' í fiskar gagnagrunninum.
@@ -65,6 +71,8 @@ lesa_numer <- function(mar) {
 
 
 #' Kvarnir
+#'
+#' @name lesa_kvarnir
 #'
 #' @description Fallid myndar tengingu við toflu kvarnir
 #' í fiskar gagnagrunninum.
@@ -92,6 +100,8 @@ lesa_kvarnir <- function(mar) {
 #' Skala með töldum
 #'
 #' Þetta fall skala lengdardreifingar með töldum fiskum úr ralli
+#'
+#' @name skala_med_toldum
 #'
 #' @param lengdir fyrirspurn á fiskar.lengdir
 #'
@@ -121,7 +131,3 @@ skala_med_toglengd <- function(st_len,
            toglengd = if_else(toglengd < min_towlength, min_towlength, toglengd)) %>%
     mutate(fjoldi = fjoldi * std_towlength/toglengd)
 }
-
-
-
-

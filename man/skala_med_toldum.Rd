@@ -3,9 +3,6 @@
 \name{skala_med_toldum}
 \alias{skala_med_toldum}
 \title{Skala með töldum}
-\usage{
-skala_med_toldum(lengdir)
-}
 \arguments{
 \item{lengdir}{fyrirspurn á fiskar.lengdir}
 }

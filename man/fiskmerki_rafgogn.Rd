@@ -3,9 +3,6 @@
 \name{fiskmerki_rafgogn}
 \alias{fiskmerki_rafgogn}
 \title{dst}
-\usage{
-fiskmerki_rafgogn(con)
-}
 \arguments{
 \item{con}{src_oracle tenging við oracle}
 }

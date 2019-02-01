@@ -3,6 +3,8 @@
 #' @description Fallid myndar tengingu við toflu stofn í
 #' afli gagnagrunninum. Grásleppan er alveg sér á parti ennþá
 #'
+#' @name afli_stofn
+#'
 #' @param mar src_oracle tenging við oracle
 #'
 #' @return dataframe
@@ -32,6 +34,8 @@ afli_stofn <- function(mar) {
 #'
 #' @param mar src_oracle tenging við oracle
 #'
+#' @name afli_afli
+#'
 #' @return dataframe
 #' @export
 #'
@@ -47,6 +51,8 @@ afli_afli <- function(mar) {
 #' afli gagnagrunninum.
 #'
 #' @param mar src_oracle tenging við oracle
+#'
+#' @name afli_sjalfvirkir_maelar
 #'
 #' @return dataframe
 #' @export
@@ -74,6 +80,8 @@ afli_sjalfvirkir_maelar <- function(mar) {
 #' @description Fallid myndar tengingu við toflu toga í
 #' afli gagnagrunninum.
 #'
+#' @name afli_toga
+#'
 #' @param mar src_oracle tenging við oracle
 #'
 #' @return dataframe
@@ -90,6 +98,8 @@ afli_toga <- function(mar) {
 #' @description Fallid myndar tengingu við toflu linea í
 #' afli gagnagrunninum.
 #'
+#' @name afli_lineha
+#'
 #' @param mar src_oracle tenging við oracle
 #'
 #' @return dataframe
@@ -103,6 +113,8 @@ afli_lineha <- function(mar) {
 #' Grásleppunet
 #'
 #' @param mar
+#'
+#' @name afli_grasl
 #'
 #' @export
 #'

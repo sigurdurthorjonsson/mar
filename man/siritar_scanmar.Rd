@@ -3,9 +3,6 @@
 \name{siritar_scanmar}
 \alias{siritar_scanmar}
 \title{siritar_scanmar}
-\usage{
-siritar_scanmar(con)
-}
 \arguments{
 \item{con}{XXX}
 }

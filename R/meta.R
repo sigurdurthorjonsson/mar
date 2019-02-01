@@ -2,6 +2,8 @@
 #'
 #' @param mar db connection
 #'
+#' @name lesa_veidarfaeri
+#'
 #' @return db query object
 #' @export
 #'
@@ -13,6 +15,8 @@ lesa_veidarfaeri <- function(mar) {
 }
 
 #' lesa tegundir
+#'
+#' @name lesa_tegundir
 #'
 #' @param mar db connection
 #'
@@ -26,6 +30,8 @@ lesa_tegundir <- function(mar){
 }
 
 #' lesa synaflokka
+#'
+#' @name lesa_synaflokkar
 #'
 #' @param mar db connection
 #'
@@ -42,6 +48,8 @@ lesa_synaflokkar <- function(mar){
 #'
 #' @param mar db connection
 #'
+#' @name kvoti_stadur
+#'
 #' @return db query object
 #'
 kvoti_stadur <- function(mar) {
@@ -53,6 +61,9 @@ kvoti_stadur <- function(mar) {
 #' Orðabók
 #'
 #' Flettir upp í sjávardýraorðbókinni á Hafró vefnum
+#'
+#' @name ordabok
+#'
 #' @param mar
 #'
 #' @return db query object
@@ -68,6 +79,7 @@ ordabok <- function(mar){
 #'
 #' @description XXX
 #'
+#' @name lods_skipasaga
 #'
 #' @param mar src_oracle tenging við oracle
 #' @export
@@ -83,6 +95,8 @@ lods_skipasaga <- function(mar) {
 #' @title Skipaskra
 #'
 #' @description XXX
+#'
+#' @name lesa_skipaskra
 #'
 #' @export
 #'

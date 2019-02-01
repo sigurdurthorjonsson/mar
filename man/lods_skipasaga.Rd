@@ -3,9 +3,6 @@
 \name{lods_skipasaga}
 \alias{lods_skipasaga}
 \title{Skipasaga}
-\usage{
-lods_skipasaga(mar)
-}
 \arguments{
 \item{mar}{src_oracle tenging við oracle}
 }

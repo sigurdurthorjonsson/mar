@@ -1,5 +1,7 @@
 #' @title merki
 #'
+#' @name fiskmerki_merki
+#'
 #' @description XXX
 #'
 #' @param con Connection to mar Oracle database
@@ -13,6 +15,8 @@ fiskmerki_merki <- function(con) {
 }
 
 #' @title fiskar
+#'
+#' @name fiskmerki_fiskar
 #'
 #' @description XXX
 #'
@@ -30,6 +34,8 @@ fiskmerki_fiskar <- function(con) {
 #' @title endurheimtur
 #'
 #' @description XXX
+#'
+#' @name fiskmerki_endurheimtur
 #'
 #' @param con src_oracle tenging við oracle
 #'
@@ -64,6 +70,8 @@ fiskmerki_endurheimtur <- function(con) {
 #'
 #' @description XXX
 #'
+#' @name fiskmerki_rafaudkenni
+#'
 #' @param con src_oracle tenging við oracle
 #'
 #' @export
@@ -76,6 +84,8 @@ fiskmerki_rafaudkenni <- function(con) {
 }
 
 #' @title dst
+#'
+#' @name fiskmerki_rafgogn
 #'
 #' @description XXX
 #'
@@ -91,6 +101,8 @@ fiskmerki_rafgogn <- function(con) {
 
 
 #' @title taggart
+#'
+#' @name taggart
 #'
 #' @description A flat dataframe of tags and recaptures
 #'

@@ -3,9 +3,6 @@
 \name{fiskifelag_oslaegt}
 \alias{fiskifelag_oslaegt}
 \title{Gamall afli (fyrir 94)}
-\usage{
-fiskifelag_oslaegt(mar)
-}
 \arguments{
 \item{mar}{tenging við mar}
 }

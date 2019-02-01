@@ -2,6 +2,8 @@
 #'
 #' @param con
 #'
+#' @name hvalir_hvalir
+#'
 #' @return tenging við hvalir_v
 #' @export
 #'

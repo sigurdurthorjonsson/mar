@@ -3,9 +3,6 @@
 \name{tbl_mar}
 \alias{tbl_mar}
 \title{Connection to mar}
-\usage{
-tbl_mar(mar, tbl)
-}
 \arguments{
 \item{mar}{tenging við oraclegrunn}
 

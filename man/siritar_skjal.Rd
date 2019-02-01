@@ -3,9 +3,6 @@
 \name{siritar_skjal}
 \alias{siritar_skjal}
 \title{Siritar skjal}
-\usage{
-siritar_skjal(con)
-}
 \arguments{
 \item{con}{XXX}
 }

@@ -3,9 +3,6 @@
 \name{ordabok}
 \alias{ordabok}
 \title{Orðabók}
-\usage{
-ordabok(mar)
-}
 \arguments{
 \item{mar}{}
 }

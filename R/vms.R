@@ -2,12 +2,14 @@
 #'
 #' Athugið aðgangur er takmarkaður við fáa notendur á Hafrannsóknastofnun
 #'
+#' @name vms
+#'
 #' @param con XXX
 #' @param year XXX
 #'
 #' @export
 #'
-lesa_vms <- function(con, year) {
+vms <- function(con, year) {
 
   q <-
     tbl_mar(con, "stk.stk_vms_v") %>%

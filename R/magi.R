@@ -1,5 +1,5 @@
 #' Magasyni Hafrannsóknarstofnunar
-#' @name faeda
+#' @name faeda_tegundir
 #' @param mar tenging við oraclegrunn
 #'
 #' @return fyrirspurn
@@ -19,6 +19,7 @@ faeda_tegundir <- function(mar){
 }
 
 #' @rdname faeda
+#' @name faeda_ranfiskar
 #' @export
 faeda_ranfiskar <- function(mar){
   tbl_mar(mar,'faeda.f_fiskar') %>%
@@ -49,6 +50,7 @@ faeda_ranfiskar <- function(mar){
 }
 
 #' @rdname faeda
+#' @name faeda_thyngdir
 #' @export
 faeda_thyngdir <- function(mar){
    tbl_mar(mar,'faeda.f_hopar') %>%
@@ -63,6 +65,7 @@ faeda_thyngdir <- function(mar){
 }
 
 #' @rdname faeda
+#' @name faeda_lengdir
 #' @export
 faeda_lengdir <- function(mar){
   tbl_mar(mar,'faeda.f_lengdir') %>%

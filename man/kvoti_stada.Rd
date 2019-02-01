@@ -3,9 +3,6 @@
 \name{kvoti_stada}
 \alias{kvoti_stada}
 \title{Kvóti staða}
-\usage{
-kvoti_stada(mar)
-}
 \arguments{
 \item{mar}{src_oracle tenging við oracle}
 }
