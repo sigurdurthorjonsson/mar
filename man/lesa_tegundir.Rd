@@ -3,9 +3,6 @@
 \name{lesa_tegundir}
 \alias{lesa_tegundir}
 \title{lesa tegundir}
-\usage{
-lesa_tegundir(mar)
-}
 \arguments{
 \item{mar}{db connection}
 }

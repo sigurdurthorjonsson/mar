@@ -3,9 +3,6 @@
 \name{lesa_skipaskra}
 \alias{lesa_skipaskra}
 \title{Skipaskra}
-\usage{
-lesa_skipaskra(mar)
-}
 \arguments{
 \item{mar}{src_oracle tenging við oracle}
 }

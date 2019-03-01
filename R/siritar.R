@@ -4,6 +4,8 @@
 #'
 #' @param con XXX
 #'
+#' @name siritar_hitastig
+#'
 #' @return töfluskronster
 #' @export
 #'
@@ -15,6 +17,9 @@ siritar_hitastig <- function(con){
 #' Siritar skjal
 #'
 #' @param con XXX
+#'
+#' @name siritar_skjal
+#'
 #' @export
 siritar_skjal <- function(con){
   tbl_mar(con,'siritar.skjal') %>%
@@ -22,6 +27,9 @@ siritar_skjal <- function(con){
 }
 
 #' Siritar skjal stöð
+#'
+#' @name siritar_skjal_stod
+#'
 #' @param con XXX
 #' @export
 siritar_skjal_stod <- function(con){
@@ -30,6 +38,9 @@ siritar_skjal_stod <- function(con){
 }
 
 #' siritar_scanmar
+#'
+#' @name siritar_scanmar
+#'
 #' @param con XXX
 #' @export
 siritar_scanmar <- function(con){
@@ -38,6 +49,9 @@ siritar_scanmar <- function(con){
 }
 
 #' siritar_stadsetning
+#'
+#' @name siritar_stadsetning
+#'
 #' @param con XXX
 #' @export
 siritar_stadsetning <- function(con){

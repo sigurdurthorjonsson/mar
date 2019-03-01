@@ -1,5 +1,7 @@
 #' Connection to mar
 #'
+#' @name tbl_mar
+#'
 #' @param mar tenging við oraclegrunn
 #' @param tbl nafn oracle töflu
 #'

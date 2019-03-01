@@ -3,9 +3,6 @@
 \name{hvalir_hvalir}
 \alias{hvalir_hvalir}
 \title{Hvalir}
-\usage{
-hvalir_hvalir(con)
-}
 \arguments{
 \item{con}{}
 }

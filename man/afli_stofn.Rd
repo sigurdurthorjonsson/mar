@@ -3,9 +3,6 @@
 \name{afli_stofn}
 \alias{afli_stofn}
 \title{afli.stofn}
-\usage{
-afli_stofn(mar)
-}
 \arguments{
 \item{mar}{src_oracle tenging við oracle}
 }

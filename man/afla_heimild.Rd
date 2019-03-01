@@ -3,9 +3,6 @@
 \name{afla_heimild}
 \alias{afla_heimild}
 \title{Aflaheimild}
-\usage{
-afla_heimild(con)
-}
 \arguments{
 \item{con}{src_oracle tenging við oracle}
 }

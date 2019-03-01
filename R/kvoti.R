@@ -1,6 +1,8 @@
 
 #' Heimild
 #'
+#' @name heimild
+#'
 #' @param con src_oracle tenging við oracle
 #'
 heimild <- function(con) {
@@ -12,6 +14,8 @@ heimild <- function(con) {
 }
 
 #' Aflaheimild
+#'
+#' @name afla_heimild
 #'
 #' @param con src_oracle tenging við oracle
 #'
@@ -34,6 +38,8 @@ afla_heimild <- function(con) {
 }
 
 #' Úthlutun kvóta
+#'
+#' @name kvoti_uthlutanir
 #'
 #' @param con src_oracle tenging við oracle
 #' @export

@@ -3,9 +3,6 @@
 \name{fiskmerki_rafaudkenni}
 \alias{fiskmerki_rafaudkenni}
 \title{rafaudkenni}
-\usage{
-fiskmerki_rafaudkenni(con)
-}
 \arguments{
 \item{con}{src_oracle tenging við oracle}
 }

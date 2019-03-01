@@ -3,9 +3,6 @@
 \name{fiskmerki_endurheimtur}
 \alias{fiskmerki_endurheimtur}
 \title{endurheimtur}
-\usage{
-fiskmerki_endurheimtur(con)
-}
 \arguments{
 \item{con}{src_oracle tenging við oracle}
 }
