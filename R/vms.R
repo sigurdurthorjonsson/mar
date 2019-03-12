@@ -27,7 +27,7 @@ vms <- function(con, year) {
   }
 
   q %>%
-    select(mobileid, vid = skip_nr, date = posdate, recdate, lon, lat, speed,
+    select(mobileid, vid = skip_nr, date = recdate, posdate, lon, lat, speed,
            heading, in_out_of_harbor, harborid)
 
 }
