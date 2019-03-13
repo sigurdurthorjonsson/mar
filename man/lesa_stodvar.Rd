@@ -13,7 +13,3 @@ dataframe
 Fallid myndar tengingu við "view" toflu v_stodvar
 í fiskar gagnagrunninum.
 }
-\examples{
-mar <- dplyrOracle::src_oracle("mar")
-dplyr::glimpse(lesa_stodvar(mar))
-}

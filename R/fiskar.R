@@ -10,11 +10,15 @@
 #' @return dataframe
 #' @export
 #'
-#' @examples
-#' mar <- dplyrOracle::src_oracle("mar")
-#' dplyr::glimpse(lesa_stodvar(mar))
+
 lesa_stodvar <- function(mar) {
-  tbl_mar(mar,'fiskar.stodvar_mar_v')
+  tbl_mar(mar,'fiskar.stodvar_mar_v') %>%
+    dplyr::mutate(lon = ifelse(is.na(hift_v_lengd),
+                               kastad_v_lengd,
+                               (kastad_v_lengd + hift_v_lengd) / 2),
+                  lat = ifelse(is.na(hift_n_breidd),
+                               kastad_n_breidd,
+                               (kastad_n_breidd + hift_n_breidd) / 2))
 }
 
 
