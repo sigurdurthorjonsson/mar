@@ -117,8 +117,6 @@ afli_lineha <- function(mar) {
 #' @name afli_grasl
 #'
 #' @export
-#'
-
 afli_grasl <- function(mar){
   grasl <-
     tbl_mar(mar,'afli.grasl_sokn') %>%

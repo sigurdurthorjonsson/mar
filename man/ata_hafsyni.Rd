@@ -30,9 +30,6 @@
 \arguments{
 \item{con}{tenging við mar}
 }
-\value{
-fyrirspurn
-}
 \description{
 Ástusýni
 }

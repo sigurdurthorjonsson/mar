@@ -1,8 +1,7 @@
 #' Ástusýni
 #' @name ata_hafsyni
 #' @param con tenging við mar
-#'
-#' @return fyrirspurn
+#' @rdname ata_hafsyni
 #' @export
 ata_hafsyni <- function(con) {
   tbl_mar(con,"ata.hafsyni") %>%
@@ -200,3 +199,4 @@ ata_eggjaframleidsla <- function(con) {
   tbl_mar(con,"ata.eggjaframleidsla") %>%
     dplyr::select(-c(snt:sbg))
 }
+
