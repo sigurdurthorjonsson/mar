@@ -35,7 +35,7 @@ hydro_station <- function(con) {
     mar:::geoconvert(col.names = c("lon", "lat")) %>%
     dplyr::mutate(lon = ifelse(lo_id == "W", -lon,  lon),
            lat = ifelse(la_id == "N",  lat, -lat)) %>%
-    dplyr::select(t_id:id, lon, lat, q_cont:name)
+    dplyr::select(l_id:id, lon, lat, q_cont:name)
 }
 #' @export
 hydro_sonda <- function(con) {
