@@ -2,6 +2,41 @@
 #'
 #' Athugið aðgangur er takmarkaður við fáa notendur á Hafrannsóknastofnun
 #'
+#' @name stk_trail
+#'
+#' @param con XXX1
+#' @param year XXX2
+#'
+#' @export
+#'
+stk_trail <- function(con, year) {
+
+  q <-
+    tbl_mar(con, "stk.trail") %>%
+    dplyr::mutate(lon = poslon * 45 / atan(1),
+                  lat = poslat * 45 / atan(1),
+                  heading = heading * 45 / atan(1),
+                  speed = speed * 3600/1852)
+  if(!missing(year)) {
+    y1 <- paste0(year, "-01-01")
+    y2 <- paste0(year + 1, "-01-01")
+    q <-
+      q %>%
+      dplyr::filter(recdate >= to_date(y1, "YYYY:MM:DD"),
+             recdate   <  to_date(y2, "YYYY:MM:DD"))
+  }
+
+  q %>%
+    dplyr::select(mobileid, date = recdate, lon, lat, speed,
+                  heading, in_out_of_harbor, harborid, posdate)
+
+}
+
+
+#' Lesa vms gögn
+#'
+#' Athugið aðgangur er takmarkaður við fáa notendur á Hafrannsóknastofnun
+#'
 #' @name vms
 #'
 #' @param con XXX
@@ -13,21 +48,21 @@ vms <- function(con, year) {
 
   q <-
     tbl_mar(con, "stk.stk_vms_v") %>%
-    mutate(lon = poslon * 45 / atan(1),
-           lat = poslat * 45 / atan(1),
-           heading = heading * 45 / atan(1),
-           speed = speed * 3600/1852)
+    dplyr::mutate(lon = poslon * 45 / atan(1),
+                  lat = poslat * 45 / atan(1),
+                  heading = heading * 45 / atan(1),
+                  speed = speed * 3600/1852)
   if(!missing(year)) {
     y1 <- paste0(year, "-01-01")
     y2 <- paste0(year + 1, "-01-01")
     q <-
       q %>%
-      filter(recdate >= to_date(y1, "YYYY:MM:DD"),
-           recdate   <  to_date(y2, "YYYY:MM:DD"))
+      dplyr::filter(recdate >= to_date(y1, "YYYY:MM:DD"),
+                    recdate   <  to_date(y2, "YYYY:MM:DD"))
   }
 
   q %>%
-    select(mobileid, vid = skip_nr, date = recdate, posdate, lon, lat, speed,
-           heading, in_out_of_harbor, harborid)
+    dplyr::select(mobileid, vid = skip_nr, date = recdate, posdate, lon, lat, speed,
+                  heading, in_out_of_harbor, harborid)
 
 }
