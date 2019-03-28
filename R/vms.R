@@ -27,8 +27,7 @@ stk_trail <- function(con, year) {
   }
 
   q %>%
-    dplyr::select(mobileid, date = recdate, lon, lat, speed,
-                  heading, in_out_of_harbor, harborid, posdate)
+    dplyr::select(mobileid, time = recdate, lon, lat, speed, heading)
 
 }
 
