@@ -102,7 +102,7 @@ taggart_jj <- function(con) {
                                 rLat)) %>%
     dplyr::select(-sq) %>%
     dplyr:: mutate(das = (rDags - tDags),
-                   das = as.duration(das) / ddays(1),
+                   das = lubridate::as.duration(das) / ddays(1),
                    mas = floor(das / 30),
                    yas = floor(das / 365))
 
