@@ -3,6 +3,9 @@
 \name{mar_views}
 \alias{mar_views}
 \title{mar_tables}
+\usage{
+mar_views(con, schema)
+}
 \arguments{
 \item{con}{src_oracle tenging við oracle}
 

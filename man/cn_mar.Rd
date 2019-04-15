@@ -4,13 +4,13 @@
 \alias{cn_mar}
 \title{Conform to mar column heading}
 \usage{
-cn_mar(d)
+cn_mar(con)
 }
 \arguments{
-\item{d}{}
+\item{con}{Tenging við Oracle}
 }
 \value{
-dataframe
+SQL fyrirspurn
 }
 \description{
 The function converts column of a dataframe, returning "_"

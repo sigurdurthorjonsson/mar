@@ -4,11 +4,11 @@ geoconvert <- function(data, inverse = FALSE, col.names = c("lat", "lon")){
   }
   if(!inverse){
     tmp <- sprintf('geoconvert1(%s)',col.names)
-    dplyr::mutate_(data,.dots = setNames(tmp,col.names)) %>%
+    dplyr::mutate_(data,.dots = stats::setNames(tmp,col.names)) %>%
       select_(.dots=colnames(data))
   } else {
     tmp <- sprintf('geoconvert2(%s)',col.names)
-    dplyr::mutate_(data,.dots = setNames(tmp,col.names)) %>%
+    dplyr::mutate_(data,.dots = stats::setNames(tmp,col.names)) %>%
       select_(.dots=colnames(data))
   }
 }
@@ -19,14 +19,14 @@ r2d <- function(data,cell.col='r',col.names=c('lat','lon')){
   }
   r <-
     data %>%
-    dplyr::select_(.dots=setNames(cell.col,'r')) %>%
+    dplyr::select_(.dots=stats::setNames(cell.col,'r')) %>%
     dplyr::distinct() %>%
     dplyr::mutate(lat = floor(r/100)) %>%
     dplyr::mutate(lon = mod((r-lat*100),50)) %>%
     dplyr::mutate(halfb = (r - 100*lat - lon)/100) %>%
     dplyr::mutate(lon = -(lon + 0.5)) %>%
     dplyr::mutate(lat = lat + 60 + halfb + 0.25) %>%
-    dplyr::select_(.dots = setNames(c('r','lat','lon'),c(cell.col,col.names)))
+    dplyr::select_(.dots = stats::setNames(c('r','lat','lon'),c(cell.col,col.names)))
   data %>%
     dplyr::left_join(r)
 }
@@ -38,7 +38,7 @@ sr2d <- function(data,cell.col='sr',col.names=c('lat','lon')){
 
   sr <-
     data %>%
-    dplyr::select_(.dots=setNames(cell.col,'sr')) %>%
+    dplyr::select_(.dots=stats::setNames(cell.col,'sr')) %>%
     dplyr::distinct() %>%
     dplyr::mutate(r = floor(sr/10)) %>%
     dplyr::mutate(s = round(sr - r*10,0) + 1,
@@ -49,7 +49,7 @@ sr2d <- function(data,cell.col='sr',col.names=c('lat','lon')){
                   lat = lat + 60 + halfb + 0.25) %>%
     dplyr::mutate(lat = lat + ifelse(s==1, 0,ifelse(s %in% 2:3, 0.125,-0.125)),
                   lon = lon + ifelse(s==1, 0,ifelse(s %in% c(2,4), -0.25, 0.25))) %>%
-    dplyr::select_(.dots = setNames(c('sr','lat','lon'),c(cell.col,col.names)))
+    dplyr::select_(.dots = stats::setNames(c('sr','lat','lon'),c(cell.col,col.names)))
   data %>%
     dplyr::left_join(sr,by='sr')
 }
@@ -100,7 +100,7 @@ encode_zchords <- function(data,col.names=c('lat','lon'),dx=1,dy=0.5,invalids=TR
   data %>%
     dplyr::mutate(dx = dx,
                   dy = dy) %>%
-    dplyr::mutate_(.dots=setNames(tmp,c('x','y','lat','lon'))) %>%
+    dplyr::mutate_(.dots=stats::setNames(tmp,c('x','y','lat','lon'))) %>%
     dplyr::mutate(x = x+dx/2,
                   y = y+dy/2) %>%
     dplyr::mutate(sq = round(x,6)%||%':'%||%round(y,6))

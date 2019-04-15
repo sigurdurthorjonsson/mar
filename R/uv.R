@@ -1,4 +1,4 @@
-#' @export
+
 uv_veidisvaedi <- function(con) {
   tbl_mar(con, "uv.veidisvaedi") %>%
     # fs_skyring is not readable into R
@@ -6,14 +6,14 @@ uv_veidisvaedi <- function(con) {
     dplyr::mutate(ar = to_number(to_char(dags_fra, "YYYY")))
 }
 
-#' @export
+
 uv_hnit <- function(con) {
   tbl_mar(con, "uv.hnit") %>%
     dplyr::rename(hnit_id = id) %>%
     dplyr::rename(id = veidisv)
 }
 
-#' @export
+
 uv_tegund <- function(con) {
   d <-
     tbl_mar(con, "uv.veidisv_fteg") %>%
@@ -28,7 +28,7 @@ uv_tegund <- function(con) {
 }
 
 
-#' @export
+
 uv_veidarfaeri <- function(con) {
   d <-
     tbl_mar(con, "uv.veidisv_veidarf") %>%
@@ -43,13 +43,22 @@ uv_veidarfaeri <- function(con) {
     dplyr::select(-veidarf_id)
 }
 
-#' @export
+
 uv_flatfile <- function(con) {
   uv_veidisvaedi(con) %>%
     dplyr::left_join(uv_tegund(con), by = "id") %>%
     dplyr::left_join(uv_veidarfaeri(con), by = "id")
 }
 
+
+#' @title Get skyndilokun
+#'
+#' Gets information about a particlar quick-area closure number
+#' for a given year.
+#'
+#' @param con connection to Orcacle
+#' @param year year of closure
+#' @param nr the closure number
 #' @export
 get_skyndilokun <- function(con, year, nr) {
 
@@ -69,7 +78,7 @@ get_skyndilokun <- function(con, year, nr) {
   hnit <-
     stofn %>%
     dplyr::left_join(uv_hnit(con), by = "id") %>%
-    mar:::geoconvert(col.names = c("hnit_n", "hnit_v")) %>%
+    geoconvert(col.names = c("hnit_n", "hnit_v")) %>%
     dplyr::rename(lon = hnit_v, lat = hnit_n) %>%
     dplyr::mutate(lon = -lon)
 

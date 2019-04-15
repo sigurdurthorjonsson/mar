@@ -6,6 +6,9 @@
 \usage{
 connect_mar(...)
 }
+\arguments{
+\item{...}{Additional arguements to pass to DBI functions}
+}
 \value{
 A connection to the Oracle database
 }

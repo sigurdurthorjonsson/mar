@@ -3,8 +3,11 @@
 \name{afli_grasl}
 \alias{afli_grasl}
 \title{Grásleppunet}
+\usage{
+afli_grasl(mar)
+}
 \arguments{
-\item{mar}{}
+\item{mar}{connection to Oracle}
 }
 \description{
 Grásleppunet

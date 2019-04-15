@@ -3,6 +3,9 @@
 \name{taggart}
 \alias{taggart}
 \title{taggart}
+\usage{
+taggart(con)
+}
 \arguments{
 \item{con}{src_oracle tenging við oracle}
 }

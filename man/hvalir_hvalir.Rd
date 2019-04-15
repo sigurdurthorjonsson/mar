@@ -3,11 +3,14 @@
 \name{hvalir_hvalir}
 \alias{hvalir_hvalir}
 \title{Hvalir}
+\usage{
+hvalir_hvalir(con)
+}
 \arguments{
-\item{con}{}
+\item{con}{Tenging við Oracle}
 }
 \value{
-tenging við hvalir_v
+SQL fyrirspurn
 }
 \description{
 Hvalir

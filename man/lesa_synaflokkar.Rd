@@ -3,6 +3,9 @@
 \name{lesa_synaflokkar}
 \alias{lesa_synaflokkar}
 \title{lesa synaflokka}
+\usage{
+lesa_synaflokkar(mar)
+}
 \arguments{
 \item{mar}{db connection}
 }

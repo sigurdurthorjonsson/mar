@@ -3,8 +3,11 @@
 \name{ordabok}
 \alias{ordabok}
 \title{Orðabók}
+\usage{
+ordabok(mar)
+}
 \arguments{
-\item{mar}{}
+\item{mar}{connection to Oracle}
 }
 \value{
 db query object

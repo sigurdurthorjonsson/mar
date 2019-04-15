@@ -3,6 +3,9 @@
 \name{lesa_lengdir}
 \alias{lesa_lengdir}
 \title{Lengdarmaelingar}
+\usage{
+lesa_lengdir(mar)
+}
 \arguments{
 \item{mar}{src_oracle tenging við oracle}
 }

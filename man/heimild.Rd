@@ -3,6 +3,9 @@
 \name{heimild}
 \alias{heimild}
 \title{Heimild}
+\usage{
+heimild(con)
+}
 \arguments{
 \item{con}{src_oracle tenging við oracle}
 }

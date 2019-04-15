@@ -3,6 +3,9 @@
 \name{kvoti_stadur}
 \alias{kvoti_stadur}
 \title{londundarhofn}
+\usage{
+kvoti_stadur(mar)
+}
 \arguments{
 \item{mar}{db connection}
 }

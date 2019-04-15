@@ -3,6 +3,9 @@
 \name{lesa_veidarfaeri}
 \alias{lesa_veidarfaeri}
 \title{lesa veiðarfæri}
+\usage{
+lesa_veidarfaeri(mar)
+}
 \arguments{
 \item{mar}{db connection}
 }

@@ -3,6 +3,9 @@
 \name{lesa_numer}
 \alias{lesa_numer}
 \title{Talningar}
+\usage{
+lesa_numer(mar)
+}
 \arguments{
 \item{mar}{src_oracle tenging við oracle}
 }

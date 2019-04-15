@@ -3,6 +3,9 @@
 \name{kvoti_stada_summarised}
 \alias{kvoti_stada_summarised}
 \title{Kvóti staða summary}
+\usage{
+kvoti_stada_summarised(mar)
+}
 \arguments{
 \item{mar}{src_oracle tenging við oracle}
 }

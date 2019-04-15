@@ -3,6 +3,9 @@
 \name{fiskmerki_fiskar}
 \alias{fiskmerki_fiskar}
 \title{fiskar}
+\usage{
+fiskmerki_fiskar(con)
+}
 \arguments{
 \item{con}{src_oracle tenging við oracle}
 }

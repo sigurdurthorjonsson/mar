@@ -3,6 +3,9 @@
 \name{afli_afli}
 \alias{afli_afli}
 \title{afli.afli}
+\usage{
+afli_afli(mar)
+}
 \arguments{
 \item{mar}{src_oracle tenging við oracle}
 }
