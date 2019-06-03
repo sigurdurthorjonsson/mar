@@ -102,6 +102,7 @@ encode_zchords <- function(data,col.names=c('lat','lon'),dx=1,dy=0.5,invalids=TR
                   dy = dy) %>%
     dplyr::mutate_(.dots=setNames(tmp,c('x','y','lat','lon'))) %>%
     dplyr::mutate(x = x+dx/2,
-                  y = y+dy/2) %>%
+                  y = y+dy/2,
+                  area = dy * dx * 3600 * cos((y * pi)/180)) %>%
     dplyr::mutate(sq = round(x,6)%||%':'%||%round(y,6))
 }
