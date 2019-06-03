@@ -3,6 +3,9 @@
 \name{mar_fields}
 \alias{mar_fields}
 \title{mar_fields}
+\usage{
+mar_fields(mar, table)
+}
 \arguments{
 \item{mar}{src_oracle tenging við oracle}
 

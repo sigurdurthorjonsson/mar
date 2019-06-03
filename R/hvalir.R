@@ -1,10 +1,11 @@
 #' Hvalir
 #'
-#' @param con
+#' @param con Tenging við Oracle
 #'
 #' @name hvalir_hvalir
 #'
-#' @return tenging við hvalir_v
+#' @return SQL fyrirspurn
+#'
 #' @export
 #'
 hvalir_hvalir <- function(con) {

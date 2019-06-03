@@ -3,6 +3,9 @@
 \name{landadur_afli}
 \alias{landadur_afli}
 \title{Landadur afli}
+\usage{
+landadur_afli(mar)
+}
 \arguments{
 \item{mar}{src_oracle tenging við oracle}
 }

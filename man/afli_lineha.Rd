@@ -3,6 +3,9 @@
 \name{afli_lineha}
 \alias{afli_lineha}
 \title{afli.lineha}
+\usage{
+afli_lineha(mar)
+}
 \arguments{
 \item{mar}{src_oracle tenging við oracle}
 }

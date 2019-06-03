@@ -64,7 +64,7 @@ kvoti_stadur <- function(mar) {
 #'
 #' @name ordabok
 #'
-#' @param mar
+#' @param mar connection to Oracle
 #'
 #' @return db query object
 #' @export

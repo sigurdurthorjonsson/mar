@@ -3,6 +3,9 @@
 \name{kvoti_uthlutanir}
 \alias{kvoti_uthlutanir}
 \title{Úthlutun kvóta}
+\usage{
+kvoti_uthlutanir(con)
+}
 \arguments{
 \item{con}{src_oracle tenging við oracle}
 }

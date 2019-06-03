@@ -4,13 +4,13 @@
 \alias{cn_fjolst}
 \title{Conform to fjolst column heading}
 \usage{
-cn_fjolst(d)
+cn_fjolst(con)
 }
 \arguments{
-\item{d}{}
+\item{con}{Tenging við Oracle}
 }
 \value{
-dataframe
+SQL fyrirspurn
 }
 \description{
 The function converts column of a dataframe, returning "."

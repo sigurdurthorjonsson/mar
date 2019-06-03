@@ -3,6 +3,9 @@
 \name{kvoti_studlar}
 \alias{kvoti_studlar}
 \title{kvoti studlar}
+\usage{
+kvoti_studlar(mar)
+}
 \arguments{
 \item{mar}{src_oracle tenging við oracle}
 }

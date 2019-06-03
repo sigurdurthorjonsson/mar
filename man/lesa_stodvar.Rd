@@ -3,6 +3,9 @@
 \name{lesa_stodvar}
 \alias{lesa_stodvar}
 \title{Stodvarupplysingar}
+\usage{
+lesa_stodvar(mar)
+}
 \arguments{
 \item{mar}{src_oracle tenging við oracle}
 }

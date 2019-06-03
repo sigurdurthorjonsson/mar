@@ -3,13 +3,16 @@
 #' The function converts column of a dataframe, returning "_"
 #' where there is a ".".
 #'
-#' @param d
+#' @param con Tenging við Oracle
 #'
-#' @return dataframe
+#' @return SQL fyrirspurn
+#'
+#' @name cn_mar
+#'
 #' @export
 #'
-cn_mar <- function(d) {
+cn_mar <- function(con) {
 
-  d %>% select_all(function(x) gsub('.','_',x))
+  con %>% dplyr::select_all(function(x) gsub('.','_',x))
 
   }

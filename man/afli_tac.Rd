@@ -3,6 +3,9 @@
 \name{afli_tac}
 \alias{afli_tac}
 \title{Landaður afli (Lóðs)}
+\usage{
+afli_tac(mar)
+}
 \arguments{
 \item{mar}{src_oracle tenging við oracle}
 }

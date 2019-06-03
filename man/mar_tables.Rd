@@ -3,6 +3,9 @@
 \name{mar_tables}
 \alias{mar_tables}
 \title{mar_tables}
+\usage{
+mar_tables(mar, schema)
+}
 \arguments{
 \item{mar}{src_oracle tenging við oracle}
 

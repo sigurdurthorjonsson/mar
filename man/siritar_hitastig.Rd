@@ -3,6 +3,9 @@
 \name{siritar_hitastig}
 \alias{siritar_hitastig}
 \title{Síritagögn}
+\usage{
+siritar_hitastig(con)
+}
 \arguments{
 \item{con}{XXX}
 }

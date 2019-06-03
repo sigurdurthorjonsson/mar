@@ -3,6 +3,9 @@
 \name{lesa_kvarnir}
 \alias{lesa_kvarnir}
 \title{Kvarnir}
+\usage{
+lesa_kvarnir(mar)
+}
 \arguments{
 \item{mar}{src_oracle tenging við oracle}
 }

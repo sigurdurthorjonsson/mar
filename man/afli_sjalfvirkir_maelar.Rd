@@ -3,6 +3,9 @@
 \name{afli_sjalfvirkir_maelar}
 \alias{afli_sjalfvirkir_maelar}
 \title{afli.sjálfvirkir_maelar}
+\usage{
+afli_sjalfvirkir_maelar(mar)
+}
 \arguments{
 \item{mar}{src_oracle tenging við oracle}
 }

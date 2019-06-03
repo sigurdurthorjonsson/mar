@@ -18,7 +18,7 @@ merki_stodvar_jj <- function(con) {
                   tLon =  -tLon * 100,
                   tLat =   tLat * 100,
                   source = "jj") %>%
-    mar:::geoconvert(col.names = c("tLat", "tLon")) %>%
+    geoconvert(col.names = c("tLat", "tLon")) %>%
     dplyr::select(-c(merking, flokkur))
 }
 
@@ -53,7 +53,7 @@ merki_endurheimtur_jj <- function(con) {
                   ar = to_number(ar) + 1900,
                   rLon = -rLon * 100,
                   rLat =  rLat * 100) %>%
-    mar:::geoconvert(col.names = c("rLat", "rLon")) %>%
+    geoconvert(col.names = c("rLat", "rLon")) %>%
     dplyr::mutate(rAr = to_number(to_char(rDags, "YYYY")),
                   rAr = ifelse(is.na(rDags), ar, rAr)) %>%
     dplyr::left_join(tbl_mar(con, "merki.tjoderni") %>%
@@ -63,12 +63,19 @@ merki_endurheimtur_jj <- function(con) {
     dplyr::select(-c(tjod:ar))
 }
 
-
+#' @title taggart_jj
+#'
+#' @name taggart_jj
+#'
+#' @description A flat dataframe of tags and recaptures
+#'
+#'
+#' @param con tenging við oracle
 taggart_jj <- function(con) {
 
-  mar:::merki_stodvar_jj(con) %>%
-    dplyr::left_join(mar:::merki_lengdir_jj(con)) %>%
-    dplyr::left_join(mar:::merki_endurheimtur_jj(con)) %>%
+  merki_stodvar_jj(con) %>%
+    dplyr::left_join(merki_lengdir_jj(con)) %>%
+    dplyr::left_join(merki_endurheimtur_jj(con)) %>%
     dplyr::collect(n = Inf) %>%
     # rPosition: 1 - recapture lon and lat
     #            2 - from reitur-smareitur
@@ -102,7 +109,7 @@ taggart_jj <- function(con) {
                                 rLat)) %>%
     dplyr::select(-sq) %>%
     dplyr:: mutate(das = (rDags - tDags),
-                   das = as.duration(das) / ddays(1),
+                   das = lubridate::as.duration(das) / lubridate::ddays(1),
                    mas = floor(das / 30),
                    yas = floor(das / 365))
 

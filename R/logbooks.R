@@ -19,7 +19,7 @@ afli_stofn <- function(mar) {
                   lengd_lok = -lengd_lok*100,
                   breidd_lok = breidd_lok*100,
                   smareitur = nvl(smareitur,1)) %>%  ## ath
-    mar:::geoconvert(col.names = c('lengd','breidd','lengd_lok','breidd_lok')) %>%
+    geoconvert(col.names = c('lengd','breidd','lengd_lok','breidd_lok')) %>%
     dplyr::left_join(tbl_mar(mar,'fiskar.reitir'),by = c('reitur','smareitur')) %>%
     dplyr::mutate(lengd = nvl(lengd,lon),
                   breidd = nvl(breidd,lat)) %>%
@@ -112,7 +112,7 @@ afli_lineha <- function(mar) {
 
 #' Grásleppunet
 #'
-#' @param mar
+#' @param mar connection to Oracle
 #'
 #' @name afli_grasl
 #'
