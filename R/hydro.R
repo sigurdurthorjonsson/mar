@@ -1,15 +1,25 @@
+#' @title Umhverfismælingar Hafrannsóknastofnunnar
+#' @param con Tegning við Oracle grunn
+#' @name hydro
+#' @return SQL fyrirspurn
 
+#' @rdname hydro
+#' @export
 hydro_hitamaelar <- function(con) {
   tbl_mar(con,"hydro.hitamaelar") %>%
     dplyr::select(-c(snt:sbn)) %>%
     dplyr::mutate(ar = to_number(to_char(timi, "YYYY")))
 }
 
+#' @rdname hydro
+#' @export
 hydro_stadir <- function(con) {
   tbl_mar(con, "hydro.stadir") %>%
     dplyr::select(-c(snt:sbn))
 }
 
+#' @rdname hydro
+#' @export
 hydro_stodvanofn <- function(con) {
   tbl_mar(con, "hydro.stodvanofn") %>%
     dplyr::mutate(lengd = -lengd * 100,
@@ -17,16 +27,22 @@ hydro_stodvanofn <- function(con) {
     geoconvert()
 }
 
+#' @rdname hydro
+#' @export
 hydro_observation <- function(con) {
   tbl_mar(con, "hydro.observation") %>%
     dplyr::select(-c(snt:sbn))
 }
 
+#' @rdname hydro
+#' @export
 hydro_trolltog <- function(con) {
   tbl_mar(con, "hydro.trolltog") %>%
     dplyr::select(-c(snt:sbn))
 }
 
+#' @rdname hydro
+#' @export
 hydro_station <- function(con) {
   tbl_mar(con, "hydro.station") %>%
     dplyr::select(-c(snt:sbn)) %>%
@@ -38,6 +54,8 @@ hydro_station <- function(con) {
     dplyr::select(l_id:id, lon, lat, q_cont:name)
 }
 
+#' @rdname hydro
+#' @export
 hydro_sonda <- function(con) {
   tbl_mar(con, "hydro.sonda") %>%
     dplyr::select(-c(snt:sbg))
