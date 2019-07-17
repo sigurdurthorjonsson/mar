@@ -1,14 +1,17 @@
-vessel_registry <- function(con, standardize = TRUE) {
+vessel_registry <- function(con, standardize = FALSE) {
+
   q <-
     tbl_mar(con, "kvoti.skipaskra_siglo")
+
   if( standardize ) {
     q <-
       q %>%
       dplyr::select(vid = skipnr,
                     name = nafnskips,
-                    umdnr,
+                    uid = umdnr,
                     cs = kallmerki,
                     imo = imonr,
+                    vclass = notkunarteg,
                     homeharbour = heimahofn,
                     propeller_diameter = thvermskrufu,
                     engine_kw = vel_kw,
@@ -22,36 +25,31 @@ vessel_registry <- function(con, standardize = TRUE) {
       # the "claimed" kw unit is likely wrong, corrected here
       #   the original unit seems to be strange, normally have w or kw, here
       #   it seems to be deciwatts
-      dplyr::mutate(name = str_trim(name),
-                    umdnr = str_trim(umdnr),
-                    cs = str_trim(cs),
-                    cs = ifelse(cs == "", NA_character_, cs),
-                    engine_kw = engine_kw / 100,
-                    # units of cm to meters
-                    length_registered = length_registered / 100,
-                    length = length / 100,
-                    width = width / 100,
-                    depth = depth / 100,
-                    brl = brl / 100,
-                    grt = grt / 100,
-                    homeharbour = str_trim(homeharbour)) %>%
-      # not really used
-      #separate(umdnr, c("ich", "inu"), sep = 2, convert = TRUE) %>%
+      mutate(engine_kw = engine_kw / 100) %>%
+      mutate(length_registered = length_registered / 100,
+             # units of cm to meters
+             length = length / 100,
+             width = width / 100,
+             depth = depth / 100,
+             brl = brl / 100,
+             grt = grt / 100,
+             name = str_trim(name),
+             homeharbour = str_trim(homeharbour)) %>%
       # "correct" brl for Ásgrímur Halldórsson
-      dplyr::mutate(brl = ifelse(vid == 2780, 1000, brl)) %>%
+      mutate(brl = ifelse(vid == 2780, 1000, brl)) %>%
       # "correct" variable for the ghost-ship,
-      dplyr::mutate(length = ifelse(vid == 9928, 5, length),
-                    brl = ifelse(vid == 9928, 2, brl),
-                    grt = ifelse(vid == 9928, 2, grt)) %>%
+      mutate(length = ifelse(vid == 9928, 5, length),
+             brl = ifelse(vid == 9928, 2, brl),
+             grt = ifelse(vid == 9928, 2, grt)) %>%
       # Blífari has abnormal engine_kw, divied by 100
-      dplyr::mutate(engine_kw = ifelse(vid == 2069, engine_kw / 100, engine_kw)) %>%
-      # now for some metier stuff
-      dplyr::mutate(vessel_length_class = dplyr::case_when(length < 8 ~ "<8",
-                                                           length >= 8  & length < 10 ~ "08-10",
-                                                           length >= 10 & length < 12 ~ "10-12",
-                                                           length >= 12 & length < 15 ~ "12-15",
-                                                           length >= 15 ~ ">=15",
-                                                           TRUE ~ NA_character_))
+      mutate(engine_kw = ifelse(vid == 2069, engine_kw / 100, engine_kw)) %>%
+      #now for some metier stuff
+      mutate(vessel_length_class = case_when(length < 8 ~ "<8",
+                                             length >= 8  & length < 10 ~ "08-10",
+                                             length >= 10 & length < 12 ~ "10-12",
+                                             length >= 12 & length < 15 ~ "12-15",
+                                             length >= 15 ~ ">=15",
+                                             TRUE ~ NA_character_))
   }
 
   return(q)
