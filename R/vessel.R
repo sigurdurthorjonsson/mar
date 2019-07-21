@@ -25,31 +25,53 @@ vessel_registry <- function(con, standardize = FALSE) {
       # the "claimed" kw unit is likely wrong, corrected here
       #   the original unit seems to be strange, normally have w or kw, here
       #   it seems to be deciwatts
-      mutate(engine_kw = engine_kw / 100) %>%
-      mutate(length_registered = length_registered / 100,
-             # units of cm to meters
-             length = length / 100,
-             width = width / 100,
-             depth = depth / 100,
-             brl = brl / 100,
-             grt = grt / 100,
-             name = str_trim(name),
-             homeharbour = str_trim(homeharbour)) %>%
-      # "correct" brl for Ásgrímur Halldórsson
-      mutate(brl = ifelse(vid == 2780, 1000, brl)) %>%
-      # "correct" variable for the ghost-ship,
-      mutate(length = ifelse(vid == 9928, 5, length),
-             brl = ifelse(vid == 9928, 2, brl),
-             grt = ifelse(vid == 9928, 2, grt)) %>%
-      # Blífari has abnormal engine_kw, divied by 100
-      mutate(engine_kw = ifelse(vid == 2069, engine_kw / 100, engine_kw)) %>%
-      #now for some metier stuff
-      mutate(vessel_length_class = case_when(length < 8 ~ "<8",
-                                             length >= 8  & length < 10 ~ "08-10",
-                                             length >= 10 & length < 12 ~ "10-12",
-                                             length >= 12 & length < 15 ~ "12-15",
-                                             length >= 15 ~ ">=15",
-                                             TRUE ~ NA_character_))
+      dplyr::mutate(engine_kw = engine_kw,
+                    length_registered = length_registered,
+                    # units of cm to meters
+                    length = length,
+                    width = width,
+                    depth = depth,
+                    brl = brl,
+                    grt = grt,
+                    name = str_trim(name),
+                    homeharbour = str_trim(homeharbour),
+                    # "correct" brl for Ásgrímur Halldórsson
+                    brl = ifelse(vid == 2780, 1000, brl),
+                    # "correct" variable for the ghost-ship,
+                    length = ifelse(vid == 9928, 5, length),
+                    brl = ifelse(vid == 9928, 2, brl),
+                    grt = ifelse(vid == 9928, 2, grt),
+                    # Blífari has abnormal engine_kw, divied by 100
+                    engine_kw = ifelse(vid == 2069, engine_kw / 100, engine_kw),
+                    #now for some metier stuff
+                    vessel_length_class = dplyr::case_when(length < 8 ~ "<8",
+                                                           length >= 8  & length < 10 ~ "08-10",
+                                                           length >= 10 & length < 12 ~ "10-12",
+                                                           length >= 12 & length < 15 ~ "12-15",
+                                                           length >= 15 ~ ">=15",
+                                                           TRUE ~ NA_character_),
+                    name = str_trim(name),
+                    name = ifelse(name == "", NA_character_, name),
+                    uid = str_trim(uid),
+                    uid = ifelse(uid == "", NA_character_, uid),
+                    # NOTE: Below does not get rid of the period
+                    uid = str_replace(uid, "\\.", ""),
+                    uid = case_when(uid == "IS" ~ "ÍS",
+                                    uid == "OF" ~ "ÓF",
+                                    uid == "KÓ" ~ "KO",
+                                    uid == "ZZ0" ~ "ZZ",      # Not valid but is also in skipaskrá fiskistofu
+                                    TRUE ~ uid),
+                    uid = dplyr::case_when(nchar(uid) > 2 ~ paste0(str_sub(uid, 1, 2), "-", str_sub(uid, 3)),
+                                           TRUE ~ uid),
+                    #uid = str_replace(uid, "-NA", ""),
+                    cs = str_trim(cs),
+                    cs = ifelse(cs == "", NA_character_, cs),
+                    cs = ifelse(cs == "", NA_character_, cs),
+                    cs = ifelse(nchar(cs) == 4 & str_sub(cs, 1, 2) == "TF",
+                                cs,
+                                NA_character_),
+                    imo = ifelse(imo == 0, NA_integer_, imo),
+                    vclass = as.integer(vclass))
   }
 
   return(q)
