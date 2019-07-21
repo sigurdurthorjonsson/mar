@@ -4,7 +4,7 @@ stk_mobile <- function(con, correct = FALSE, vidmatch = FALSE, classify = FALSE)
     tbl_mar(con, "stk.mobile") %>%
     dplyr::select(mobileid, localid, globalid)
 
-  if(correct) {
+  if( correct ) {
 
     # NOTE: There are duplicate mobileid below, will only match "vessel"
     #       first in the list
@@ -397,7 +397,7 @@ stk_mobile <- function(con, correct = FALSE, vidmatch = FALSE, classify = FALSE)
                                                TRUE ~ localid))
   }
 
-  if(vidmatch) {
+  if( vidmatch ) {
 
     # There must be a neater way :-)
     cn1 <- as.character(1:1000)
@@ -438,7 +438,8 @@ stk_mobile <- function(con, correct = FALSE, vidmatch = FALSE, classify = FALSE)
                     vid2 = as.integer(vid2))
   }
 
-  if(classify) {
+
+  if( classify ) {
     q <-
       q %>%
       mutate(bauja = ifelse(toupper(str_sub(globalid, 5, 9)) %in% c("_NET_", "_NET1", "_NET2", "_NET3", "_NET4"),
@@ -478,6 +479,7 @@ stk_mobile <- function(con, correct = FALSE, vidmatch = FALSE, classify = FALSE)
              vid.aux = ifelse(!is.na(bauja) & !str_sub(globalid, 1, 2) %in% c("TF", "XP"), str_sub(globalid, 1, 4), NA_character_)) %>%
       select(-bauja)
   }
+
 
   return(q)
 
