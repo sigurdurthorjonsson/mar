@@ -15,7 +15,8 @@ Depends:
 Imports:
     dplyr,
     dbplyr,
-    geo, 
+    geo,
+    lubridate,
     magrittr,
     stats
 Encoding: UTF-8
