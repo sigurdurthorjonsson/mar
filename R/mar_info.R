@@ -53,8 +53,8 @@ mar_fields <- function(mar, table) {
   #                     data_type = lower(data_type))
 
   tbl_mar(mar,'sys.all_col_comments') %>%
-    dplyr::filter(owner == toupper(x[1]),
-                  table_name == toupper(x[2])) %>%
+    dplyr::filter(owner == local(toupper(x[1])),
+                  table_name == local(toupper(x[2]))) %>%
     dplyr::transmute(owner = lower(owner),
                      table_name = lower(table_name),
                      column_name = lower(column_name),
