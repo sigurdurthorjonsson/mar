@@ -13,9 +13,9 @@ stk_trail <- function(con, year) {
 
   q <-
     tbl_mar(con, "stk.trail") %>%
-    dplyr::mutate(lon = poslon * 45 / atan(1),
-                  lat = poslat * 45 / atan(1),
-                  heading = heading * 45 / atan(1),
+    dplyr::mutate(lon = poslon * 180 / pi,
+                  lat = poslat * 180 / pi,
+                  heading = heading * 180 / pi,
                   speed = speed * 3600/1852)
   if(!missing(year)) {
     y1 <- paste0(year, "-01-01")
@@ -47,6 +47,10 @@ stk_mapdeck <- function(con, MID) {
 
 }
 
+
+# Not unique vid by mobileid
+#   101548
+#
 #' @export
 stk_mobile <- function(con, correct = FALSE, vidmatch = FALSE, classify = FALSE) {
 
@@ -65,7 +69,8 @@ stk_mobile <- function(con, correct = FALSE, vidmatch = FALSE, classify = FALSE)
       # Correcting icelandic vessels
       #   NOTE 2019-07-21 mid 133558 is old SISIMIUT now reflagged in Iceland
       #        mt states IMO 9039779, which is old vid 2173
-      dplyr::mutate(localid = dplyr::case_when(mid == 133558 ~ "2173",    # Tómas Þorvaldsson GK-10 - gamli Sisimiut
+      dplyr::mutate(localid = dplyr::case_when(mid == 102795 ~ "2848",    # Ambassador, passenger vessel
+                                               mid == 133558 ~ "2173",    # Tómas Þorvaldsson GK-10 - gamli Sisimiut
                                                mid == 101078 ~ "2549",    # Þór HF-4
                                                mid == 127288 ~ "-----",   # Eitthvurt útlenskt skip, ekki vid = 2276
                                                mid == 101069 ~ "1275",    # Jón Vídalín
@@ -95,6 +100,7 @@ stk_mobile <- function(con, correct = FALSE, vidmatch = FALSE, classify = FALSE)
                                                mid == 101439 ~ "2904",    # Páll Pálsson ÍS-102 - NOTE: overwrote old vid
                                                mid == 101545 ~ "2894",    # Björg EA-7  - NOTE: overwrote old vid
                                                mid == 102561 ~ "2895",    # Viðey RE-50
+                                               mid == 103251 ~ "2948",    # Barkur
                                                TRUE ~ localid)) %>%
       # "Correcting" foreign vessels
       # NOTE: There are duplicate mid below, will only match "vessel"
@@ -261,6 +267,7 @@ stk_mobile <- function(con, correct = FALSE, vidmatch = FALSE, classify = FALSE)
                                                mid == 101923 ~ "4052",
                                                mid == 101633 ~ "4054",
                                                mid == 105243 ~ "4057",
+                                               mid == 103037 ~ "4087",
                                                mid == 102891 ~ "4123",
                                                mid == 102609 ~ "4129",
                                                mid == 102395 ~ "4148",
@@ -444,6 +451,25 @@ stk_mobile <- function(con, correct = FALSE, vidmatch = FALSE, classify = FALSE)
                                                mid == 102041 ~ "4977",
                                                mid == 101804 ~ "4981",
                                                mid == 101815 ~ "4986",
+                                               mid ==	102465 ~ "4028",
+                                               mid ==	101792 ~ "4406",
+                                               mid ==	108202 ~ "4969",
+                                               mid ==	102881 ~ "4238",
+                                               mid ==	121707 ~ "4159",
+                                               mid ==	119088 ~ "3792",
+                                               mid ==	107084 ~ "4857",
+                                               mid ==	105825 ~ "4125",
+                                               mid ==	102186 ~ "4210",
+                                               mid ==	102423 ~ "4616",
+                                               mid ==	105792 ~ "4729",
+                                               mid == 102432 ~ "4786",
+                                               mid ==	128455 ~ "3828",
+                                               mid ==	104333 ~ "4232",
+                                               mid ==	105816 ~ "4524",
+                                               mid ==	102057 ~ "4928",
+                                               mid ==	104213 ~ "4779",
+                                               mid ==	106184 ~ "4922",
+                                               mid ==	127307 ~ "4086",
                                                TRUE ~ localid))
   }
 
@@ -497,13 +523,14 @@ stk_mobile <- function(con, correct = FALSE, vidmatch = FALSE, classify = FALSE)
       q %>%
       left_join(mar:::vessel_mmsi(con) %>%
                   select(vid, mmsi) %>%
-                  filter(!is.na(vid)))
+                  filter(!is.na(vid)),
+                by = "vid")
     q <-
       q %>%
       mutate(bauja = ifelse(toupper(str_sub(globalid, 5, 9)) %in% c("_NET_", "_NET1", "_NET2", "_NET3", "_NET4"),
                             "hi",
                             NA)) %>%
-      # NOTE Code for just finding numers in the global string since below NOT 100 foolproof
+      # NOTE Code for just finding numericals in the global string since below NOT 100 foolproof
       mutate(gid_temp = str_trim(globalid)) %>%
       mutate(mmsi = case_when(!is.na(mmsi) ~ mmsi,
                               nchar(str_trim(gid_temp)) == 9 &
@@ -511,50 +538,53 @@ stk_mobile <- function(con, correct = FALSE, vidmatch = FALSE, classify = FALSE)
                                 is.na(bauja) ~ gid_temp,
                               TRUE ~ NA_character_)) %>%
       select(-gid_temp)
-      # mutate(mmsi = ifelse(nchar(str_trim(globalid)) == 9 &
-      #                        str_sub(globalid, 1, 1) %in% c("0", "1", "2", "3", "4", "5", "6", "7", "8", "9") &
-      #                        is.na(bauja),
-      #                      str_trim(globalid),
-      #                      NA_character_))
+    # mutate(mmsi = ifelse(nchar(str_trim(globalid)) == 9 &
+    #                        str_sub(globalid, 1, 1) %in% c("0", "1", "2", "3", "4", "5", "6", "7", "8", "9") &
+    #                        is.na(bauja),
+    #                      str_trim(globalid),
+    #                      NA_character_))
 
 
     q <-
       q %>%
       mutate(mmsi.mid = case_when(as.integer(str_sub(mmsi, 1, 1)) %in% c("2", "3", "4", "5", "6", "7") ~ str_sub(mmsi, 1, 3),
-                             str_sub(mmsi, 1, 2) %in% c("98", "99") ~ str_sub(mmsi, 3, 5),
-                             TRUE ~ NA_character_))
+                                  str_sub(mmsi, 1, 2) %in% c("98", "99") ~ str_sub(mmsi, 3, 5),
+                                  TRUE ~ NA_character_))
 
     q <-
       q %>%
       left_join(mar:::vessel_mid(con) %>%
-                  select(mmsi.mid = mid, mid_iso2 = iso2))
+                  select(mmsi.mid = mid, mid_iso2 = iso2),
+                by = "mmsi.mid")
 
     q <-
       q %>%
       mutate(class = case_when(str_sub(mmsi, 1, 1) == "1" ~ "sar aircraft",
-                                    str_sub(mmsi, 1, 1) %in% c("2", "3", "4", "5", "6", "7") ~ "vessel",
-                                    str_sub(mmsi, 1, 1) == "8" ~ "handheld VHF transceiver",
-                                    str_sub(mmsi, 1, 2) == "99" ~ "bauja",
-                                    str_sub(mmsi, 1, 2) == "98" ~ "sibling craft",
-                                    str_sub(mmsi, 1, 3) == "970" ~ "sar transponders",
-                                    str_sub(mmsi, 1, 3) == "972" ~ "man overboard",
-                                    !is.na(mmsi.mid) & is.na(as.integer(str_sub(mmsi, 1, 2))) ~ "vessel",
-                                    localid_original %in% c("9999", "9998") |
-                                      globalid %in% c("Surtseyja", "Straumnes", "Steinanes", "Haganes_K", "Eyri_Kvi_", "Bakkafjar",
-                                                      "Laugardal", "BorgfjE P", "Gemlufall", "Sjokvi", "Straumduf", "Eyrarhlid",
-                                                      "Hvalnes", "Straumm?l", "V_Blafj P", "Isafj.dju", "Rey?arfjo",
-                                                      "VidarfjAI", "KLIF AIS",  "VadlahAIS", "Hafell_AI", "TIND_AIS",  "Storhof?i",
-                                                      "Helguv", "Laugarb.f", "Grimseyja", "G.skagi",   "Grindavik", "Hornafjar",
-                                                      "Flateyjar", "Kogurdufl", "Blakkur.d", "Bakkafjor", "Hvalbakur", "SUGANDI_A",
-                                                      "TJALDANES", "Sjokvi-4",  "Kvi-0 Hri", "Sjokvi-2", "Sjokvi-3", "Snaefj1",
-                                                      "Snaefj2", "Lande", "Sjomsk", "TJALD.NES", "illvid_p", "BLAKKSNES", "V_Sfell B",
-                                                      "HOF", "118084", "Illvi?rah", "Miðfegg P", "BASE11", "Borgarfj ",
-                                                      "V_Hofsos", "V_Hofsos ", "Arnarfjor", "Trackw", "SUGANDAFJ",
-                                                      "BORGARÍS", "BORGARIS", "BORGARIS0", "BORGARIS1",
-                                                      "TEST", "SN-105717") ~ "fixed",
-                                    !is.na(bauja) ~ "bauja",
-                                    !is.na(vid) ~ "vessel",
-                                    TRUE ~ NA_character_))
+                               str_sub(mmsi, 1, 1) %in% c("2", "3", "4", "5", "6", "7") ~ "vessel",
+                               str_sub(mmsi, 1, 1) == "8" ~ "handheld VHF transceiver",
+                               str_sub(mmsi, 1, 2) == "99" ~ "bauja",
+                               str_sub(mmsi, 1, 2) == "98" ~ "sibling craft",
+                               str_sub(mmsi, 1, 3) == "970" ~ "sar transponders",
+                               str_sub(mmsi, 1, 3) == "972" ~ "man overboard",
+                               !is.na(mmsi.mid) & is.na(as.integer(str_sub(mmsi, 1, 2))) ~ "vessel",
+                               localid_original %in% c("9999", "9998") |
+                                 globalid %in% c("Surtseyja", "Straumnes", "Steinanes", "Haganes_K", "Eyri_Kvi_", "Bakkafjar",
+                                                 "Laugardal", "BorgfjE P", "Gemlufall", "Sjokvi", "Straumduf", "Eyrarhlid",
+                                                 "Hvalnes", "Straumm?l", "V_Blafj P", "Isafj.dju", "Rey?arfjo",
+                                                 "VidarfjAI", "KLIF AIS",  "VadlahAIS", "Hafell_AI", "TIND_AIS",  "Storhof?i",
+                                                 "Helguv", "Laugarb.f", "Grimseyja", "G.skagi",   "Grindavik", "Hornafjar",
+                                                 "Flateyjar", "Kogurdufl", "Blakkur.d", "Bakkafjor", "Hvalbakur", "SUGANDI_A",
+                                                 "TJALDANES", "Sjokvi-4",  "Kvi-0 Hri", "Sjokvi-2", "Sjokvi-3", "Snaefj1",
+                                                 "Snaefj2", "Lande", "Sjomsk", "TJALD.NES", "illvid_p", "BLAKKSNES", "V_Sfell B",
+                                                 "HOF", "118084", "Illvi?rah", "Miðfegg P", "BASE11", "Borgarfj ",
+                                                 "V_Hofsos", "V_Hofsos ", "Arnarfjor", "Trackw", "SUGANDAFJ",
+                                                 "BORGARÍS", "BORGARIS", "BORGARIS0", "BORGARIS1",
+                                                 "TEST", "SN-105717") ~ "fixed",
+                               !is.na(bauja) ~ "bauja",
+                               !is.na(vid) ~ "vessel",
+                               mid %in% c(102817, 127288) ~ "vessel",
+                               mid %in% c(118084, 103135) ~ "fixed",
+                               TRUE ~ NA_character_))
 
     # NOTE: CHECK HERE
     q <-
@@ -564,7 +594,8 @@ stk_mobile <- function(con, correct = FALSE, vidmatch = FALSE, classify = FALSE)
                             str_sub(cs, 1, 4) == "TMP_" ~  NA_character_,
                             TRUE ~ cs),
              cs_prefix = str_sub(cs, 1, 2)) %>%
-      left_join(mar:::vessel_csprefix(con) %>% select(cs_prefix, cs_iso2 = iso2))  %>%
+      left_join(mar:::vessel_csprefix(con) %>% select(cs_prefix, cs_iso2 = iso2),
+                by = "cs_prefix")  %>%
       mutate(cs = ifelse(!is.na(cs_iso2), cs, NA_character_))
 
     # NOTE: This may have to be put upstream
@@ -582,3 +613,20 @@ stk_mobile <- function(con, correct = FALSE, vidmatch = FALSE, classify = FALSE)
 
 }
 
+
+# library(mar)
+# con <- connect_mar()
+# d <-
+#   stk_mobile(con, TRUE, TRUE, TRUE) %>%
+#   left_join(stk_trail(con) %>%
+#               group_by(mid) %>%
+#               summarise(n.vms = n())) %>%
+#   collect(n = Inf)
+# d <-
+#   d %>%
+#   rename_all(toupper)
+# dbWriteTable(con, name = "STK_MID_VID", value = d, overwrite = TRUE)
+
+st_mid_vid <- function(con) {
+  tbl_mar(con, "ops$einarhj.STK_MID_VID")
+}
