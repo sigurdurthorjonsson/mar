@@ -22,16 +22,14 @@ vessel_registry <- function(con, standardize = FALSE) {
                     length = mestalengd,
                     brl = bruttoruml,    # neet a proper acronym
                     grt = bruttotonn) %>%
-      # the "claimed" kw unit is likely wrong, corrected here
-      #   the original unit seems to be strange, normally have w or kw, here
-      #   it seems to be deciwatts
-      dplyr::mutate(engine_kw = engine_kw / 100,
-                    length_registered = length_registered / 100,
+      dplyr::mutate(length_registered = length_registered / 100,
                     # units of cm to meters
                     width = width / 100,
                     depth = depth / 100,
+                    length = length / 100,
                     brl = brl / 100,
                     grt = grt / 100,
+                    engine_kw = engine_kw / 100,
                     name = str_trim(name),
                     homeharbour = str_trim(homeharbour),
                     # "correct" brl for Ásgrímur Halldórsson
@@ -40,7 +38,7 @@ vessel_registry <- function(con, standardize = FALSE) {
                     length = ifelse(vid == 9928, 5, length),
                     brl = ifelse(vid == 9928, 2, brl),
                     grt = ifelse(vid == 9928, 2, grt),
-                    # Blífari has abnormal engine_kw, divied by 100
+                    # Blífari has abnormal engine_kw, divided by 100
                     engine_kw = ifelse(vid == 2069, engine_kw / 100, engine_kw),
                     #now for some metier stuff
                     vessel_length_class = dplyr::case_when(length < 8 ~ "<8",
@@ -77,6 +75,22 @@ vessel_registry <- function(con, standardize = FALSE) {
 
 }
 
+vessel_history <- function(con) {
+  tbl_mar(con, "kvoti.skipasaga") %>%
+    filter(skip_nr > 1) %>%
+    mutate(einknr = case_when(nchar(einknr) == 1 ~ paste0("00", einknr),
+                              nchar(einknr) == 2 ~ paste0("0",  einknr),
+                              TRUE ~ as.character(einknr)),
+           einkst = paste0(einkst, einknr)) %>%
+    rename(vid = skip_nr, hist = saga_nr, t1 = i_gildi, t2 = ur_gildi,
+           uid = einkst, code = flokkur) %>%
+    left_join(tbl_mar(con, "kvoti.utg_fl") %>%
+                select(code = flokkur, flokkur = heiti)) %>%
+    select(-c(einknr, snn:sbn)) %>%
+    arrange(vid, hist) %>%
+    select(vid:code, flokkur, everything())
+
+}
 
 # pth <- "https://www.pfs.is/library/Skrar/Tidnir-og-taekni/Numeramal/MMSI/NUMER%20Query270619.xlsx"
 # download.file(pth, destfile = "data-raw/ss-270619_mmsi.xlsx")
