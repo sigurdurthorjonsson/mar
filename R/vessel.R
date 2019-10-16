@@ -29,7 +29,6 @@ vessel_registry <- function(con, standardize = FALSE) {
                     length = length / 100,
                     brl = brl / 100,
                     grt = grt / 100,
-                    engine_kw = engine_kw / 100,
                     name = str_trim(name),
                     homeharbour = str_trim(homeharbour),
                     # "correct" brl for Ásgrímur Halldórsson
