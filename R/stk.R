@@ -27,7 +27,9 @@ stk_trail <- function(con, year) {
   }
 
   q %>%
-    dplyr::select(mid = mobileid, time = recdate, lon, lat, speed, heading)
+    dplyr::select(mid = mobileid,
+                  time = recdate,
+                  lon, lat, speed, heading, harborid)
 
 }
 
@@ -627,6 +629,6 @@ stk_mobile <- function(con, correct = FALSE, vidmatch = FALSE, classify = FALSE)
 #   rename_all(toupper)
 # dbWriteTable(con, name = "STK_MID_VID", value = d, overwrite = TRUE)
 
-st_mid_vid <- function(con) {
+stk_mid_vid <- function(con) {
   tbl_mar(con, "ops$einarhj.STK_MID_VID")
 }
