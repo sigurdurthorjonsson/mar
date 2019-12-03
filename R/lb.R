@@ -32,12 +32,20 @@ lb_base <- function(con, standardize = TRUE) {
 }
 
 
-lb_mobile <- function(con, standaridize = TRUE) {
+#' lb_base
+#'
+#' @param con Oracle connection
+#' @param standardize Boolean (default TRUE) if only certain variables returned
+#'
+#' @return A sql tibble
+#'
+
+lb_mobile <- function(con, standardize = TRUE) {
 
   q <-
     tbl_mar(con, "afli.toga")
 
-  if(standaridize) {
+  if(standardize) {
     q <-
       q %>%
       # get date of fishing (note: may also need gid)
@@ -68,31 +76,13 @@ lb_mobile <- function(con, standaridize = TRUE) {
                     tempb2 = botnhiti_lok,
                     temps1 = uppsj_hiti,         # surface temperature
                     temps2 = uppsj_hiti_lok,
-                    on.bottom = ibotni) %>%      # of the form (h)hmm)
-      # get rid of any gear not supposed to be in the "mobile" details
-      # filter(gid > 3) %>%
-      # ------------------------------------------------------------------------
-    # NOTE: SHOULD KEEP THIS SOMEWHERE IN THE PIPE
-    #mutate(towtime = ifelse(towtime / 60 > 12, 12 * 60, towtime)) %>%
-    # ------------------------------------------------------------------------
-    # drop diver and blue mussel lines
-    #filter(!gid %in% c(41, 42)) %>%
-    dplyr::mutate(l = length(on.bottom),
-                  t1 = dplyr::case_when(l == 1 ~ paste0("00:0", on.bottom),
-                                        l == 2 ~ paste0("00:", on.bottom),
-                                        l == 3 ~ paste0("0", str_sub(on.bottom, 1, 1), ":", str_sub(on.bottom, 2, 3)),
-                                        l == 4 ~ paste0(str_sub(on.bottom, 1, 2), ":", str_sub(on.bottom, 3, 4)),
-                                        TRUE ~ NA_character_),
-                  t1 = (paste0(to_char(date, 'YYYY-MM-DD'), " ", t1, ":00"))) %>%
-      dplyr::select(-c(l, date))
-    #mutate(on.bottom = str_pad(on.bottom, 4, "left", pad = "0"),
-    #       on.bottom = paste0(str_sub(on.bottom, 1, 2),
-    #                          ":",
-    #                          str_sub(on.bottom, 3, 4)),
-    #       t1 = ymd_hm(paste(as.character(date), on.bottom)),
-    # ------------------------------------------------------------------------
-    # NOTE: NEED TO IMPLEMENT THIS IN SQL
-    #       t2 = t1 + minutes(towtime))
+                    on.bottom = ibotni) %>%
+      dplyr::mutate(on.bottom = lpad(on.bottom, 4, "0")) %>%
+      # vedags + (substr(lpad(ibotni,4,'0'),1,2)*60+substr(lpad(ibotni,4,'0'),3,2))/24/60 t1
+      # Oracle time is in days
+      dplyr::mutate(t1 = date + (substr(on.bottom, 1, 2) * 60 + substr(on.bottom, 3, 4)) / (24 * 60),
+             t2 = date + (substr(on.bottom, 1, 2) * 60 + substr(on.bottom, 3, 4) + towtime) / (24 * 60))
+
 
 
   }
