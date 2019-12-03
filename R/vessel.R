@@ -22,24 +22,24 @@ vessel_registry <- function(con, standardize = FALSE) {
                     length = mestalengd,
                     brl = bruttoruml,    # neet a proper acronym
                     grt = bruttotonn) %>%
+      # Need to double check ghost ships
       dplyr::mutate(length_registered = length_registered / 100,
                     # units of cm to meters
                     width = width / 100,
                     depth = depth / 100,
-                    length = length / 100,
-                    brl = brl / 100,
-                    grt = grt / 100,
+                    length = case_when(vid == 9928 ~ 5,
+                                       TRUE ~ length / 100),
+                    #               "correct" brl for Ásgrímur Halldórsson
+                    brl = case_when(vid == 2780 ~ brl / 100000,
+                                    vid == 9928 ~ 2,
+                                    TRUE ~ brl / 100),
+                    grt = case_when(vid == 9928 ~ 2,
+                                    TRUE ~ grt / 100),
+                    #                     Blífari has abnormal engine_kw, divided by 100
+                    engine_kw = case_when(vid == 2069 ~ engine_kw / 10000,
+                                          TRUE ~ engine_kw / 100),
                     name = str_trim(name),
                     homeharbour = str_trim(homeharbour),
-                    # "correct" brl for Ásgrímur Halldórsson
-                    brl = ifelse(vid == 2780, 1000, brl),
-                    # "correct" variable for the ghost-ship,
-                    length = ifelse(vid == 9928, 5, length),
-                    brl = ifelse(vid == 9928, 2, brl),
-                    grt = ifelse(vid == 9928, 2, grt),
-                    # Blífari has abnormal engine_kw, divided by 100
-                    engine_kw = ifelse(vid == 2069, engine_kw / 100, engine_kw),
-                    #now for some metier stuff
                     vessel_length_class = dplyr::case_when(length < 8 ~ "<8",
                                                            length >= 8  & length < 10 ~ "08-10",
                                                            length >= 10 & length < 12 ~ "10-12",
@@ -59,7 +59,6 @@ vessel_registry <- function(con, standardize = FALSE) {
                                     TRUE ~ uid),
                     uid = dplyr::case_when(nchar(uid) > 2 ~ paste0(str_sub(uid, 1, 2), "-", str_sub(uid, 3)),
                                            TRUE ~ uid),
-                    #uid = str_replace(uid, "-NA", ""),
                     cs = str_trim(cs),
                     cs = ifelse(cs == "", NA_character_, cs),
                     cs = ifelse(cs == "", NA_character_, cs),
