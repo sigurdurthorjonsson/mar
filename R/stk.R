@@ -119,6 +119,7 @@ stk_mobile <- function(con, correct = FALSE, vidmatch = FALSE, classify = FALSE)
                                                mid == 101545 ~ "2894",    # Bjorg EA-7  - NOTE: overwrote old vid
                                                mid == 102561 ~ "2895",    # Videy RE-50
                                                mid == 103251 ~ "2948",    # Barkur
+                                               mid == 101103 ~ "2954",    # 2020-03-10: Vestmannaey in nyja, var (2007) Vestmannaey gamla, vid = 1273
                                                TRUE ~ localid)) %>%
       # "Correcting" foreign vessels
       # NOTE: There are duplicate mid below, will only match "vessel"
@@ -647,4 +648,23 @@ stk_mobile <- function(con, correct = FALSE, vidmatch = FALSE, classify = FALSE)
 
 stk_mid_vid <- function(con) {
   tbl_mar(con, "ops$einarhj.STK_MID_VID")
+}
+
+
+# library(mar)
+# con <- connect_mar()
+# RUN: 2020-03-10
+# d <-
+#   stk_mobile(con, TRUE, TRUE, TRUE) %>%
+#   left_join(stk_trail(con) %>%
+#               group_by(mid) %>%
+#               summarise(n.vms = n())) %>%
+#   collect(n = Inf)
+# d <-
+#   d %>%
+#   rename_all(toupper)
+# dbWriteTable(con, name = "STK_MID_VID_2020", value = d, overwrite = TRUE)
+
+stk_mid_vid_2020 <- function(con) {
+  tbl_mar(con, "ops$einarhj.STK_MID_VID_2020")
 }
