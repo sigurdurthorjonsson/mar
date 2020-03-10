@@ -4,8 +4,13 @@
 \alias{encode_zchords}
 \title{Encode zchords}
 \usage{
-encode_zchords(data, col.names = c("lat", "lon"), dx = 1, dy = 0.5,
-  invalids = TRUE)
+encode_zchords(
+  data,
+  col.names = c("lat", "lon"),
+  dx = 1,
+  dy = 0.5,
+  invalids = TRUE
+)
 }
 \arguments{
 \item{data}{database query}

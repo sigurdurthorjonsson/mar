@@ -10,30 +10,31 @@ hv_skraning <- function(con) {
 
 hv_pred <- function(con) {
   hv_skraning(con) %>%
-    filter(!is.na(magaastand)) %>%
-    select(synis_id,
+    dplyr::filter(!is.na(magaastand)) %>%
+    dplyr::select(synis_id,
            pred = tegund,
            nr,
            oslaegt,
            slaegt,
            astand = magaastand) %>%
-    left_join(tbl_mar(con, "hafvog.magaastand") %>%
-                select(astand, lysing_astands)) %>%
-    select(-astand) %>%
-    rename(astand = lysing_astands)
+    dplyr::left_join(tbl_mar(con, "hafvog.magaastand") %>%
+                       dplyr::select(astand, lysing_astands)) %>%
+    dplyr::select(-astand) %>%
+    dplyr::rename(astand = lysing_astands)
 }
 
 
 hv_prey <- function(con) {
   prey <-
     hv_skraning(con) %>%
-    filter(maeliadgerd %in% c(20, 21)) %>%
-    rename(prey = tegund,
+    dplyr::filter(maeliadgerd %in% c(20, 21)) %>%
+    dplyr::rename(prey = tegund,
            pred = ranfiskurteg,
            pnr = nr,
            nr = kvarnanr) %>%
-    left_join(lesa_tegundir(con) %>% select(prey = tegund, heiti)) %>%
-    select(synis_id,
+    dplyr::left_join(lesa_tegundir(con) %>%
+                       dplyr::select(prey = tegund, heiti)) %>%
+    dplyr::select(synis_id,
            pred,
            nr,
            prey,

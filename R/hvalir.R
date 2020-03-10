@@ -9,7 +9,7 @@
 #' @export
 #'
 hvalir_hvalir <- function(con) {
-  tbl_mar(mar,'hvalir.hvalir_v') %>%
+  tbl_mar(con, 'hvalir.hvalir_v') %>%
     dplyr::mutate(veiddur_breidd = to_number(replace(veiddur_breidd,',','.')),
                   veiddur_lengd = to_number(replace(veiddur_lengd,',','.'))) %>%
     dplyr::select_(.dots = colnames(tbl_mar(mar,"hvalir.hvalir_v"))) %>%

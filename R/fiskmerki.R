@@ -60,7 +60,7 @@ fiskmerki_endurheimtur <- function(con) {
                   rKyn = kyn,
                   rKynthroski = kynthroski,
                   rAge = aldur) %>%
-    mutate(rLon = -geoconvert1(rLon * 100),
+    dplyr::mutate(rLon = -geoconvert1(rLon * 100),
            rLat =  geoconvert1(rLat * 100))
 
   return(d)
@@ -113,10 +113,10 @@ taggart <- function(con) {
 
   stodvar <-
     lesa_stodvar(con) %>%
-    mutate(tLon = kastad_v_lengd,
+    dplyr::mutate(tLon = kastad_v_lengd,
            tLat =  kastad_n_breidd,
            tAr = to_number(to_char(dags, 'yyyy'))) %>%
-    select(synis_id,
+    dplyr::select(synis_id,
            leidangur,
            stod,
            tDags = dags,
@@ -130,7 +130,7 @@ taggart <- function(con) {
 
   fiskar <-
     fiskmerki_fiskar(con) %>%
-    select(fiskur_id,
+    dplyr::select(fiskur_id,
            synis_id,
            tTegund = tegund,
            tLengd = lengd,
@@ -140,7 +140,7 @@ taggart <- function(con) {
 
   merki <-
     fiskmerki_merki(con) %>%
-    select(tid,
+    dplyr::select(tid,
            fiskur_id,
            audkenni,
            numer)
@@ -151,7 +151,7 @@ taggart <- function(con) {
     dplyr::left_join(stodvar, by = "synis_id") %>%
     dplyr::left_join(fiskmerki_endurheimtur(con), by = "tid") %>%
     dplyr::left_join(fiskmerki_rafaudkenni(con),  by = "tid") %>%
-    select(-id, -tid)
+    dplyr::select(-id, -tid)
 
   return(d)
 }

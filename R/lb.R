@@ -112,7 +112,7 @@ lb_static <- function(con, standardize = TRUE) {
       q %>%
       # get gid
       dplyr::left_join(tbl_mar(con, "afli.stofn") %>%
-                         select(visir, gid = veidarf),
+                         dplyr::select(visir, gid = veidarf),
                        by = "visir") %>%
       # NOTE: SHOULD NOT REALLY FILTER DATA HERE
       dplyr::filter(gid %in% c(1, 2, 3)) %>%

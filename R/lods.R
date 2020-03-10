@@ -12,10 +12,10 @@ lods_oslaegt <- function(mar) {
     dplyr::rename(veidarfaeri = veidarf) %>%
     dplyr::mutate(ar =   to_number(to_char(l_dags, "YYYY")),
                   man =  to_number(to_char(l_dags, "MM")),
-                  timabil = if_else(to_number(to_char(l_dags, "MM")) < 9,
+                  timabil = dplyr::if_else(to_number(to_char(l_dags, "MM")) < 9,
                                     concat(to_number(to_char(l_dags, "YYYY")) -1, to_number(to_char(l_dags, "YYYY"))),
                                     concat(to_number(to_char(l_dags, "YYYY")), to_number(to_char(l_dags, "YYYY")) + 1)),
-                  magn_oslaegt = if_else(fteg %in% c(30, 31, 34) & to_number(to_char(l_dags, "YYYY")) > 1992,
+                  magn_oslaegt = dplyr::if_else(fteg %in% c(30, 31, 34) & to_number(to_char(l_dags, "YYYY")) > 1992,
                                          magn_oslaegt * 1000,
                                          magn_oslaegt))
 

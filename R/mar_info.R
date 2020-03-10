@@ -16,7 +16,7 @@ mar_tables <- function(mar, schema) {
   #    dplyr::select(owner,table_name = view_name) %>%
   #    dplyr::mutate(tablespace_name = NULL, num_rows = NULL, last_analyze = NULL)
   if(!missing(schema)) {
-    d <- d %>% filter(owner %in% toupper(schema))
+    d <- d %>% dplyr::filter(owner %in% toupper(schema))
   }
 
   d %>%

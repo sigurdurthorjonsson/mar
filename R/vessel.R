@@ -27,42 +27,42 @@ vessel_registry <- function(con, standardize = FALSE) {
                     # units of cm to meters
                     width = width / 100,
                     depth = depth / 100,
-                    length = case_when(vid == 9928 ~ 5,
+                    length = dplyr::case_when(vid == 9928 ~ 5,
                                        TRUE ~ length / 100),
-                    #               "correct" brl for Ásgrímur Halldórsson
-                    brl = case_when(vid == 2780 ~ brl / 100000,
+                    #               "correct" brl for Asgrimur Halldorsson
+                    brl = dplyr::case_when(vid == 2780 ~ brl / 100000,
                                     vid == 9928 ~ 2,
                                     TRUE ~ brl / 100),
-                    grt = case_when(vid == 9928 ~ 2,
+                    grt = dplyr::case_when(vid == 9928 ~ 2,
                                     TRUE ~ grt / 100),
-                    #                     Blífari has abnormal engine_kw, divided by 100
-                    engine_kw = case_when(vid == 2069 ~ engine_kw / 10000,
+                    #                     Blidfari has abnormal engine_kw, divided by 100
+                    engine_kw = dplyr::case_when(vid == 2069 ~ engine_kw / 10000,
                                           TRUE ~ engine_kw / 100),
-                    name = str_trim(name),
-                    homeharbour = str_trim(homeharbour),
+                    name = stringr::str_trim(name),
+                    homeharbour = stringr::str_trim(homeharbour),
                     vessel_length_class = dplyr::case_when(length < 8 ~ "<8",
                                                            length >= 8  & length < 10 ~ "08-10",
                                                            length >= 10 & length < 12 ~ "10-12",
                                                            length >= 12 & length < 15 ~ "12-15",
                                                            length >= 15 ~ ">=15",
                                                            TRUE ~ NA_character_),
-                    name = str_trim(name),
+                    name = stringr::str_trim(name),
                     name = ifelse(name == "", NA_character_, name),
-                    uid = str_trim(uid),
+                    uid = stringr::str_trim(uid),
                     uid = ifelse(uid == "", NA_character_, uid),
                     # NOTE: Below does not get rid of the period
-                    uid = str_replace(uid, "\\.", ""),
-                    uid = case_when(uid == "IS" ~ "ÍS",
+                    uid = stringr::str_replace(uid, "\\.", ""),
+                    uid = dplyr::case_when(uid == "IS" ~ "ÍS",
                                     uid == "OF" ~ "ÓF",
                                     uid == "KÓ" ~ "KO",
-                                    uid == "ZZ0" ~ "ZZ",      # Not valid but is also in skipaskrá fiskistofu
+                                    uid == "ZZ0" ~ "ZZ",      # Not valid but is also in skipaskra fiskistofu
                                     TRUE ~ uid),
-                    uid = dplyr::case_when(nchar(uid) > 2 ~ paste0(str_sub(uid, 1, 2), "-", str_sub(uid, 3)),
+                    uid = dplyr::case_when(nchar(uid) > 2 ~ paste0(stringr::str_sub(uid, 1, 2), "-", stringr::str_sub(uid, 3)),
                                            TRUE ~ uid),
-                    cs = str_trim(cs),
+                    cs = stringr::str_trim(cs),
                     cs = ifelse(cs == "", NA_character_, cs),
                     cs = ifelse(cs == "", NA_character_, cs),
-                    cs = ifelse(nchar(cs) == 4 & str_sub(cs, 1, 2) == "TF",
+                    cs = ifelse(nchar(cs) == 4 & stringr::str_sub(cs, 1, 2) == "TF",
                                 cs,
                                 NA_character_),
                     imo = ifelse(imo == 0, NA_integer_, imo),
@@ -75,18 +75,18 @@ vessel_registry <- function(con, standardize = FALSE) {
 
 vessel_history <- function(con) {
   tbl_mar(con, "kvoti.skipasaga") %>%
-    filter(skip_nr > 1) %>%
-    mutate(einknr = case_when(nchar(einknr) == 1 ~ paste0("00", einknr),
+    dplyr::filter(skip_nr > 1) %>%
+    dplyr::mutate(einknr = dplyr::case_when(nchar(einknr) == 1 ~ paste0("00", einknr),
                               nchar(einknr) == 2 ~ paste0("0",  einknr),
                               TRUE ~ as.character(einknr)),
            einkst = paste0(einkst, einknr)) %>%
-    rename(vid = skip_nr, hist = saga_nr, t1 = i_gildi, t2 = ur_gildi,
+    dplyr::rename(vid = skip_nr, hist = saga_nr, t1 = i_gildi, t2 = ur_gildi,
            uid = einkst, code = flokkur) %>%
-    left_join(tbl_mar(con, "kvoti.utg_fl") %>%
+    dplyr::left_join(tbl_mar(con, "kvoti.utg_fl") %>%
                 select(code = flokkur, flokkur = heiti)) %>%
-    select(-c(einknr, snn:sbn)) %>%
-    arrange(vid, hist) %>%
-    select(vid:code, flokkur, everything())
+    dplyr::select(-c(einknr, snn:sbn)) %>%
+    dplyr::arrange(vid, hist) %>%
+    dplyr::select(vid:code, flokkur, dplyr::everything())
 
 }
 

@@ -11,7 +11,7 @@
 #'
 siritar_hitastig <- function(con){
   tbl_mar(con,'siritar.hitastig') %>%
-    select(-c(sng:sbt))
+    dplyr::select(-c(sng:sbt))
 }
 
 #' Siritar skjal
@@ -23,7 +23,7 @@ siritar_hitastig <- function(con){
 #' @export
 siritar_skjal <- function(con){
   tbl_mar(con,'siritar.skjal') %>%
-    select(-c(sng:sbt))
+    dplyr::select(-c(sng:sbt))
 }
 
 #' Siritar skjal stöð
@@ -34,7 +34,7 @@ siritar_skjal <- function(con){
 #' @export
 siritar_skjal_stod <- function(con){
   tbl_mar(con,'siritar.skjal_stod') %>%
-    select(-c(sng:sbt))
+    dplyr::select(-c(sng:sbt))
 }
 
 #' siritar_scanmar
@@ -45,7 +45,7 @@ siritar_skjal_stod <- function(con){
 #' @export
 siritar_scanmar <- function(con){
   tbl_mar(con,'siritar.scanmar') %>%
-    select(-c(sng:sbt))
+    dplyr::select(-c(sng:sbt))
 }
 
 #' siritar_stadsetning
@@ -56,6 +56,6 @@ siritar_scanmar <- function(con){
 #' @export
 siritar_stadsetning <- function(con){
   tbl_mar(con,'siritar.stadsetning') %>%
-    select(-c(sng:sbt))
+    dplyr::select(-c(sng:sbt))
 }
 

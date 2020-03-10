@@ -31,19 +31,19 @@ faeda_tegundir <- function(con){
 faeda_ranfiskar <- function(con){
   tbl_mar(con,'faeda.f_fiskar') %>%
     dplyr::mutate(len_fl =
-                    if_else(lengd < 5,0,
-                            if_else(lengd <7,1,
-                                    if_else(lengd <10,2,
-                                            if_else(lengd <15,3,
-                                                    if_else(lengd <20,4,
-                                                            if_else(lengd <25,5,
-                                                                    if_else(lengd <30,6,
-                                                                            if_else(lengd <40,7,
-                                                                                    if_else(lengd <50,8,
-                                                                                            if_else(lengd <60,9,
-                                                                                                    if_else(lengd <70,10,
-                                                                                                            if_else(lengd <80,11,
-                                                                                                                    if_else(lengd <90,12,13
+                    dplyr::if_else(lengd < 5,0,
+                            dplyr::if_else(lengd <7,1,
+                                    dplyr::if_else(lengd <10,2,
+                                            dplyr::if_else(lengd <15,3,
+                                                    dplyr::if_else(lengd <20,4,
+                                                            dplyr::if_else(lengd <25,5,
+                                                                    dplyr::if_else(lengd <30,6,
+                                                                            dplyr::if_else(lengd <40,7,
+                                                                                    dplyr::if_else(lengd <50,8,
+                                                                                            dplyr::if_else(lengd <60,9,
+                                                                                                    dplyr::if_else(lengd <70,10,
+                                                                                                            dplyr::if_else(lengd <80,11,
+                                                                                                                    dplyr::if_else(lengd <90,12,13
                                                                                                                             ))))))))))))),
                   uppruni_ranfiskar = 'f_fiskar') %>%
     dplyr::union_all(tbl_mar(con,'faeda.f_flokkar') %>%
@@ -99,19 +99,19 @@ faeda_lengdir <- function(con){
                        dplyr::select(synis_id, faerslunumer, flokk_id, ranfiskur, faeduhopur,
                                      brad_kyn, lengd, fjoldi,  haed, lengd_rf,len_fl,uppruni,brad_kynth)) %>%
     dplyr::mutate(len_fl =
-                    if_else(lengd < 5,0,
-                            if_else(lengd <7,1,
-                                    if_else(lengd <10,2,
-                                            if_else(lengd <15,3,
-                                                    if_else(lengd <20,4,
-                                                            if_else(lengd <25,5,
-                                                                    if_else(lengd <30,6,
-                                                                            if_else(lengd <40,7,
-                                                                                    if_else(lengd <50,8,
-                                                                                            if_else(lengd <60,9,
-                                                                                                    if_else(lengd <70,10,
-                                                                                                            if_else(lengd <80,11,
-                                                                                                                    if_else(lengd <90,12,13
+                    dplyr::if_else(lengd < 5,0,
+                            dplyr::if_else(lengd <7,1,
+                                    dplyr::if_else(lengd <10,2,
+                                            dplyr::if_else(lengd <15,3,
+                                                    dplyr::if_else(lengd <20,4,
+                                                            dplyr::if_else(lengd <25,5,
+                                                                    dplyr::if_else(lengd <30,6,
+                                                                            dplyr::if_else(lengd <40,7,
+                                                                                    dplyr::if_else(lengd <50,8,
+                                                                                            dplyr::if_else(lengd <60,9,
+                                                                                                    dplyr::if_else(lengd <70,10,
+                                                                                                            dplyr::if_else(lengd <80,11,
+                                                                                                                    dplyr::if_else(lengd <90,12,13
                                                                                                                     )))))))))))))) %>%
     dplyr::rename(uppruni_lengdar = uppruni)
 }
