@@ -27,3 +27,18 @@ lu_gear <- function(con) {
                   gear = lysing_enska)
 
 }
+
+#' Lookup harbour
+#'
+#' @param con Oracle connection
+#'
+#' @return a query
+#'
+lu_harbour <- function(con) {
+
+  tbl_mar(con, "kvoti.stadur") %>%
+    dplyr::select(hid = stad_nr,
+                  harbour = heiti,
+                  landing = londunar_hofn)
+
+}
