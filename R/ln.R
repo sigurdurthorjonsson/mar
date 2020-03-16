@@ -1,3 +1,7 @@
+#' landed catch
+#'
+#' @param con Oracle conection
+#'
 ln_catch <- function(con) {
 
   landadur_afli(con) %>%
