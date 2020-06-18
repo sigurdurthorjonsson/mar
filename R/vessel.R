@@ -40,7 +40,7 @@ vessel_registry <- function(con, standardize = FALSE) {
                                           TRUE ~ engine_kw / 100),
                     name = str_trim(name),
                     homeharbour = str_trim(homeharbour),
-                    vessel_length_class = dplyr::case_when(length < 8 ~ "<8",
+                    length_class = dplyr::case_when(length < 8 ~ "<8",
                                                            length >= 8  & length < 10 ~ "08-10",
                                                            length >= 10 & length < 12 ~ "10-12",
                                                            length >= 12 & length < 15 ~ "12-15",
