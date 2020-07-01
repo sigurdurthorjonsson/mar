@@ -1,6 +1,6 @@
 #' Lengdarmaelingar
 #'
-#' @name lengdir
+#' @name bio_lengdir
 #'
 #' @description Fallid myndar tengingu við "view" toflu lengdir
 #' í biota gagnagrunninum.
@@ -11,7 +11,7 @@
 #' @export
 #'
 
-lengdir <- function(con) {
+bio_lengdir <- function(con) {
 
   d <-
     tbl_mar(con,"biota.lengdir")
@@ -23,7 +23,7 @@ lengdir <- function(con) {
 
 #' Talningar
 #'
-#' @name numer
+#' @name bio_numer
 #'
 #' @description Fallid myndar tengingu við "view" toflu numer
 #' í biota gagnagrunninum.
@@ -34,7 +34,7 @@ lengdir <- function(con) {
 #' @export
 #'
 
-numer <- function(con) {
+bio_numer <- function(con) {
 
   d <-
     tbl_mar(con,"biota.numer")
@@ -46,7 +46,7 @@ numer <- function(con) {
 
 #' Kvarnir
 #'
-#' @name kvarnir
+#' @name bio_kvarnir
 #'
 #' @description Fallid myndar tengingu við "view" toflu kvarnir
 #' í biota gagnagrunninum.
@@ -57,7 +57,7 @@ numer <- function(con) {
 #' @export
 #'
 
-kvarnir <- function(con) {
+bio_kvarnir <- function(con) {
 
   d <-
     tbl_mar(con,"biota.kvarnir")
@@ -71,13 +71,13 @@ kvarnir <- function(con) {
 #'
 #' Þetta fall skala lengdardreifingar með töldum fiskum úr ralli
 #'
-#' @name skala_m_toldum
+#' @name bio_skala_med_toldum
 #'
 #' @param lengdir fyrirspurn á biota.lengdir
 #'
 #' @return fyrirspurn með sköluðum fjölda í lengdarbili
 #' @export
-skala_m_toldum <- function(lengdir){
+bio_skala_med_toldum <- function(lengdir){
 
   ratio <-
     numer(lengdir$src) %>%
@@ -92,7 +92,7 @@ skala_m_toldum <- function(lengdir){
     dplyr::mutate(fjoldi = fjoldi * r)
 }
 
-skala_m_toglengd <- function(st_len,
+bio_skala_med_toglengd <- function(st_len,
                              min_towlength = 2,
                              max_towlength = 8,
                              std_towlength = 4){
@@ -105,7 +105,7 @@ skala_m_toglengd <- function(st_len,
 
 #' Tegundir fæðu
 #'
-#' @name f_tegundir
+#' @name bio_faedutegundir
 #'
 #' @description Fallid myndar tengingu við "view" toflu f_tegundir
 #' í biota gagnagrunninum.
@@ -115,7 +115,7 @@ skala_m_toglengd <- function(st_len,
 #' @return SQL fyrirspurn
 #' @export
 #'
-f_tegundir <- function(con){
+bio_faedutegundir <- function(con){
   tbl_mar(con,'biota.f_tegundir') %>%
     dplyr::left_join(lesa_tegundir(con),by='tegund') %>%
     dplyr::select(-c(heiti,yfir_flokkur,visindaheiti)) %>%
@@ -131,7 +131,7 @@ f_tegundir <- function(con){
 
 #' Fæða ránfiskar
 #'
-#' @name f_ranfiskar
+#' @name bio_ranfiskar
 #'
 #' @description Fallid myndar tengingu við "view" toflu f_fiskar
 #' , f_flokkar og f_lenfl í biota gagnagrunninum.
@@ -139,7 +139,7 @@ f_tegundir <- function(con){
 #' @param con src_oracle tenging við oracle
 #' @export
 #'
-f_ranfiskar <- function(con){
+bio_ranfiskar <- function(con){
   tbl_mar(con,'biota.f_fiskar') %>%
     dplyr::mutate(len_fl =
                     dplyr::if_else(lengd < 5,0,
@@ -169,7 +169,7 @@ f_ranfiskar <- function(con){
 
 #' Fæða þyngdir
 #'
-#' @name f_thyngdir
+#' @name bio_brad_tyngdir
 #'
 #' @description Fallid myndar tengingu við "view" toflu f_hopar
 #' í biota gagnagrunninum.
@@ -177,7 +177,7 @@ f_ranfiskar <- function(con){
 #' @param con src_oracle tenging við oracle
 #' @export
 #'
-f_thyngdir <- function(con){
+bio_brad_tyngdir <- function(con){
   tbl_mar(con,'biota.f_hopar') %>%
     dplyr::mutate(uppruni = 'f_hopar') %>%
     dplyr::mutate(thyngd = ifelse(thyngd==-1,0.2,
@@ -192,7 +192,7 @@ f_thyngdir <- function(con){
 
 #' Fæða lengdir
 #'
-#' @name f_lengdir
+#' @name bio_brad_lengdir
 #'
 #' @description Fallid myndar tengingu við "view" toflu f_lengdir
 #' í biota gagnagrunninum.
@@ -200,7 +200,7 @@ f_thyngdir <- function(con){
 #' @param con src_oracle tenging við oracle
 #' @export
 #'
-f_lengdir <- function(con){
+bio_brad_lengdir <- function(con){
   tbl_mar(con,'biota.f_lengdir') %>%
     dplyr::left_join(tbl_mar(con,'biota.f_lenfl'),by='len_fl') %>%
     dplyr::mutate(lengd = lengd/10,
