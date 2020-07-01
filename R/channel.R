@@ -2,7 +2,7 @@
 #'
 #' @name bio_stodvar
 #'
-#' @description Fallid myndar tengingu við "view" toflu stodvar
+#' @description Fallid myndar tengingu við "view" toflu stodvar_mar_v
 #' í channel gagnagrunninum.
 #'
 #' @param con src_oracle tenging við oracle
@@ -12,7 +12,7 @@
 #'
 
 bio_stodvar <- function(con) {
-  tbl_mar(con,'channel.stodvar') %>%
+  tbl_mar(con,'channel.stodvar_mar_v') %>%
     dplyr::mutate(lon = ifelse(is.na(hift_v_lengd),
                                kastad_v_lengd,
                                (kastad_v_lengd + hift_v_lengd) / 2),

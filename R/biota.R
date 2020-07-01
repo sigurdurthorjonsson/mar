@@ -77,6 +77,7 @@ bio_kvarnir <- function(con) {
 #'
 #' @return fyrirspurn með sköluðum fjölda í lengdarbili
 #' @export
+#'
 bio_skala_med_toldum <- function(lengdir){
 
   ratio <-
@@ -243,3 +244,83 @@ bio_brad_lengdir <- function(con){
                                                                                                                                                                                                         )))))))))))))) %>%
     dplyr::rename(uppruni_lengdar = uppruni)
 }
+
+
+#' Linir
+#'
+#' @name bio_linir
+#'
+#' @description Fallid myndar tengingu við "view" toflu linir
+#' í biota gagnagrunninum.
+#'
+#' @param con src_oracle tenging við oracle
+#' @export
+#'
+bio_linir <- function(con) {
+  d <- tbl_mar(con, "biota.linir")
+  return(d)
+}
+
+
+#' Sníkjudýr
+#'
+#' @name bio_snikjudyr
+#'
+#' @description Fallid myndar tengingu við "view" toflu snikjudyr
+#' í biota gagnagrunninum.
+#'
+#' @param con src_oracle tenging við oracle
+#' @export
+#'
+bio_snikjudyr <- function(con) {
+  d <- tbl_mar(con, "biota.snikjudyr")
+  return(d)
+}
+
+
+#' Valkvarnir
+#'
+#' @name bio_valkvarnir
+#'
+#' @description Fallid myndar tengingu við "view" toflu valkvarnir
+#' í biota gagnagrunninum.
+#'
+#' @param con src_oracle tenging við oracle
+#' @export
+#'
+bio_valkvarnir <- function(con) {
+  d <- tbl_mar(con, "biota.valkvarnir")
+  return(d)
+}
+
+#' Skjóða númer
+#'
+#' @name bio_skjoda_numer
+#'
+#' @description Fallid myndar tengingu við "view" toflu skjoda_numer
+#' í biota gagnagrunninum.
+#'
+#' @param con src_oracle tenging við oracle
+#' @export
+#'
+bio_skjoda_numer <- function(con) {
+  d <- tbl_mar(con, "biota.skjoda_numer")
+  return(d)
+}
+
+
+#' Skjóða lengdir
+#'
+#' @name bio_skjoda_lengdir
+#'
+#' @description Fallid myndar tengingu við "view" toflu skjoda_lengdir
+#' í biota gagnagrunninum.
+#'
+#' @param con src_oracle tenging við oracle
+#' @export
+#'
+bio_skjoda_lengdir <- function(con) {
+  d <- tbl_mar(con, "biota.skjoda_lengdir")
+  return(d)
+}
+
