@@ -10,8 +10,8 @@ geoconvert <- function(data, inverse = FALSE, col.names = c("lat", "lon")){
   tmp <-
     sprintf(ff,col.names) %>%
     stats::setNames(col.names) %>%
-    purrr::map(rlang::parse_quosure)
-    dplyr::mutate(data,!!! tmp)
+    purrr::map(rlang::parse_expr)
+  dplyr::mutate(data,!!! tmp)
 }
 
 r2d <- function(data,cell.col='r',col.names=c('lat','lon')){
