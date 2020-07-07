@@ -3,14 +3,15 @@ geoconvert <- function(data, inverse = FALSE, col.names = c("lat", "lon")){
     return(geo::geoconvert(data,inverse,col.names))
   }
   if(!inverse){
-    tmp <- sprintf('geoconvert1(%s)',col.names)
-    dplyr::mutate_(data,.dots = stats::setNames(tmp,col.names)) %>%
-      select_(.dots=colnames(data))
+    ff <- 'geoconvert1(%s)'
   } else {
-    tmp <- sprintf('geoconvert2(%s)',col.names)
-    dplyr::mutate_(data,.dots = stats::setNames(tmp,col.names)) %>%
-      select_(.dots=colnames(data))
+    ff <- 'geoconvert2(%s)'
   }
+  tmp <-
+    sprintf(ff,col.names) %>%
+    stats::setNames(col.names) %>%
+    purrr::map(rlang::parse_quosure)
+    dplyr::mutate(data,!!! tmp)
 }
 
 r2d <- function(data,cell.col='r',col.names=c('lat','lon')){
