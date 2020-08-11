@@ -93,6 +93,17 @@ bio_skala_med_toldum <- function(lengdir){
     dplyr::mutate(fjoldi = fjoldi * r)
 }
 
+
+#' Skala með toglengd
+#'
+#' Þetta fall skala lengdardreifingar með toglengd úr ralli
+#'
+#' @name bio_skala_med_toglengd
+#'
+#' @param lengdir fyrirspurn á biota.lengdir
+#'
+#' @return fyrirspurn með sköluðum fjölda í lengdarbili
+#' @export
 bio_skala_med_toglengd <- function(st_len,
                              min_towlength = 2,
                              max_towlength = 8,

@@ -128,6 +128,16 @@ skala_med_toldum <- function(lengdir){
     dplyr::mutate(fjoldi = fjoldi * r)
 }
 
+#' Skala með toglengd
+#'
+#' Þetta fall skala lengdardreifingar með toglengd úr ralli
+#'
+#' @name skala_med_toglengd
+#'
+#' @param lengdir fyrirspurn á fiskar.lengdir
+#'
+#' @return fyrirspurn með sköluðum fjölda í lengdarbili
+#' @export
 skala_med_toglengd <- function(st_len,
                                min_towlength = 2,
                                max_towlength = 8,
