@@ -12,12 +12,9 @@
 #'
 
 bio_lengdir <- function(con) {
-
-  d <-
-    tbl_mar(con,"biota.lengdir")
+  d <- tbl_mar(con,"biota.lengdir")
 
   return(d)
-
 }
 
 
@@ -35,12 +32,9 @@ bio_lengdir <- function(con) {
 #'
 
 bio_numer <- function(con) {
-
-  d <-
-    tbl_mar(con,"biota.numer")
+  d <- tbl_mar(con,"biota.numer")
 
   return(d)
-
 }
 
 
@@ -58,12 +52,9 @@ bio_numer <- function(con) {
 #'
 
 bio_kvarnir <- function(con) {
-
-  d <-
-    tbl_mar(con,"biota.kvarnir")
+  d <- tbl_mar(con,"biota.kvarnir")
 
   return(d)
-
 }
 
 
@@ -81,7 +72,7 @@ bio_kvarnir <- function(con) {
 bio_skala_med_toldum <- function(lengdir){
 
   ratio <-
-    numer(lengdir$src) %>%
+    bio_numer(lengdir$src) %>%
     dplyr::mutate(fj_maelt = nvl(fj_maelt,1)) %>%
     dplyr::mutate(r = ifelse(nvl(fj_talid,0)==0 ,1,
                              1 + fj_talid/ifelse(fj_maelt>0,fj_maelt,1))) %>%
@@ -181,7 +172,7 @@ bio_ranfiskar <- function(con){
 
 #' Fæða þyngdir
 #'
-#' @name bio_brad_tyngdir
+#' @name bio_brad_thyngdir
 #'
 #' @description Fallid myndar tengingu við "view" toflu f_hopar
 #' í biota gagnagrunninum.
@@ -189,7 +180,7 @@ bio_ranfiskar <- function(con){
 #' @param con src_oracle tenging við oracle
 #' @export
 #'
-bio_brad_tyngdir <- function(con){
+bio_brad_thyngdir <- function(con){
   tbl_mar(con,'biota.f_hopar') %>%
     dplyr::mutate(uppruni = 'f_hopar') %>%
     dplyr::mutate(thyngd = ifelse(thyngd==-1,0.2,
@@ -230,7 +221,7 @@ bio_brad_lengdir <- function(con){
                                      len_fl = NA,
                                      uppruni = 'f_kynthroski') %>%
                        dplyr::select(synis_id, faerslunumer, flokk_id, ranfiskur, faeduhopur,
-                                     brad_kyn, lengd=brad_lengd, fjoldi,  haed, lengd_rf,len_fl,uppruni,brad_kynth)) %>%
+                                     brad_kyn, lengd=brad_lengd, fjoldi, haed, lengd_rf,len_fl,uppruni,brad_kynth)) %>%
     dplyr::union_all(tbl_mar(con,'biota.f_staerdir') %>%
                        dplyr::mutate(haed = NA,
                                      len_fl = NA,
