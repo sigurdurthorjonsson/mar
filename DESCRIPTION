@@ -10,8 +10,7 @@ Maintainer: Einar Hjorleifsson <einar.hjorleifsson@gmail.com>
 Description: Database utilities for MFRI db's. Contains a set of convenient wrapper function to some but not all of the tables.
 Depends:
     R (>= 3.1.1),
-    tidyverse,
-    ROracle
+    tidyverse
 Imports:
     dplyr,
     dbplyr,
