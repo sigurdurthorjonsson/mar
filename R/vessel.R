@@ -28,24 +28,24 @@ vessel_registry <- function(con, standardize = FALSE) {
                     width = width / 100,
                     depth = depth / 100,
                     length = dplyr::case_when(vid == 9928 ~ 5,
-                                       TRUE ~ length / 100),
+                                              TRUE ~ length / 100),
                     #               "correct" brl for Asgrimur Halldorsson
                     brl = dplyr::case_when(vid == 2780 ~ brl / 100000,
-                                    vid == 9928 ~ 2,
-                                    TRUE ~ brl / 100),
+                                           vid == 9928 ~ 2,
+                                           TRUE ~ brl / 100),
                     grt = dplyr::case_when(vid == 9928 ~ 2,
-                                    TRUE ~ grt / 100),
+                                           TRUE ~ grt / 100),
                     #                     Blidfari has abnormal engine_kw, divided by 100
                     engine_kw = dplyr::case_when(vid == 2069 ~ engine_kw / 10000,
-                                          TRUE ~ engine_kw / 100),
+                                                 TRUE ~ engine_kw / 100),
                     name = str_trim(name),
                     homeharbour = str_trim(homeharbour),
                     length_class = dplyr::case_when(length < 8 ~ "<8",
-                                                           length >= 8  & length < 10 ~ "08-10",
-                                                           length >= 10 & length < 12 ~ "10-12",
-                                                           length >= 12 & length < 15 ~ "12-15",
-                                                           length >= 15 ~ ">=15",
-                                                           TRUE ~ NA_character_),
+                                                    length >= 8  & length < 10 ~ "08-10",
+                                                    length >= 10 & length < 12 ~ "10-12",
+                                                    length >= 12 & length < 15 ~ "12-15",
+                                                    length >= 15 ~ ">=15",
+                                                    TRUE ~ NA_character_),
                     name = str_trim(name),
                     name = ifelse(name == "", NA_character_, name),
                     uid = str_trim(uid),
@@ -53,10 +53,10 @@ vessel_registry <- function(con, standardize = FALSE) {
                     # NOTE: Below does not get rid of the period
                     uid = str_replace(uid, "\\.", ""),
                     uid = dplyr::case_when(uid == "IS" ~ "ÍS",
-                                    uid == "OF" ~ "ÓF",
-                                    uid == "KÓ" ~ "KO",
-                                    uid == "ZZ0" ~ "ZZ",      # Not valid but is also in skipaskra fiskistofu
-                                    TRUE ~ uid),
+                                           uid == "OF" ~ "ÓF",
+                                           uid == "KÓ" ~ "KO",
+                                           uid == "ZZ0" ~ "ZZ",      # Not valid but is also in skipaskra fiskistofu
+                                           TRUE ~ uid),
                     uid = dplyr::case_when(nchar(uid) > 2 ~ paste0(str_sub(uid, 1, 2), "-", str_sub(uid, 3)),
                                            TRUE ~ uid),
                     cs = str_trim(cs),
@@ -77,13 +77,13 @@ vessel_history <- function(con) {
   tbl_mar(con, "kvoti.skipasaga") %>%
     dplyr::filter(skip_nr > 1) %>%
     dplyr::mutate(einknr = dplyr::case_when(nchar(einknr) == 1 ~ paste0("00", einknr),
-                              nchar(einknr) == 2 ~ paste0("0",  einknr),
-                              TRUE ~ as.character(einknr)),
-           einkst = paste0(einkst, einknr)) %>%
+                                            nchar(einknr) == 2 ~ paste0("0",  einknr),
+                                            TRUE ~ as.character(einknr)),
+                  einkst = paste0(einkst, einknr)) %>%
     dplyr::rename(vid = skip_nr, hist = saga_nr, t1 = i_gildi, t2 = ur_gildi,
-           uid = einkst, code = flokkur) %>%
+                  uid = einkst, code = flokkur) %>%
     dplyr::left_join(tbl_mar(con, "kvoti.utg_fl") %>%
-                select(code = flokkur, flokkur = heiti)) %>%
+                       select(code = flokkur, flokkur = heiti)) %>%
     dplyr::select(-c(einknr, snn:sbn)) %>%
     dplyr::arrange(vid, hist) %>%
     dplyr::select(vid:code, flokkur, dplyr::everything())
@@ -108,8 +108,28 @@ vessel_history <- function(con) {
 #   dplyr::arrange(VID)
 # dbWriteTable(con, name = "VESSEL_MMSI_20190627", value = v_mmsi, overwrite = TRUE)
 
+# # updated table 2021-01-06
+# pth <- "https://www.pfs.is/library/Skrar/Tidnir-og-taekni/Numeramal/MMSI/NUMER%20Query151220.xlsx"
+# download.file(pth, destfile = "tmp.xlsx")
+# v_mmsi <-
+#   readxl::read_excel("tmp.xlsx") %>%
+#   janitor::clean_names() %>%
+#   dplyr::select(SKNR = sknr,
+#                 NAME = skip,
+#                 CS = kallm,
+#                 MMSI = mmsi_nr,
+#                 STDC = standard_c) %>%
+#   dplyr::mutate(VID = dplyr::case_when(stringr::str_sub(MMSI, 1, 3) == "251" ~ as.integer(SKNR),
+#                                        TRUE ~ NA_integer_),
+#                 VID2 = dplyr::case_when(stringr::str_sub(MMSI, 1, 3) != "251" ~ as.integer(SKNR),
+#                                         TRUE ~ NA_integer_)) %>%
+#   dplyr::select(SKNR, VID, VID2, NAME, MMSI, CS) %>%
+#   dplyr::arrange(VID)
+# DBI::dbWriteTable(con, name = "VESSEL_MMSI_20201215", value = v_mmsi)
+
+
 vessel_mmsi <- function(con) {
-  tbl_mar(con, "ops$einarhj.VESSEL_MMSI_20190627")
+  tbl_mar(con, "ops$einarhj.VESSEL_MMSI_20201215")
 }
 
 # ------------------------------------------------------------------------------
