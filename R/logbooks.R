@@ -122,23 +122,29 @@ afli_lineha <- function(mar) {
 afli_grasl <- function(mar){
   grasl <-
     tbl_mar(mar,'afli.grasl_sokn') %>%
+    dplyr::left_join(tbl_mar(mar,'afli.grasl_stofn'),
+                     by = c("skipnr", "vear")) %>%
     dplyr::mutate(sr = round(reitur/10,0),
                   uppruni_grasl = 'grasl_sokn') %>%
     dplyr::select(-vear)
 
   g <-
     tbl_mar(mar,'afli.g_sokn') %>%
+    dplyr::left_join(tbl_mar(mar,'afli.g_stofn'), by = c("skipnr", "ar"="vear")) %>%
     dplyr::mutate(sr = reitur,
            reitur = 10*reitur,
            uppruni_grasl = 'g_sokn',
-           athugasemd = '') %>%
+           athugasemd = '',
+           ahofn = -1,
+           bokst_regl = '') %>%
     dplyr::select_(.dots = colnames(grasl))
 
   dplyr::union_all(grasl,g) %>%
-    sr2d() %>%
+    mar:::sr2d() %>%
     dplyr::select(-sr) %>%
     dplyr::mutate(ar=to_char(vedags,'YYYY'),
                   man=to_char(vedags,'MM')) %>%
     dplyr::left_join(tbl_mar(mar,'afli.grasleppureitur'), by = 'reitur') %>%
-    dplyr::rename(veidisvaedi = bokst_rel)
+    dplyr::rename(veidisvaedi = bokst_rel) %>%
+    dplyr::left_join(tbl_mar(mar,'afli.grasl_verkun'), by = 'teg_verkunar')
   }
