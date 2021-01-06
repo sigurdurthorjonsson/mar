@@ -20,8 +20,8 @@ afli_stofn <- function(mar) {
                   breidd_lok = breidd_lok*100) %>%
     geoconvert(col.names = c('lengd','breidd','lengd_lok','breidd_lok')) %>%
     ## fix missing square info
-    mutate(reitur = nvl(reitur,d2r(breidd,lengd)),
-           smareitur = nvl(smareitur,d2sr(breidd,lengd)-d2r(breidd,lengd)*10)) %>%
+    dplyr::mutate(reitur = nvl(reitur,d2r(breidd,lengd)),
+                  smareitur = nvl(nvl(smareitur,d2sr(breidd,lengd)-d2r(breidd,lengd)*10),1)) %>%
     dplyr::left_join(tbl_mar(mar,'fiskar.reitir'),by = c('reitur','smareitur')) %>%
     dplyr::mutate(lengd = nvl(lengd,lon),
                   breidd = nvl(breidd,lat)) %>%

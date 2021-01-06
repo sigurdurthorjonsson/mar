@@ -12,6 +12,7 @@ NULL
 
 #' @rdname faeda
 #' @name faeda_tegundir
+#' @export
 faeda_tegundir <- function(con){
   tbl_mar(con,'faeda.f_tegundir') %>%
     dplyr::left_join(lesa_tegundir(con),by='tegund') %>%
@@ -28,6 +29,7 @@ faeda_tegundir <- function(con){
 
 #' @rdname faeda
 #' @name faeda_ranfiskar
+#' @export
 faeda_ranfiskar <- function(con){
   tbl_mar(con,'faeda.f_fiskar') %>%
     dplyr::mutate(len_fl =
@@ -58,6 +60,7 @@ faeda_ranfiskar <- function(con){
 
 #' @rdname faeda
 #' @name faeda_thyngdir
+#' @export
 faeda_thyngdir <- function(con){
    tbl_mar(con,'faeda.f_hopar') %>%
     dplyr::mutate(uppruni = 'f_hopar') %>%
@@ -72,6 +75,7 @@ faeda_thyngdir <- function(con){
 
 #' @rdname faeda
 #' @name faeda_lengdir
+#' @export
 faeda_lengdir <- function(con){
   tbl_mar(con,'faeda.f_lengdir') %>%
     dplyr::left_join(tbl_mar(con,'faeda.f_lenfl'),by='len_fl') %>%

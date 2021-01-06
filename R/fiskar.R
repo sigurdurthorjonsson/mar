@@ -18,7 +18,9 @@ lesa_stodvar <- function(mar) {
                                (kastad_v_lengd + hift_v_lengd) / 2),
                   lat = ifelse(is.na(hift_n_breidd),
                                kastad_n_breidd,
-                               (kastad_n_breidd + hift_n_breidd) / 2))
+                               (kastad_n_breidd + hift_n_breidd) / 2)) %>%
+    dplyr::mutate(reitur = nvl(reitur, d2r(lat,lon)),
+                  smareitur = nvl(smareitur,d2sr(lat,lon)-10*d2r(lat,lon)))
 }
 
 
@@ -126,6 +128,16 @@ skala_med_toldum <- function(lengdir){
     dplyr::mutate(fjoldi = fjoldi * r)
 }
 
+#' Skala með toglengd
+#'
+#' Þetta fall skala lengdardreifingar með toglengd úr ralli
+#'
+#' @name skala_med_toglengd
+#'
+#' @param lengdir fyrirspurn á fiskar.lengdir
+#'
+#' @return fyrirspurn með sköluðum fjölda í lengdarbili
+#' @export
 skala_med_toglengd <- function(st_len,
                                min_towlength = 2,
                                max_towlength = 8,
