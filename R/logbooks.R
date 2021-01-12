@@ -136,8 +136,7 @@ afli_grasl <- function(mar){
            uppruni_grasl = 'g_sokn',
            athugasemd = '',
            ahofn = -1,
-           bokst_regl = '') %>%
-    dplyr::select_(.dots = colnames(grasl))
+           bokst_regl = '')
 
   dplyr::union_all(grasl,g) %>%
     mar:::sr2d() %>%
@@ -146,5 +145,6 @@ afli_grasl <- function(mar){
                   man=to_char(vedags,'MM')) %>%
     dplyr::left_join(tbl_mar(mar,'afli.grasleppureitur'), by = 'reitur') %>%
     dplyr::rename(veidisvaedi = bokst_rel) %>%
-    dplyr::left_join(tbl_mar(mar,'afli.grasl_verkun'), by = 'teg_verkunar')
+    dplyr::left_join(tbl_mar(mar,'afli.grasl_verkun'), by = 'teg_verkunar') %>%
+    dplyr::mutate(afli = 3.40*kg_hrogn/lysing)
   }
