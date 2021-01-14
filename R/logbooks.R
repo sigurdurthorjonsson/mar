@@ -140,7 +140,7 @@ afli_grasl <- function(mar){
     dplyr::select_(.dots = colnames(grasl))
 
   dplyr::union_all(grasl,g) %>%
-    mar:::sr2d() %>%
+    sr2d() %>%
     dplyr::select(-sr) %>%
     dplyr::mutate(ar=to_char(vedags,'YYYY'),
                   man=to_char(vedags,'MM')) %>%
