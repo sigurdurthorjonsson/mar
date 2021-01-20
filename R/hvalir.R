@@ -111,7 +111,7 @@ hvalir_magagreining <- function(mar){
     dplyr::mutate(hlutasyni = nvl(hlutasyni,1),
                   medal_thyngd = case_when(maelieining == 'kg'~magn,
                                      maelieining == 'gr'~magn/1000,
-                                     TRUE~NA)/nvl(fjoldi,1),
+                                     TRUE~NA)/pmax(nvl(fjoldi,1),1),
                   lengd = case_when(maelieining == 'mm'~10*magn,
                                     maelieining == 'cm'~magn,
                                     maelieining == 'm'~magn/100,
