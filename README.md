@@ -7,6 +7,10 @@ output:
 ---
 
 
+## NOTE
+
+The development of this package has been moved to an internal MFRI repository and thus development on this site has ceased. 
+
 
 The small print: Package in the making
 
