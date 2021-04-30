@@ -1,13 +1,13 @@
 Package: mar
 Type: Package
-Title: A backend to the MFRI Oracle database
-Version: 0.0.3.9001
-Date: 2018-08-10
+Title: The old backend to the MFRI Oracle database
+Version: 0.0.1.9001
+Date: 2021-04-30
 Authors@R:
   c(person("Einar", "Hjorleifsson", email = "einarhjorleifsson@gmail.com",role = c("aut", "cre")),
     person("Bjarki", "Elvarsson", email = "bjarki.elvarsson@hafogvatn.is",role = c("aut")))
-Maintainer: Einar Hjorleifsson <einar.hjorleifsson@gmail.com>
-Description: Database utilities for MFRI db's. Contains a set of convenient wrapper function to some but not all of the tables.
+Maintainer: Sigurdur Thor Jonsson <sigurdur.thor.jonsson@gmail.com>
+Description: Database utilities for MFRI db's. Contains a set of convenient wrapper function to some but not all of the tables. An attempt at keeping the old version (pre-spring 2021) alive.
 Depends:
     R (>= 3.1.1),
     tidyverse,
@@ -23,8 +23,8 @@ Imports:
 Encoding: UTF-8
 License: GPL (>= 2)
 LazyData: TRUE
-URL: http://github.com/fishvice/mar
-BugReports: http://github.com/fishvice/mar/issues
+URL: http://github.com/sigurdurthorjonsson/mar
+BugReports: http://github.com/sigurdurthorjonsson/mar/issues
 Suggests:
     knitr,
     rmarkdown

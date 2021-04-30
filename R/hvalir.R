@@ -1,6 +1,6 @@
 #' Hvalir
 #'
-#' @param mar Tenging við Oracle
+#' @param con Tenging við Oracle
 #'
 #' @name hvalir_hvalir
 #'
@@ -9,25 +9,25 @@
 #'
 #' @export
 #'
-hvalir_hvalir <- function(mar) {
-  tbl_mar(mar, 'hvalir.hvalir_v') %>%
+hvalir_hvalir <- function(con) {
+  tbl_mar(con, 'hvalir.hvalir_v') %>%
     dplyr::mutate(veiddur_breidd = to_number(replace(nvl(veiddur_breidd,0),',','.')),
                   veiddur_lengd = to_number(replace(decode(veiddur_lengd,'-',NULL,veiddur_lengd),',','.'))) %>%
-    dplyr::select_(.dots = colnames(tbl_mar(mar,"hvalir.hvalir_v"))) %>%
+    dplyr::select_(.dots = colnames(tbl_mar(con,"hvalir.hvalir_v"))) %>%
     dplyr::mutate(ar = to_char(dags_veidi,'yyyy'),
                   er_fostur = ifelse(substr(radnumer,-1,0)=='F',1,0)) %>%
     dplyr::rename(hvalur_id = id) %>%
-    dplyr::left_join(hvalir_kynthroski(mar), by = c("hvalur_id", "kyn")) %>%
+    dplyr::left_join(hvalir_kynthroski(con), by = c("hvalur_id", "kyn")) %>%
     dplyr::mutate(kynthroski = nvl(kynthroski,feltkynthroski))
 }
 
 
 #' @rdname hvalir
 #' @export
-hvalir_eistu <- function(mar){
-  tbl_mar(mar,'hvalir.eistu') %>%
+hvalir_eistu <- function(con){
+  tbl_mar(con,'hvalir.eistu') %>%
     dplyr::select(-c(sng:sbt)) %>%
-    dplyr::left_join(tbl_mar(mar, 'hvalir.feltkynthroski') %>%
+    dplyr::left_join(tbl_mar(con, 'hvalir.feltkynthroski') %>%
                        dplyr::select(kynthroski_id  = id,kynthroski=heiti),
                      by = 'kynthroski_id') %>%
     dplyr::select(-kynthroski_id) %>%
@@ -36,10 +36,10 @@ hvalir_eistu <- function(mar){
 
 #' @rdname hvalir
 #' @export
-hvalir_eggjastokkar <- function(mar){
-  tbl_mar(mar,'hvalir.eggjastokkar') %>%
+hvalir_eggjastokkar <- function(con){
+  tbl_mar(con,'hvalir.eggjastokkar') %>%
     dplyr::select(-c(sng:sbt)) %>%
-    dplyr::left_join(tbl_mar(mar, 'hvalir.feltkynthroski') %>%
+    dplyr::left_join(tbl_mar(con, 'hvalir.feltkynthroski') %>%
                        dplyr::select(throski_id  = id,kynthroski=heiti),
                      by = 'throski_id') %>%
     dplyr::select(-throski_id) %>%
@@ -48,14 +48,14 @@ hvalir_eggjastokkar <- function(mar){
 
 #' @rdname hvalir
 #' @export
-hvalir_kynthroski <- function(mar){
-  hvalir_eistu(mar) %>%
+hvalir_kynthroski <- function(con){
+  hvalir_eistu(con) %>%
     dplyr::mutate(order = substr(kynthroski,0,0)) %>%
     dplyr::group_by(hvalur_id) %>%
     dplyr::filter(order == max(order,na.rm = TRUE)) %>%
     dplyr::select(hvalur_id,kyn,kynthroski) %>%
     dplyr::union_all(
-      hvalir_eggjastokkar(mar) %>%
+      hvalir_eggjastokkar(con) %>%
         dplyr::mutate(order = substr(kynthroski,0,0)) %>%
         dplyr::group_by(hvalur_id) %>%
         dplyr::filter(order == max(order,na.rm = TRUE)) %>%
@@ -67,22 +67,22 @@ hvalir_kynthroski <- function(mar){
 
 #' @rdname hvalir
 #' @export
-hvalir_magasyni <- function(mar){
-  tbl_mar(mar,'hvalir.magasyni') %>%
+hvalir_magasyni <- function(con){
+  tbl_mar(con,'hvalir.magasyni') %>%
     dplyr::select(-c(sng:sbt)) %>%
-    dplyr::left_join(tbl_mar(mar,'hvalir.meltingarstig') %>%
+    dplyr::left_join(tbl_mar(con,'hvalir.meltingarstig') %>%
                        dplyr::select(id,meltingarstig = heiti),
                      by = c('meltingarstig_id'='id')) %>%
-    dplyr::left_join(tbl_mar(mar,'hvalir.sigti') %>%
+    dplyr::left_join(tbl_mar(con,'hvalir.sigti') %>%
                        dplyr::select(id,sigti = heiti),
                      by = c('sigti_id'='id')) %>%
-    dplyr::left_join(tbl_mar(mar,'hvalir.faedutegundir') %>% ## þetta er nú meiri andsk vitleysan að búa til nýja tegunda töflu
+    dplyr::left_join(tbl_mar(con,'hvalir.faedutegundir') %>% ## þetta er nú meiri andsk vitleysan að búa til nýja tegunda töflu
                        dplyr::select(tegund,helsta_faeda = heiti, lat_heiti),
                      by = c('helsta_faeda_id'='tegund')) %>%
-    dplyr::left_join(tbl_mar(mar,'hvalir.meltingarvegur') %>%
+    dplyr::left_join(tbl_mar(con,'hvalir.meltingarvegur') %>%
                        dplyr::select(id,meltingarvegur = heiti),
                      by = c('meltingarvegur_id'='id')) %>%
-    dplyr::left_join(tbl_mar(mar,'hvalir.magafylli') %>%
+    dplyr::left_join(tbl_mar(con,'hvalir.magafylli') %>%
                        dplyr::select(id,magafylli = heiti),
                      by = c('magafylli_id'='id')) %>%
     dplyr::select(-c(meltingarstig_id,sigti_id,helsta_faeda_id,meltingarvegur_id,magafylli_id)) %>%
@@ -94,16 +94,16 @@ hvalir_magasyni <- function(mar){
 
 #' @rdname hvalir
 #' @export
-hvalir_magagreining <- function(mar){
-  tbl_mar(mar,'hvalir.magagreining') %>%
+hvalir_magagreining <- function(con){
+  tbl_mar(con,'hvalir.magagreining') %>%
     dplyr::select(-c(sng:sbt)) %>%
-    dplyr::left_join(tbl_mar(mar,'hvalir.meltingarstig') %>%
+    dplyr::left_join(tbl_mar(con,'hvalir.meltingarstig') %>%
                        dplyr::select(id,meltingarstig = heiti),
                      by = c('meltingarstig_id'='id')) %>%
-    dplyr::left_join(tbl_mar(mar,'hvalir.faedutegundir') %>% ## þetta er nú meiri andsk vitleysan að búa til nýja tegunda töflu
+    dplyr::left_join(tbl_mar(con,'hvalir.faedutegundir') %>% ## þetta er nú meiri andsk vitleysan að búa til nýja tegunda töflu
                        dplyr::select(tegund,faedutegund = heiti, lat_heiti),
                      by = c('faedutegund_id'='tegund')) %>%
-    dplyr::left_join(tbl_mar(mar,'hvalir.maelieining_magn_synis') %>%
+    dplyr::left_join(tbl_mar(con,'hvalir.maelieining_magn_synis') %>%
                        dplyr::select(maelieining_id = id, maelieining = heiti),
                      by = 'maelieining_id') %>%
     dplyr::select(-c(meltingarstig_id,maelieining_id,faedutegund_id)) %>%
@@ -121,22 +121,22 @@ hvalir_magagreining <- function(mar){
 
 #' @rdname hvalir
 #' @export
-hvalir_faedumaeling <- function(mar){
-  tbl_mar(mar,'hvalir.faedumaelingar' ) %>%
+hvalir_faedumaeling <- function(con){
+  tbl_mar(con,'hvalir.faedumaelingar' ) %>%
     dplyr::select(-c(sng:sbt)) %>%
-    dplyr::left_join(tbl_mar(mar,'hvalir.finflokkun') %>%
+    dplyr::left_join(tbl_mar(con,'hvalir.finflokkun') %>%
                        dplyr::select(finflokkun_id = id,fjoldi),
                      by = 'finflokkun_id') %>%
-    dplyr::left_join(tbl_mar(mar,'hvalir.meltingarstig') %>%
+    dplyr::left_join(tbl_mar(con,'hvalir.meltingarstig') %>%
                        dplyr::select(id,meltingarstig = heiti),
                      by = c('meltingarstig_id'='id')) %>%
-    dplyr::left_join(tbl_mar(mar,'hvalir.maelieining_magn_synis') %>%
+    dplyr::left_join(tbl_mar(con,'hvalir.maelieining_magn_synis') %>%
                        dplyr::select(maelieining_id = id, maelieining = heiti),
                      by = 'maelieining_id') %>%
-    dplyr::left_join(tbl_mar(mar,'hvalir.tegund_faedumaelingar') %>%
+    dplyr::left_join(tbl_mar(con,'hvalir.tegund_faedumaelingar') %>%
                        dplyr::select(tegund_maelingar_id = id, tegund_maelingar = heiti),
                      by = 'tegund_maelingar_id') %>%
-    dplyr::left_join(tbl_mar(mar,'hvalir.kalibrering') %>%
+    dplyr::left_join(tbl_mar(con,'hvalir.kalibrering') %>%
                        dplyr::select(kalibrering_id = id, taeki:margfoldun, hlutgler),
                      by = 'kalibrering_id') %>%
     dplyr::select(-c(finflokkun_id,meltingarstig_id,finflokkun_id,tegund_maelingar_id,kalibrering_id)) %>%

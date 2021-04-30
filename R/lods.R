@@ -4,11 +4,11 @@
 #'
 #' @name lods_oslaegt
 #'
-#' @param mar src_oracle tenging við oracle
+#' @param con src_oracle tenging við oracle
 #' @export
-lods_oslaegt <- function(mar) {
+lods_oslaegt <- function(con) {
 
-  d <- tbl_mar(mar, "kvoti.lods_oslaegt") %>%
+  d <- tbl_mar(con, "kvoti.lods_oslaegt") %>%
     dplyr::rename(veidarfaeri = veidarf) %>%
     dplyr::mutate(ar =   to_number(to_char(l_dags, "YYYY")),
                   man =  to_number(to_char(l_dags, "MM")),
@@ -34,19 +34,19 @@ lods_oslaegt <- function(mar) {
 #'
 #' @name landadur_afli
 #'
-#' @param mar src_oracle tenging við oracle
+#' @param con src_oracle tenging við oracle
 #' @export
-landadur_afli <- function(mar) {
+landadur_afli <- function(con) {
 
   d <-
-    lods_oslaegt(mar) %>%
+    lods_oslaegt(con) %>%
 #   dplyr::mutate(skip_nr = to_number(skip_nr),
 #                  hofn = to_number(hofn),
 #                  fteg = to_number(fteg),
 #                  stada = to_number(stada),
 #                  ar = to_number(ar),
 #                  man = to_number(man))
-    dplyr::left_join(lesa_skipaskra(mar) %>%
+    dplyr::left_join(lesa_skipaskra(con) %>%
                        dplyr::select(skip_nr, flokkur),
                      by = "skip_nr")
 
@@ -61,12 +61,12 @@ landadur_afli <- function(mar) {
 #'
 #' @name fiskifelag_oslaegt
 #'
-#' @param mar tenging við mar
+#' @param con tenging við mar
 #'
 #' @return aflatölur eftir höfn, skipi, veiðarfærði, árum og mánuðum
 #' @export
-fiskifelag_oslaegt <- function(mar){
-  tbl_mar(mar,'fiskifelagid.landed_catch_pre94') %>%
+fiskifelag_oslaegt <- function(con){
+  tbl_mar(con,'fiskifelagid.landed_catch_pre94') %>%
     dplyr::mutate(komunr = -1,
                   l_dags = to_date(concat(ar,concat('.',man)),'yyyy.mm'),
                   gerd = '',
@@ -96,11 +96,11 @@ fiskifelag_oslaegt <- function(mar){
 #'
 #' @name afli_tac
 #'
-#' @param mar src_oracle tenging við oracle
+#' @param con src_oracle tenging við oracle
 #'
-afli_tac <- function(mar) {
+afli_tac <- function(con) {
 
-  d <- tbl_mar(mar, "kvoti.afli_tac") %>%
+  d <- tbl_mar(con, "kvoti.afli_tac") %>%
     dplyr::mutate(ar = to_number(ar),
                   man = to_number(man)) %>%
     dplyr::rename(tegund = fteg,
@@ -117,10 +117,10 @@ afli_tac <- function(mar) {
 #'
 #' @name kvoti_studlar
 #'
-#' @param mar src_oracle tenging við oracle
-kvoti_studlar <- function(mar) {
+#' @param con src_oracle tenging við oracle
+kvoti_studlar <- function(con) {
 
-  d <- tbl_mar(mar, "kvoti.studlar")
+  d <- tbl_mar(con, "kvoti.studlar")
 
   return(d)
 
@@ -133,10 +133,10 @@ kvoti_studlar <- function(mar) {
 #' @name kvoti_stada
 #'
 #' @param mar src_oracle tenging við oracle
-kvoti_stada <- function(mar) {
+kvoti_stada <- function(con) {
 
   d <-
-    tbl_mar(mar, "kvoti.kv_stada") %>%
+    tbl_mar(con, "kvoti.kv_stada") %>%
     dplyr::select(-c(sng:snt))
 
   return(d)
@@ -154,15 +154,15 @@ kvoti_stada <- function(mar) {
 #'
 #' @name kvoti_stada_summarised
 #'
-#' @param mar src_oracle tenging við oracle
-kvoti_stada_summarised <- function(mar) {
+#' @param con src_oracle tenging við oracle
+kvoti_stada_summarised <- function(con) {
 
   d <-
-    kvoti_stada(mar) %>%
+    kvoti_stada(con) %>%
     ## sleppum millifærslum í skiptipott v. skerðinga (skip -11),
     ## þetta virðast vera innri færslur
     dplyr::filter(skip_nr!=-11) %>%
-    dplyr::left_join(kvoti_studlar(mar) %>%
+    dplyr::left_join(kvoti_studlar(con) %>%
                        dplyr::select(fteg = ftegund, timabil, i_oslaegt),
                      by = c("fteg", "timabil")) %>%
     dplyr::group_by(fteg, timabil) %>%

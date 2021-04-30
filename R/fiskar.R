@@ -5,14 +5,14 @@
 #' @description Fallid myndar tengingu við "view" toflu v_stodvar
 #' í fiskar gagnagrunninum.
 #'
-#' @param mar src_oracle tenging við oracle
+#' @param con src_oracle tenging við oracle
 #'
 #' @return dataframe
 #' @export
 #'
 
-lesa_stodvar <- function(mar) {
-  tbl_mar(mar,'fiskar.stodvar_mar_v') %>%
+lesa_stodvar <- function(con) {
+  tbl_mar(con,'fiskar.stodvar_mar_v') %>%
     dplyr::mutate(lon = ifelse(is.na(hift_v_lengd),
                                kastad_v_lengd,
                                (kastad_v_lengd + hift_v_lengd) / 2),
@@ -33,16 +33,16 @@ lesa_stodvar <- function(mar) {
 #' @description Fallid myndar tengingu við toflu lengdir
 #' í fiskar gagnagrunninum.
 #'
-#' @param mar src_oracle tenging við oracle
+#' @param con src_oracle tenging við oracle
 #'
 #' @return dataframe
 #' @export
 #'
 
-lesa_lengdir <- function(mar) {
+lesa_lengdir <- function(con) {
 
   d <-
-    tbl_mar(mar,"fiskar.lengdir") %>%
+    tbl_mar(con,"fiskar.lengdir") %>%
     dplyr::select(-c(snn:sbt))
 
   return(d)
@@ -57,16 +57,16 @@ lesa_lengdir <- function(mar) {
 #' @description Fallid myndar tengingu við toflu numer
 #' í fiskar gagnagrunninum.
 #'
-#' @param mar src_oracle tenging við oracle
+#' @param con src_oracle tenging við oracle
 #'
 #' @return dataframe
 #' @export
 #'
 
-lesa_numer <- function(mar) {
+lesa_numer <- function(con) {
 
   d <-
-    tbl_mar(mar,"fiskar.numer") %>%
+    tbl_mar(con,"fiskar.numer") %>%
     dplyr::rename(aths_numer = athuga) %>%
     dplyr::select(-c(sbn:snt,dplyr::starts_with('innsl'))) %>%
     dplyr::mutate(uppruni_numer = 'numer')
@@ -83,16 +83,16 @@ lesa_numer <- function(mar) {
 #' @description Fallid myndar tengingu við toflu kvarnir
 #' í fiskar gagnagrunninum.
 #'
-#' @param mar src_oracle tenging við oracle
+#' @param con src_oracle tenging við oracle
 #'
 #' @return dataframe
 #' @export
 #'
 
-lesa_kvarnir <- function(mar) {
+lesa_kvarnir <- function(con) {
 
  d <-
-    tbl_mar(mar,"fiskar.kvarnir") %>%
+    tbl_mar(con,"fiskar.kvarnir") %>%
     dplyr::select(-c(sbn:snt)) %>%
     dplyr::rename(syking = sy) %>%
     dplyr::mutate(uppruni_kvarnir = 'kvarnir') %>%

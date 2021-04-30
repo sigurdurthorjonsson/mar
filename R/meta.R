@@ -1,15 +1,15 @@
 #' lesa veiðarfæri
 #'
-#' @param mar db connection
+#' @param con db connection
 #'
 #' @name lesa_veidarfaeri
 #'
 #' @return db query object
 #' @export
 #'
-lesa_veidarfaeri <- function(mar) {
+lesa_veidarfaeri <- function(con) {
 
-  tbl_mar(mar, "orri.veidarfaeri") %>%
+  tbl_mar(con, "orri.veidarfaeri") %>%
     dplyr::select(-c(snt:sbn))
 
 }
@@ -18,14 +18,14 @@ lesa_veidarfaeri <- function(mar) {
 #'
 #' @name lesa_tegundir
 #'
-#' @param mar db connection
+#' @param con db connection
 #'
 #' @return db query object
 #' @export
 #'
 
-lesa_tegundir <- function(mar){
-  tbl_mar(mar, "orri.fisktegundir") %>%
+lesa_tegundir <- function(con){
+  tbl_mar(con, "orri.fisktegundir") %>%
     dplyr::select(-c(snt:sbn))
 }
 
@@ -33,28 +33,28 @@ lesa_tegundir <- function(mar){
 #'
 #' @name lesa_synaflokkar
 #'
-#' @param mar db connection
+#' @param con db connection
 #'
 #' @return db query object
 #' @export
 #'
 
-lesa_synaflokkar <- function(mar){
-  tbl_mar(mar, "fiskar.synaflokkar")
+lesa_synaflokkar <- function(con){
+  tbl_mar(con, "fiskar.synaflokkar")
 }
 
 
 #' londundarhofn
 #'
-#' @param mar db connection
+#' @param con db connection
 #'
 #' @name kvoti_stadur
 #'
 #' @return db query object
 #'
-kvoti_stadur <- function(mar) {
+kvoti_stadur <- function(con) {
 
-  tbl_mar(mar, "kvoti.stadur")
+  tbl_mar(con, "kvoti.stadur")
 
 }
 
@@ -64,13 +64,13 @@ kvoti_stadur <- function(mar) {
 #'
 #' @name ordabok
 #'
-#' @param mar connection to Oracle
+#' @param con connection to Oracle
 #'
 #' @return db query object
 #' @export
-ordabok <- function(mar){
-  tbl_mar(mar, "orri.ordabok") %>%
-    dplyr::left_join(tbl_mar(mar, "orri.ordabok_mal")) %>%
+ordabok <- function(con){
+  tbl_mar(con, "orri.ordabok") %>%
+    dplyr::left_join(tbl_mar(con, "orri.ordabok_mal")) %>%
     dplyr::select(tegund = nafn,erlent_heiti = heiti,tungumal=nafn_mals,skammst)
 }
 
@@ -81,11 +81,11 @@ ordabok <- function(mar){
 #'
 #' @name lods_skipasaga
 #'
-#' @param mar src_oracle tenging við oracle
+#' @param con src_oracle tenging við oracle
 #' @export
-lods_skipasaga <- function(mar) {
+lods_skipasaga <- function(con) {
 
-  d <- tbl_mar(mar, "kvoti.skipasaga") %>%
+  d <- tbl_mar(con, "kvoti.skipasaga") %>%
     dplyr::select(-(snt:sbn))
 
   return(d)
@@ -100,18 +100,18 @@ lods_skipasaga <- function(mar) {
 #'
 #' @export
 #'
-#' @param mar src_oracle tenging við oracle
+#' @param con src_oracle tenging við oracle
 # #' @example
-# #' mar <- dplyrOracle::src_oracle("mar")
-# #' mar:::lods_skipasaga(mar) %>%
+# #' con <- dplyrOracle::src_oracle(dbname='sjor')
+# #' mar:::lods_skipasaga(con) %>%
 # #'  filter(heiti == 'Ljósafell') %>%
 # #'  rename(skip=skip_nr) %>%
-# #'  left_join(lesa_stodvar(mar)) %>%
+# #'  left_join(lesa_stodvar(con)) %>%
 # #'  filter(dags > i_gildi,dags<ur_gildi) %>%
 # #'  select(i_gildi,ur_gildi,dags)
-lesa_skipaskra <- function(mar) {
+lesa_skipaskra <- function(con) {
 
-  d <- tbl_mar(mar, "orri.skipaskra")
+  d <- tbl_mar(con, "orri.skipaskra")
 
   return(d)
 

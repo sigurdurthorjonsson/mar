@@ -5,13 +5,13 @@
 #'
 #' @name afli_stofn
 #'
-#' @param mar src_oracle tenging við oracle
+#' @param con src_oracle tenging við oracle
 #'
 #' @return dataframe
 #' @export
 
-afli_stofn <- function(mar) {
-    tbl_mar(mar, "afli.stofn") %>%
+afli_stofn <- function(con) {
+    tbl_mar(con, "afli.stofn") %>%
     dplyr::mutate(ar =   to_number(to_char(vedags, "YYYY")),
                   man =  to_number(to_char(vedags, "MM")),
                   lengd = -lengd*100,
@@ -22,7 +22,7 @@ afli_stofn <- function(mar) {
     ## fix missing square info
     dplyr::mutate(reitur = nvl(reitur,d2r(breidd,lengd)),
                   smareitur = nvl(nvl(smareitur,d2sr(breidd,lengd)-d2r(breidd,lengd)*10),1)) %>%
-    dplyr::left_join(tbl_mar(mar,'fiskar.reitir'),by = c('reitur','smareitur')) %>%
+    dplyr::left_join(tbl_mar(con,'fiskar.reitir'),by = c('reitur','smareitur')) %>%
     dplyr::mutate(lengd = nvl(lengd,lon),
                   breidd = nvl(breidd,lat)) %>%
     dplyr::mutate(toglengd = arcdist(breidd,lengd,breidd_lok,lengd_lok)) %>%
@@ -34,16 +34,16 @@ afli_stofn <- function(mar) {
 #' @description Fallid myndar tengingu við toflu afli í
 #' afli gagnagrunninum.
 #'
-#' @param mar src_oracle tenging við oracle
+#' @param con src_oracle tenging við oracle
 #'
 #' @name afli_afli
 #'
 #' @return dataframe
 #' @export
 #'
-afli_afli <- function(mar) {
+afli_afli <- function(con) {
 
-  tbl_mar(mar,"afli.afli")
+  tbl_mar(con,"afli.afli")
 
 }
 
@@ -52,19 +52,19 @@ afli_afli <- function(mar) {
 #' @description Fallid myndar tengingu við toflu sjálfvirkir_maelar í
 #' afli gagnagrunninum.
 #'
-#' @param mar src_oracle tenging við oracle
+#' @param con src_oracle tenging við oracle
 #'
 #' @name afli_sjalfvirkir_maelar
 #'
 #' @return dataframe
 #' @export
-afli_sjalfvirkir_maelar <- function(mar) {
+afli_sjalfvirkir_maelar <- function(con) {
 
-  d <- tbl_mar(mar, "afli.sjalfvirkir_maelar") %>%
+  d <- tbl_mar(con, "afli.sjalfvirkir_maelar") %>%
     dplyr::mutate(ar =   to_number(to_char(timi, "YYYY")),
                   man =  to_number(to_char(timi, "MM")),
                   hnattstada_siriti = sign(lengd)) %>%
-    dplyr::left_join(afli_stofn(mar) %>%
+    dplyr::left_join(afli_stofn(con) %>%
                        dplyr::mutate(hnattstada_stofn = -sign(lengd)) %>%
                        dplyr::select(visir, veidarf, hnattstada_stofn),
               by = "visir") %>%
@@ -84,14 +84,14 @@ afli_sjalfvirkir_maelar <- function(mar) {
 #'
 #' @name afli_toga
 #'
-#' @param mar src_oracle tenging við oracle
+#' @param con src_oracle tenging við oracle
 #'
 #' @return dataframe
 #' @export
 #'
-afli_toga <- function(mar) {
+afli_toga <- function(con) {
 
-  tbl_mar(mar,"afli.toga")
+  tbl_mar(con,"afli.toga")
 
 }
 
@@ -102,35 +102,35 @@ afli_toga <- function(mar) {
 #'
 #' @name afli_lineha
 #'
-#' @param mar src_oracle tenging við oracle
+#' @param con src_oracle tenging við oracle
 #'
 #' @return dataframe
 #' @export
 #'
-afli_lineha <- function(mar) {
-    tbl_mar(mar,"afli.lineha")
+afli_lineha <- function(con) {
+    tbl_mar(con,"afli.lineha")
 }
 
 
 #' Grásleppunet
 #'
-#' @param mar connection to Oracle
+#' @param con connection to Oracle
 #'
 #' @name afli_grasl
 #'
 #' @export
-afli_grasl <- function(mar){
+afli_grasl <- function(con){
   grasl <-
-    tbl_mar(mar,'afli.grasl_sokn') %>%
-    dplyr::left_join(tbl_mar(mar,'afli.grasl_stofn'),
+    tbl_mar(con,'afli.grasl_sokn') %>%
+    dplyr::left_join(tbl_mar(con,'afli.grasl_stofn'),
                      by = c("skipnr", "vear")) %>%
     dplyr::mutate(sr = round(reitur/10,0),
                   uppruni_grasl = 'grasl_sokn') %>%
     dplyr::select(-vear)
 
   g <-
-    tbl_mar(mar,'afli.g_sokn') %>%
-    dplyr::left_join(tbl_mar(mar,'afli.g_stofn'), by = c("skipnr", "ar"="vear")) %>%
+    tbl_mar(con,'afli.g_sokn') %>%
+    dplyr::left_join(tbl_mar(con,'afli.g_stofn'), by = c("skipnr", "ar"="vear")) %>%
     dplyr::mutate(sr = reitur,
            reitur = 10*reitur,
            uppruni_grasl = 'g_sokn',
@@ -143,8 +143,8 @@ afli_grasl <- function(mar){
     dplyr::select(-sr) %>%
     dplyr::mutate(ar=to_char(vedags,'YYYY'),
                   man=to_char(vedags,'MM')) %>%
-    dplyr::left_join(tbl_mar(mar,'afli.grasleppureitur'), by = 'reitur') %>%
+    dplyr::left_join(tbl_mar(con,'afli.grasleppureitur'), by = 'reitur') %>%
     dplyr::rename(veidisvaedi = bokst_rel) %>%
-    dplyr::left_join(tbl_mar(mar,'afli.grasl_verkun'), by = 'teg_verkunar') %>%
+    dplyr::left_join(tbl_mar(con,'afli.grasl_verkun'), by = 'teg_verkunar') %>%
     dplyr::mutate(afli = 3.40*kg_hrogn/lysing)
   }
